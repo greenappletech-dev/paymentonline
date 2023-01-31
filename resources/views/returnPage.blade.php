@@ -20,12 +20,7 @@
     <body>
         
         <style>
-            * {
-                font-family: 'Open Sans';
-                font-style: normal;
-                font-weight: 300;
-                src: local('Open Sans Light'), local('OpenSans-Light'), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTRWV49_lSm1NYrwo-zkhivY.woff2) format('woff2');
-                unicode-range: U+1F00-1FFF;
+            unicode-range: U+1F00-1FFF;
             }
             .mob_view{
                 display:none;
@@ -113,8 +108,49 @@
 						
 								<div class="row">
 									<div class="col-lg-12">
+										<br>
+										<br>
+									<center>
+										<table border=0 width="90%" id="result">
+										<tr valign="bottom" >
+											<td align="center" colspan="3">
+												<img src="{{asset('/image/dragonpay-logo-small.jpg')}}" alt="Dragonpay">
+											</td>
+										<tr>
+									</tr>
+										<tr>
+											<td width="33%"><b>Transaction ID</b></td>
+											<td>:</td>
+											<td>{{@$txnid}}</td>
+										<tr>
+										
+										
+										<tr>
+											<td width="25%"><b>Reference Number</b></td>
+											<td>:</td>
+											<td>{{@$refno}}</td>
+										<tr>
+										
+										
+										<tr>
+											<td><b>Remarks</b></td>
+											<td>:</td>
+											<td>{{@$message}}</td>
+										<tr>
+										
+										<tr>
+											<td><b>Status</b></td>
+											<td>:</td>
+											<td>{{@$status}}</td>
+										<tr>
+										
+										
+										
+										</table>
 									
-										<h1>{{@$message}}</h1>
+									</center>
+									
+									
 									</div>
 								</div>	
 								
@@ -138,3 +174,9 @@
 
     </body>
 </html>
+
+<style>
+table#result th, td {
+  padding: 12px;
+}
+</style>

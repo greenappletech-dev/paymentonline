@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\ModePayment;
 use App\Models\PaymentDetail;
 use App\Models\data_results;
+use App\Models\payments;
+
+
 use Crazymeeks\Foundation\PaymentGateway\Dragonpay;
 
 class PaymentDetailsController extends Controller
@@ -31,13 +34,34 @@ class PaymentDetailsController extends Controller
    public function add_details(Request $request){
 
 	
+	  $trans_date = date("y-m-d h:i:s");
+	
+	  $store = new payments();
+	  $store->transaction_id	  = "";
+	  $store->district_id 		  = @$request->district;
+	  $store->project_office_id   = $request->project;
+	  $store->beneficiaries_id    = $request->bin_id;
+	  $store->beneficiaries_name  = strtoupper($request->benefeciary);
+	  $store->mobile_number	      = '0'.$request->phone_number;
+	  $store->email	              = $request->email;
+	  $store->amount	 		  = $request->amount;
+	  $store->transaction_date	  = $trans_date ;
+	  $store->save();
+
+	  $transaction_id = str_pad($store->id, 12,'0', STR_PAD_LEFT);
+      $update = payments::where('id',$store->id)->first();
+      $update->transaction_id=$transaction_id;
+      $update->save();
+
+     
+	
+	$description = "Payment for NHA monthly bill";
+	
 	
 	define('MERCHANT_ID', 'GAPPLETECHASI');
 	define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k');
-
 	define('ENV_TEST', 1);
 	define('ENV_LIVE', 0);
-
 	$environment = ENV_TEST;
    
     $errors = array();
@@ -45,11 +69,11 @@ class PaymentDetailsController extends Controller
 
 	  $parameters = array(
 		  'merchantid' => MERCHANT_ID,
-		  'txnid' => '5555555',
-		  'amount' => 5,
+		  'txnid' => $transaction_id,
+		  'amount' => $request->amount,
 		  'ccy' => 'PHP',
-		  'description' => 'My order description.',
-		  'email' => 'jaysonpulga22@gmail.com',
+		  'description' => $description,
+		  'email' => $request->email,
 	  );
    
    
@@ -109,7 +133,7 @@ class PaymentDetailsController extends Controller
 			$url = 'http://test.dragonpay.ph/Pay.aspx?';
 		  }
 		
-		
+
 		
 		   echo $url .= http_build_query($parameters, '', '&');
 
@@ -139,8 +163,19 @@ class PaymentDetailsController extends Controller
 		//return redirect('returnPage',compact('message'));
 		
 		//return view('.returnPage');
-		return view('.returnPage', compact(['message']));
+		//return view('.returnPage', compact(['message']));
 		
 		
     }
+	
+	public function return_url(Request $request){
+		
+		$message = $request->message;
+		$txnid = $request->txnid;
+		$status = $request->status;
+		$refno = $request->refno;
+		
+		return view('.returnPage', compact('message','txnid','status','refno'));
+	}
+	
 }

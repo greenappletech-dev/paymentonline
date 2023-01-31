@@ -15,6 +15,7 @@ use App\Http\Controllers\PaymentDetailsController;
 |
 */
 Route::post('payment_callback',[PaymentDetailsController::class,'callback']);
+Route::get('return_url',[PaymentDetailsController::class,'return_url']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
