@@ -34,13 +34,13 @@
                 <div class="row">
                     <div class="col-xl-12 col-sm-12 p-1">
                         <label class="medium-text" style="margin: 0">BIN</label>
-                        <input type="number" class="input-custom form-control small-text mb-2 mt-2" v-model="account_number" placeholder="BIN" >
+                        <input type="text" class="input-custom form-control small-text mb-2 mt-2" v-model="account_number" placeholder="BIN" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-12 col-sm-12 p-1">
                         <label class="medium-text" style="margin: 0">Account Name </label>
-                        <input type="text" class="input-custom mt-2 form-control small-text mb-2" v-model="client_name" placeholder="Surname, Firstname M.">
+                        <input type="text" class="input-custom mt-2 form-control small-text mb-2" v-model="client_name" placeholder="Surname, Firstname M." required>
                     </div>
                 </div>
                 <div class="row">
@@ -60,7 +60,7 @@
                 <div class="row">
                     <div class="col-xl-12 col-sm-12 p-1">
                         <label class="medium-text" style="margin: 0">Email <span style="color: #636e72">(Required)</span></label>
-                        <input type="email" class="input-custom mt-2 form-control small-text mb-2" v-model="email" placeholder="@gmail.com" >
+                        <input type="email" class="input-custom mt-2 form-control small-text mb-2" v-model="email" placeholder="@gmail.com"  required>
                     </div>
                 </div>
 				<div class="row">
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
   
-                            <input type="number" class="input-custom form-control small-text" v-on:change="btn_change()" id="amount" v-bind:value="amount" >
+                            <input type="number" class="input-custom form-control small-text" v-on:change="btn_change()" id="amount" v-bind:value="amount"  required>
                         </div>
                 </div>
   

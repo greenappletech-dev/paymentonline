@@ -10981,8 +10981,9 @@ var render = function render() {
     }],
     staticClass: "input-custom form-control small-text mb-2 mt-2",
     attrs: {
-      type: "number",
-      placeholder: "BIN"
+      type: "text",
+      placeholder: "BIN",
+      required: ""
     },
     domProps: {
       value: _vm.account_number
@@ -11012,7 +11013,8 @@ var render = function render() {
     staticClass: "input-custom mt-2 form-control small-text mb-2",
     attrs: {
       type: "text",
-      placeholder: "Surname, Firstname M."
+      placeholder: "Surname, Firstname M.",
+      required: ""
     },
     domProps: {
       value: _vm.client_name
@@ -11063,7 +11065,8 @@ var render = function render() {
     staticClass: "input-custom mt-2 form-control small-text mb-2",
     attrs: {
       type: "email",
-      placeholder: "@gmail.com"
+      placeholder: "@gmail.com",
+      required: ""
     },
     domProps: {
       value: _vm.email
@@ -11084,7 +11087,8 @@ var render = function render() {
     staticClass: "input-custom form-control small-text",
     attrs: {
       type: "number",
-      id: "amount"
+      id: "amount",
+      required: ""
     },
     domProps: {
       value: _vm.amount
