@@ -80,7 +80,7 @@
             }
         </style>
 
-        <div class="d-flex align-items-center justify-content-center" style="height:100vh">
+        <div class="d-flex align-items-center justify-content-center" style="height:130vh">
 
             <div class="con" style="border: 1px solid #9E9E9E; border-radius: 10px; background: white">
 
