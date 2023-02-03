@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use SimpleXMLElement;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use App\Models\ModePayment;
 use App\Models\PaymentDetail;
 use App\Models\data_results;
 use App\Models\payments;
@@ -20,9 +19,7 @@ class PaymentDetailsController extends Controller
    public function epayment(){
       $district = \DB::connection('mysql2')->table('districts')->get();
 
-      $mode_payment = ModePayment::get();
-      // dd($district);
-    return view('.home',compact('district','mode_payment'));
+    return view('.home',compact('district'));
    }
 
 
