@@ -33,7 +33,7 @@
         float: right;
         width: 50%;
         height: 100vh;
-        background: white;
+        background: #000;
     }
 
     .right-size-cover .center-logo {
