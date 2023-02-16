@@ -10734,17 +10734,65 @@ __webpack_require__.r(__webpack_exports__);
       if (amount == "") {
         this.total = 0;
         this.amount = 0;
-      } else if (amount < 0) {
-        alert('less than 0 cannot accept');
+      } else if (amount <= 0) {
+        alert('less than P 1.00 cannot accept');
         this.total = 0;
         this.amount = 0;
+        return 0;
+        return false;
       } else if (amount >= 1) {
         this.amount = amount;
         this.total = parseInt(amount) + this.con_fee;
       }
     },
-    btnpayment: function btnpayment() {
+    CheckBinifExist: function CheckBinifExist() {
       var _this3 = this;
+      var account_number = document.getElementById('account_number').value;
+      var district = document.getElementById('district').value;
+      var project_id = document.getElementById('project_id').value;
+      //let bin_name = document.getElementById('client_name');
+
+      if (district == "") {
+        alert('Please select district');
+        return false;
+      }
+      if (project_id == "") {
+        alert('Please select project');
+        return false;
+      }
+      if (account_number == "") {
+        alert('Please Input BIN ID');
+        return false;
+      }
+      console.log(account_number);
+      console.log(district);
+      console.log(project_id);
+      axios.post('checkBIN_id', {
+        account_number: account_number,
+        district: district,
+        project_id: project_id
+      }).then(function (response) {
+        console.log(response.data.msg);
+        if (response.data.msg == "error") {
+          _this3.client_name = "";
+          alert(response.data.display_mesage);
+          return false;
+        } else {
+          _this3.client_name = response.data.data.full_name;
+        }
+      })["catch"](function (error) {
+        if (error.response.status === 400) {
+          _this3.$fire({
+            title: "Error",
+            text: error.response.data.error,
+            type: "error",
+            timer: 3000
+          });
+        }
+      });
+    },
+    btnpayment: function btnpayment() {
+      var _this4 = this;
       var total = document.getElementById('total').value;
       this.total = total;
       axios.post('add', {
@@ -10773,7 +10821,7 @@ __webpack_require__.r(__webpack_exports__);
         // }
       })["catch"](function (error) {
         if (error.response.status === 400) {
-          _this3.$fire({
+          _this4.$fire({
             title: "Error",
             text: error.response.data.error,
             type: "error",
@@ -10783,9 +10831,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     paymentSubmit: function paymentSubmit(e) {
-      var _this4 = this;
+      var _this5 = this;
       e.preventDefault(); // Prevent page from reloading.
 
+      var amount = this.btn_change();
+      if (amount == 0) {
+        return false;
+      }
       axios.post('add', {
         bin_id: this.account_number,
         benefeciary: this.client_name,
@@ -10795,8 +10847,21 @@ __webpack_require__.r(__webpack_exports__);
         project: this.select_project,
         amount: this.total
       }).then(function (response) {
+        if (response.data.msg == "error") {
+          alert(response.data.display_mesage);
+          _this5.client_name = "";
+          return false;
+        } else if (response.data.msg == "no_data") {
+          alert(response.data.display_mesage);
+          return false;
+        } else if (response.data.msg == "success") {
+          window.location.href = response.data.url;
+          return false;
+        }
         console.log(response.data);
-        window.location.href = response.data;
+        console.log(response.data.msg);
+
+        //window.location.href = response.data;
 
         // console.log(response.data.base);
         // if(response.data.data === 'success')
@@ -10810,7 +10875,7 @@ __webpack_require__.r(__webpack_exports__);
         // }
       })["catch"](function (error) {
         if (error.response.status === 400) {
-          _this4.$fire({
+          _this5.$fire({
             title: "Error",
             text: error.response.data.error,
             type: "error",
@@ -10908,6 +10973,7 @@ var render = function render() {
     }],
     staticClass: "input-custom form-control small-text",
     attrs: {
+      id: "district",
       required: ""
     },
     on: {
@@ -10943,6 +11009,7 @@ var render = function render() {
     }],
     staticClass: "input-custom form-control small-text",
     attrs: {
+      id: "project_id",
       required: ""
     },
     on: {
@@ -10982,6 +11049,7 @@ var render = function render() {
     staticClass: "input-custom form-control small-text mb-2 mt-2",
     attrs: {
       type: "text",
+      id: "account_number",
       placeholder: "BIN",
       required: ""
     },
@@ -10989,6 +11057,9 @@ var render = function render() {
       value: _vm.account_number
     },
     on: {
+      blur: function blur($event) {
+        return _vm.CheckBinifExist();
+      },
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.account_number = $event.target.value;
@@ -11013,8 +11084,9 @@ var render = function render() {
     staticClass: "input-custom mt-2 form-control small-text mb-2",
     attrs: {
       type: "text",
+      id: "client_name",
       placeholder: "Surname, Firstname M.",
-      required: ""
+      readonly: ""
     },
     domProps: {
       value: _vm.client_name
@@ -11094,7 +11166,7 @@ var render = function render() {
       value: _vm.amount
     },
     on: {
-      change: function change($event) {
+      blur: function blur($event) {
         return _vm.btn_change();
       }
     }

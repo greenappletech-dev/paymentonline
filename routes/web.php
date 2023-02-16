@@ -24,6 +24,9 @@ Route::get('project/{id}',[PaymentDetailsController::class,'proj_data']);
 Route::post('add',[PaymentDetailsController::class,'add_details']);
 Route::get('payment_redirect/{data}',[PaymentDetailsController::class,'redirect']);
 Route::get('returnPage',[PaymentDetailsController::class,'returnPage'])->name('returnPage');
+Route::post('checkBIN_id',[PaymentDetailsController::class,'checkBIN_id']);
+
+
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

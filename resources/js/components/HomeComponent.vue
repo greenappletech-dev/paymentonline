@@ -18,13 +18,13 @@
                 <div class="row d-flex justify-content-start">
                     <div class="col-xl-6 col-sm-12 p-1">
                         <label class="medium-text">District</label>
-                        <select class="input-custom form-control small-text" v-on:change="btn_location($event)" v-model="location" required>
+                        <select class="input-custom form-control small-text" v-on:change="btn_location($event)" v-model="location"  id="district" required>
                             <option class="small-text" v-for="dist in districtTable" v-bind:value="dist.id">{{dist.name}}</option>
                         </select>
                     </div>
                     <div class="col-xl-6 col-sm-12 p-1">
                         <label class="medium-text">Entity Project</label>
-                        <select class="input-custom form-control small-text" v-model="select_project" required>
+                        <select class="input-custom form-control small-text" v-model="select_project" id="project_id"  required>
                             <option class="small-text" v-for="project in projectTable" v-bind:value="project.id">{{project.name}}</option>
                         </select>
                     </div>
@@ -34,13 +34,13 @@
                 <div class="row">
                     <div class="col-xl-12 col-sm-12 p-1">
                         <label class="medium-text" style="margin: 0">BIN</label>
-                        <input type="text" class="input-custom form-control small-text mb-2 mt-2" v-model="account_number" placeholder="BIN" required>
+                        <input type="text" class="input-custom form-control small-text mb-2 mt-2"  v-on:blur="CheckBinifExist()" v-model="account_number" id="account_number" placeholder="BIN" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-12 col-sm-12 p-1">
                         <label class="medium-text" style="margin: 0">Account Name </label>
-                        <input type="text" class="input-custom mt-2 form-control small-text mb-2" v-model="client_name" placeholder="Surname, Firstname M." required>
+                        <input type="text" class="input-custom mt-2 form-control small-text mb-2" v-model="client_name" id="client_name" placeholder="Surname, Firstname M." readonly>
                     </div>
                 </div>
                 <div class="row">
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
   
-                            <input type="number" class="input-custom form-control small-text" v-on:change="btn_change()" id="amount" v-bind:value="amount"  required>
+                            <input type="number" class="input-custom form-control small-text" v-on:blur="btn_change()" id="amount" v-bind:value="amount"  required>
                         </div>
                 </div>
   
@@ -173,28 +173,96 @@
           },
           btn_change(){
            
-           let amount = document.getElementById('amount').value;
-           
-           if(amount == ""){
-             this.total=0;
-             this.amount=0;
-           }
-           else if(amount<0){
-           alert('less than 0 cannot accept');
-             this.total=0;
-             this.amount=0;
-           }
-           else if(amount>=1){
-           this.amount = amount;
-           this.total = parseInt(amount)+this.con_fee;
-           }
+			   let amount = document.getElementById('amount').value;
+			   
+			   if(amount == ""){
+				 this.total=0;
+				 this.amount=0;
+			   }
+			   else if(amount <= 0 ){
+				alert('less than P 1.00 cannot accept');
+				 this.total=0;
+				 this.amount=0;
+				 return 0;
+				 return false;
+			   }
+			   else if(amount>=1){
+			   this.amount = amount;
+			   this.total = parseInt(amount)+this.con_fee;
+			   }
            
          },
+		 CheckBinifExist(){
+           
+				let account_number = document.getElementById('account_number').value;
+				let district = document.getElementById('district').value;
+				let project_id = document.getElementById('project_id').value;
+				//let bin_name = document.getElementById('client_name');
+				
+				
+				if(district == ""){
+				
+					alert('Please select district');
+					return false;
+				}
+				
+				if(project_id == "" ){
+				
+					alert('Please select project');
+					return false;
+				}
+				
+				if(account_number == ""){
+				
+					alert('Please Input BIN ID');
+					return false;
+				}
+			
+				console.log(account_number);
+			    console.log(district);
+				console.log(project_id);
+			 
+				 axios.post('checkBIN_id',{
+				  account_number:account_number,
+				  district:district,
+				  project_id:project_id,
+				})
+				.then(response=>{
+					
+					
+					console.log(response.data.msg);
+					
+					if(response.data.msg == "error"){
+						this.client_name = "";
+						alert(response.data.display_mesage);
+						return false;
+					}			  
+					else{
+						this.client_name = response.data.data.full_name;
+					}
+					
+					
+				  
+				  
+				})
+				.catch(error=>{
+					if(error.response.status === 400){
+						this.$fire({
+						title: "Error",
+						text: error.response.data.error,
+						type: "error",
+						timer: 3000
+						})
+					}
+				})
+			 
+			 
+           
+         },
+		 
          btnpayment(){
 		 
-	
-	
-	
+
             let total = document.getElementById('total').value;
             this.total = total;
             axios.post('add',{
@@ -240,53 +308,77 @@
 			
 			
           },
-		  
-		   paymentSubmit(e){
-			e.preventDefault() // Prevent page from reloading.
-			
-				
-				 axios.post('add',{
-				  bin_id:this.account_number,
-				  benefeciary:this.client_name,
-				  phone_number:this.phone_number,
-				  district:this.location,
-				  email:this.email,
-				  project:this.select_project,
-				  amount: this.total,
-				})
-				.then(response=>{
+		  paymentSubmit(e){
+		   
+		   e.preventDefault() // Prevent page from reloading.
 				
 				
-				console.log(response.data);
-
-				 
-					window.location.href = response.data;
-					
-				  // console.log(response.data.base);
-				  // if(response.data.data === 'success')
-				  // {
-				  // // this.$fire({
-				  // //         title: 'Success',
-				  // //         text: 'Successfully saved all data',
-				  // //         type: 'success',
-				  // //         timer: 3000
-				  // // })
-				  // }
-				  
-				  
-				  
-				  
-				})
-				.catch(error=>{
-					if(error.response.status === 400){
-						this.$fire({
-						title: "Error",
-						text: error.response.data.error,
-						type: "error",
-						timer: 3000
-						})
+					let amount = this.btn_change();
+					if(amount == 0){
+						return false;
 					}
-				})
+
+
+					 axios.post('add',{
+					  bin_id:this.account_number,
+					  benefeciary:this.client_name,
+					  phone_number:this.phone_number,
+					  district:this.location,
+					  email:this.email,
+					  project:this.select_project,
+					  amount: this.total,
+					})
+					.then(response=>{
+					
+					
+					if(response.data.msg == "error"){
+						alert(response.data.display_mesage);
+						this.client_name="";
+						return false;
+					}
+					
+					else if(response.data.msg  == "no_data"){
+						alert(response.data.display_mesage);
+						return false;
+					}
+					
+					else if(response.data.msg  == "success"){
+						window.location.href = response.data.url;
+						return false;
+					}
+				
+					
+					console.log(response.data);
+
+					console.log(response.data.msg);
+					 
+						//window.location.href = response.data;
+						
+					  // console.log(response.data.base);
+					  // if(response.data.data === 'success')
+					  // {
+					  // // this.$fire({
+					  // //         title: 'Success',
+					  // //         text: 'Successfully saved all data',
+					  // //         type: 'success',
+					  // //         timer: 3000
+					  // // })
+					  // }
+					  
+					  
+					  
+					  
+					})
+					.catch(error=>{
+						if(error.response.status === 400){
+							this.$fire({
+							title: "Error",
+							text: error.response.data.error,
+							type: "error",
+							timer: 3000
+							})
+						}
+					})
 			
 			
 			

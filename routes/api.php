@@ -14,7 +14,7 @@ use App\Http\Controllers\PaymentDetailsController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('payment_callback',[PaymentDetailsController::class,'callback']);
+Route::post('payment_callback',[PaymentDetailsController::class,'callback']);
 Route::get('return_url',[PaymentDetailsController::class,'return_url']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
