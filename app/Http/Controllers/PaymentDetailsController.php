@@ -298,9 +298,7 @@ class PaymentDetailsController extends Controller
 		$txnid = $request->txnid;
 		$status = $request->status;
 		$refno = $request->refno;
-		
-		echo "here";
-		exit;
+	
 		
 	$databaseName = \DB::connection('mysql2')->getDatabaseName();
 		
