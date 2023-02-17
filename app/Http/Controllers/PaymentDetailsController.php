@@ -276,6 +276,7 @@ class PaymentDetailsController extends Controller
 				'payment_month_to' => null,
 				'payment_year_to' => null,
 				'refno' => $request->refno,
+				'updated_by' => null,
 				
 			
 			]
@@ -300,11 +301,26 @@ class PaymentDetailsController extends Controller
 		
 		
 		
+	$databaseName = \DB::connection('mysql2')->getDatabaseName();
+		
+		
+		$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno ";
+		$getallData = \DB::table('payments as t1')
+				->select(\DB::raw($select))
+				->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
+				->leftJoin('data_results AS t3','t3.txnid','=','t1.transaction_id')
+				->where('t1.transaction_id',$request->txnid)
+				->first(); 
+				
+				
+				
+		echo "<pre>";
 	
-	
+		print_r($getallData);
+		echo "</pre>";
 		
 	
-		return view('.returnPage', compact('message','txnid','status','refno'));
+		//return view('.returnPage', compact('message','txnid','status','refno'));
 	}
 	
 }
