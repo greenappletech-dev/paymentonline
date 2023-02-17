@@ -300,59 +300,10 @@ class PaymentDetailsController extends Controller
 		$refno = $request->refno;
 	
 		
-	$databaseName = \DB::connection('mysql2')->getDatabaseName();
-		
-		
-		$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno ";
-		$getallData = \DB::table('payments as t1')
-				->select(\DB::raw($select))
-				->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
-				->leftJoin('data_results AS t3','t3.txnid','=','t1.transaction_id')
-				->where('t1.transaction_id',$request->txnid)
-				->first(); 
-				
-				
-				
-				\DB::connection('mysql2')->table('invoices')->insert(
-			[
-			
-				'loan_id' => @$getallData->loan_id, 
-				'loan_number' => @$getallData->loan_number,
-				'invoice_number' => @$getallData->transaction_id,
-				'particulars' => 'Principal',
-				'particulars_id' => '1',
-				'modeofpayment_id' => 0,
-				'modeofpayment' => @$getallData->procid,
-				'date' => null,
-				'amount_paid' => @$getallData->amount,
-				'user' => 3,
-				'or_number' => null,
-				'or_number_series' => 0,
-				'orseries_id' => 0,
-				'came_from' => null,
-				'collection_by' => @$getallData->procid,
-				'collector_id' => 0,
-				'remarks' => null,
-				'old_loan_number' => null,
-				'old_beneficiaries_id' => null,
-				'payment_month_from' => null,
-				'payment_year_from' => null,
-				'payment_month_to' => null,
-				'payment_year_to' => null,
-				'refno' => $request->refno,
-				'updated_by' => null,
-				
-			
-			]
-		);
-				
-		echo "<pre>";
 	
-		print_r($getallData);
-		echo "</pre>";
 		
 	
-		//return view('.returnPage', compact('message','txnid','status','refno'));
+		return view('.returnPage', compact('message','txnid','status','refno'));
 	}
 	
 }
