@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentDetailsController;
+use App\Http\Controllers\WebsiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,16 @@ use App\Http\Controllers\PaymentDetailsController;
 |
 */
 
+//COMMAND 
+Route::get('/clear_cache', function() {
+    $exitCode = Artisan::call('config:clear');
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:cache');
+	$exitCode = Artisan::call('route:clear');
+    return 'DONE';
+});
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,6 +36,20 @@ Route::post('add',[PaymentDetailsController::class,'add_details']);
 Route::get('payment_redirect/{data}',[PaymentDetailsController::class,'redirect']);
 Route::get('returnPage',[PaymentDetailsController::class,'returnPage'])->name('returnPage');
 Route::post('checkBIN_id',[PaymentDetailsController::class,'checkBIN_id']);
+
+
+// PORTAL
+//Route::get('/portal', 'WebsiteController@index');
+
+Route::get('/portal',[WebsiteController::class,'index']);
+
+Route::get('/website',[WebsiteController::class,'website']);
+Route::post('/getprojectofficeRelated',[WebsiteController::class,'getprojectofficeRelated']);
+Route::post('/searchByDetails',[WebsiteController::class,'searchByDetails']);
+Route::post('/getData',[WebsiteController::class,'getData']);
+
+
+
 
 
 // Auth::routes();

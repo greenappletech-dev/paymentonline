@@ -111,7 +111,11 @@
                     </div>
                 </div>
             </div>
+			<br>
             <button onclick="location.href='information'" class="welcome-button">Pay Now</button>
+			<br>
+			<br>
+			<button onclick="location.href='portal'" class="welcome-button">Check Account</button>
         </div>
         @extends('layouts.footers')
     </div>
