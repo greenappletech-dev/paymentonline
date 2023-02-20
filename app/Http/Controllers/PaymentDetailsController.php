@@ -130,10 +130,15 @@ class PaymentDetailsController extends Controller
 	
 	
 	define('MERCHANT_ID', 'GAPPLETECHASI');
-	define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k');
-	define('ENV_TEST', 1);
-	define('ENV_LIVE', 0);
-	$environment = ENV_TEST;
+	
+	//define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
+	//define('ENV_TEST', 1);
+	
+	define('MERCHANT_PASSWORD', 'L38XsFRPPcmXmNP'); // LIVE SETUP
+	define('ENV_LIVE', 1); 
+	
+	
+	$environment = ENV_LIVE;
    
     $errors = array();
 	$is_link = false;
@@ -199,9 +204,19 @@ class PaymentDetailsController extends Controller
 		  // uncomment this to see the digest string generated for computation.
 		  // var_dump($digest_string); $is_link = true;
 		  $parameters['digest'] = sha1($digest_string);
-		  $url = 'https://gw.dragonpay.ph/Pay.aspx?';
+		 
+
+		  //TEST URL
+		  /*
 		  if ($environment == ENV_TEST) {
-			$url = 'http://test.dragonpay.ph/Pay.aspx?';
+			  
+		    $url = 'http://test.dragonpay.ph/Pay.aspx?';
+		  }
+		  */
+			  
+		  if ($environment == ENV_LIVE){ 
+			  
+			  $url = 'https://gw.dragonpay.ph/Pay.aspx?';
 		  }
 		
 
