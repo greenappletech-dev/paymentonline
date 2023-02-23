@@ -138,7 +138,7 @@ class PaymentDetailsController extends Controller
 	define('ENV_LIVE', 1); 
 	
 	
-	$environment = ENV_TEST;
+	$environment = ENV_LIVE;
    
     $errors = array();
 	$is_link = false;
