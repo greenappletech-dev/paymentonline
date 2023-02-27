@@ -58,7 +58,7 @@
         border-radius: 2px; !important;
         color: white;
         background: #0d6aaa;
-        font-size: 13px;
+        font-size: 45px;
         outline: none;
     }
     @media screen and (max-width: 1168px) {
@@ -111,11 +111,13 @@
                     </div>
                 </div>
             </div>
+			
+			<div style="margin-top:250px">
+            <button onclick="location.href='information'" class="welcome-button" style="width:100%">Pay Now</button>
 			<br>
-            <button onclick="location.href='information'" class="welcome-button">Pay Now</button>
 			<br>
-			<br>
-			<button onclick="location.href='portal'" class="welcome-button">Check Account</button>
+			<button onclick="location.href='portal'" class="welcome-button" style="width:100%">Check Payments</button>
+			</div>
         </div>
         @extends('layouts.footers')
     </div>
