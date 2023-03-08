@@ -50,6 +50,20 @@ class PaymentDetailsController extends Controller
 		}
 		else{
 			
+			
+			if($checkifexist->ismatured == 1)
+			{
+				
+				$output = array("display_mesage" => "Magandang Araw. Ang iyong account ay nangangaailangan ng  karagdagang pagsusuri mula sa NHA. Mangyari lamang na magpunta sa pinakamalapit na NHA Office upang maayos ang iyong bayarin. Maraming Salamat Po.","msg"=>"error");
+				return response()->json($output);
+				exit;
+			}
+			
+			
+			
+			
+			
+			
 			$output = array("data" => $checkifexist,"msg"=>"found");
 			return response()->json($output);
 			
@@ -78,7 +92,17 @@ class PaymentDetailsController extends Controller
 			return response()->json($output);
 			exit;
 		}
-	  
+		else{
+			
+			if($checkifexist->ismatured == 1)
+			{
+				
+				$output = array("display_mesage" => "Magandang Araw. Ang iyong account ay nangangaailangan ng  karagdagang pagsusuri mula sa NHA. Mangyari lamang na magpunta sa pinakamalapit na NHA Office upang maayos ang iyong bayarin. Maraming Salamat Po.","msg"=>"error");
+				return response()->json($output);
+				exit;
+			}
+			
+		}
 	  
 	  $select ="t1.*";
 	  $getData = \DB::connection('mysql2')
