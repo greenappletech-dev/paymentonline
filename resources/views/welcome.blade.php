@@ -37,7 +37,7 @@ html, body {
 
 #fullPage, #brandingWrapper {
     width: 100%;
-    height: 100%;
+    height: 78vh;
     background-color: inherit;
 }
 
@@ -74,7 +74,7 @@ html, body {
 #contentWrapper {
     position: relative;
     width: 800px;
-    height: 100%;
+    height: 78vh;
     overflow: auto;
     background-color: #000;
     margin-left: -800px;
@@ -208,7 +208,7 @@ fieldset[disabled] .btn-green.focus {
 	.center-text {
         position: absolute;
         top: 40%;
-        left: 30%;
+        left: 25%;
         transform: translate(-50%, -50%);
         color: white;
         font-size: 70px;
@@ -220,7 +220,7 @@ fieldset[disabled] .btn-green.focus {
 		padding: 15px;
 		color: #fff;
 		border-top: 1px solid #d2d6de;
-		min-height: 170px;
+		min-height: 160px;
 		z-index: 820;
 	}
 	.main-footer3 {
@@ -259,6 +259,39 @@ fieldset[disabled] .btn-green.focus {
 		font-weight : 600;
         outline: none;
     }
+	
+	.positionbutton{
+		margin-top:160px
+	}
+	
+	
+	
+	 @media screen and (max-width: 1500px){
+		
+		.center-text {
+			position: absolute;
+			top: 40%;
+			left: 25%;
+			transform: translate(-50%, -50%);
+			color: white;
+			font-size: 60px;
+			font-weight: 600;
+		}
+	}
+	
+	 @media screen and (max-width: 1300px){
+		
+		.center-text {
+			position: absolute;
+			top: 40%;
+			left: 20%;
+			transform: translate(-50%, -50%);
+			color: white;
+			font-size: 50px;
+			font-weight: 600;
+		}
+	}
+	
 </style>
   
 </head>
@@ -280,7 +313,7 @@ fieldset[disabled] .btn-green.focus {
     <div id="contentWrapper" class="float">
 		<div id="row">
 		<div class="col-lg-12">
-				<div class="divider"></div>	
+
 				<div class="margin-2">
 			  
 			  
@@ -293,11 +326,11 @@ fieldset[disabled] .btn-green.focus {
 						</tr>
 					</table>
 	
-					<div style="margin-top:250px">
-					<button onclick="location.href='information'" class="welcome-button" style="width:100%">PAY NOW</button>
-					<br>
-					<br>
-					<button onclick="location.href='portal'" class="welcome-button" style="width:100%">CHECK PAYMENTS</button>
+					<div class="positionbutton">
+						<button onclick="location.href='information'" class="welcome-button" style="width:100%">PAY NOW</button>
+						<br>
+						<br>
+						<button onclick="location.href='portal'" class="welcome-button" style="width:100%">CHECK PAYMENTS</button>
 					</div>
 				
 			 
@@ -322,7 +355,7 @@ fieldset[disabled] .btn-green.focus {
 		 
 			<div class="col-lg-4 green_apple">
 				<center>
-					<div style="display:block"><img src="http://localhost/portal/images/green_apple.png"></div>
+					<div style="display:block"><img src="{{ asset('images/green_apple.png') }}"></div>
 					<span class="text">© 2022 Green Apple Technologies and Systems, Inc</span>
 				</center>
 			</div>
