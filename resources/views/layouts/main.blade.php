@@ -15,6 +15,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600;800&display=swap" rel="stylesheet">
+	
+
         
     </head>
     <body>
@@ -78,6 +80,13 @@
                 color: #636e72;
             }
             }
+			
+			
+	
+		
+			
+		
+			
         </style>
 
         <div class="d-flex align-items-center justify-content-center" style="height:130vh">
@@ -96,7 +105,7 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
 
 
-
+	
 
     </body>
 </html>

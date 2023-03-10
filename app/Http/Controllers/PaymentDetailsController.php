@@ -50,20 +50,6 @@ class PaymentDetailsController extends Controller
 		}
 		else{
 			
-			
-			if($checkifexist->ismatured == 1)
-			{
-				
-				$output = array("display_mesage" => "Magandang Araw. Ang iyong account ay nangangaailangan ng  karagdagang pagsusuri mula sa NHA. Mangyari lamang na magpunta sa pinakamalapit na NHA Office upang maayos ang iyong bayarin. Maraming Salamat Po.","msg"=>"error");
-				return response()->json($output);
-				exit;
-			}
-			
-			
-			
-			
-			
-			
 			$output = array("data" => $checkifexist,"msg"=>"found");
 			return response()->json($output);
 			
@@ -97,7 +83,7 @@ class PaymentDetailsController extends Controller
 			if($checkifexist->ismatured == 1)
 			{
 				
-				$output = array("display_mesage" => "Magandang Araw. Ang iyong account ay nangangaailangan ng  karagdagang pagsusuri mula sa NHA. Mangyari lamang na magpunta sa pinakamalapit na NHA Office upang maayos ang iyong bayarin. Maraming Salamat Po.","msg"=>"error");
+				$output = array("display_mesage" => "Magandang Araw. Ang iyong account ay nangangaailangan ng  karagdagang pagsusuri mula sa NHA. Mangyari lamang na magpunta sa pinakamalapit na NHA Office upang maayos ang iyong bayarin. Maraming Salamat Po.","msg"=>"ismatured");
 				return response()->json($output);
 				exit;
 			}
@@ -333,14 +319,13 @@ class PaymentDetailsController extends Controller
 	
 	public function return_url(Request $request){
 		
+		
 		$message = $request->message;
 		$txnid = $request->txnid;
 		$status = $request->status;
 		$refno = $request->refno;
 	
-		
 	
-		
 	
 		return view('.returnPage', compact('message','txnid','status','refno'));
 	}

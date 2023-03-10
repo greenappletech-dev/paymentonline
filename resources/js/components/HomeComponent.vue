@@ -84,7 +84,7 @@
 				
            <div class="col-xl-11 col-sm-12 mt-3" style="margin-top:30px !important;margin-bottom:25px !important">
 				<div class="row">
-					<!--<button class="btn btn-block btn-primary btn-lg" v-on:click="btnpayment()">Submit</button>-->
+					<!--<button class="btn btn-block btn-primary btn-lg" v-on:click="btnpayment()">show modal</button>-->
 					<button type="submit" class="btn btn-block btn-primary btn-lg">Submit</button>
 				</div>
 		   </div>
@@ -98,8 +98,39 @@
 		
   
     </div>
-    </div>
-  
+	
+	
+	<div id="maturedAccountModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content" >
+			  <div class="modal-body">
+				<div style="margin-top:30px">
+					<div class="msgcontent">
+						<p>Maganda Araw. Ang iyong account ay<br>
+						nangangailangan ng karagdagang pagsusuri<br> 
+						mula sa NHA. Mangyari lamang na magpunta sa<br>
+						pinakamalapit na NHA Office upang maayos<br>
+						ang iyong bayarin.</p>
+				
+						
+					</div><br>
+					<center><p style="font-size:40px;font-weight:600;line-height:40px">Maraming Salamat Po.</p></center>
+				</div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+			  </div>
+			 
+			</div>
+		  </div>
+	 </div>
+	
+</div>
+	
+	
+	
+	
   
   </template>
 
@@ -260,9 +291,12 @@
            
          },
 		 
-         btnpayment(){
-		 
-
+         btnpayment(e){
+	
+					
+					
+			
+			return false;
             let total = document.getElementById('total').value;
             this.total = total;
             axios.post('add',{
@@ -312,7 +346,10 @@
 		   
 		   e.preventDefault() // Prevent page from reloading.
 				
-				
+					
+					
+			
+					
 					let amount = this.btn_change();
 					if(amount == 0){
 						return false;
@@ -330,10 +367,26 @@
 					})
 					.then(response=>{
 					
+					if(response.data.msg == "ismatured")
+					{
+					
+						
+						
+						$('#maturedAccountModal').modal('show'); 
+						return false;
+						
+					}
+					
 					
 					if(response.data.msg == "error"){
+					
+					
 						alert(response.data.display_mesage);
-						this.client_name="";
+						//this.client_name="";
+						
+						
+						
+						
 						return false;
 					}
 					
@@ -458,6 +511,15 @@
   
   }
   
+  .msgcontent{
+	
+
+	margin-left:130px;
+	font-size:26px;
+	font-weight:600;
+	line-height:40px
+  }
+  
   @media screen and (max-width: 1199px){
     .pad{
         padding-left: 10px;
@@ -467,4 +529,32 @@
     }
   }
   
+  @media screen and (max-width: 500px){
+    .msgcontent{
+	
+
+		margin-left:10px;
+		font-size:26px;
+		font-weight:600;
+		line-height:40px
+	  }
+	  
+	  .modal {
+			
+		top: 0 !important;
+	}
+  }
+  
+  
+  	.modal-content {
+		
+		border : 7px solid red !important;
+		
+	}
+			
+	.modal {
+			
+		top: 160 !important;
+	}
   </style>
+

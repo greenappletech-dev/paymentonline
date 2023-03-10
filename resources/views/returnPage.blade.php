@@ -107,6 +107,8 @@
 						
 						
 								<div class="row">
+								
+								
 									<div class="col-lg-12">
 										<br>
 										<br>
@@ -147,7 +149,13 @@
 										
 										
 										</table>
-									
+											
+											
+										<br>
+										<br>
+										<p>For inquiries or questions regarding the status of your payment, you may <a href="https://www.greenappletech.ph/" target="_blank">contact us here</a>.</p>	
+											
+
 									</center>
 									
 									

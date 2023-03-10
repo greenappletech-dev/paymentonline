@@ -16,6 +16,9 @@
         padding:10px;
 
     }
+	
+
+	
     .desktop{
         width:70px;
     }

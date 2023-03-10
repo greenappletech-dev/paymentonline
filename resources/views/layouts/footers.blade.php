@@ -4,3 +4,5 @@
        <li style="display:inline-block"><img src="{{asset('image/paynamics_rgb.png')}}" alt="" style="height:40px"></li>
     </div>
 	-->
+	
+	   

@@ -10558,7 +10558,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.pad[data-v-782dcf83]{\r\n    padding-left: 40px;\r\n    padding-right: 0px;\n}\nimg[data-v-782dcf83] {\r\n    width: 100%;\r\n    height: 100%;\n}\n.main[data-v-782dcf83]{\r\n  \r\n    height:500px;\r\n    width: 50%;\r\n    border-radius: 5px;\n}\nbutton[data-v-782dcf83] {\r\n      padding: 15px 50px;\r\n      border: none;\r\n      border-collapse: collapse;\r\n      border-radius: 5px;\r\n      color: white;\r\n      background: #0d6aaa;\r\n      font-size: 13px;\r\n      outline: none;\n}\ninput[type=\"text\"][data-v-782dcf83] {\r\n      font-size: 13px;\r\n      padding: 15px;\r\n      outline: none;\n}\ninput[type=\"text\"][data-v-782dcf83]:focus {\r\n      outline: none;\n}\n.select-custom[data-v-782dcf83] {\r\n      padding: 13px;\n}\n.small-text[data-v-782dcf83] {\r\n      font-size: 13px;\n}\n.medium-text[data-v-782dcf83] {\r\n      font-size: 14px;\n}\n.input-custom[data-v-782dcf83] {\r\n      height: 40px;\r\n      background: #ECECEC;\n}\n.prepend[data-v-782dcf83] {\r\n  \r\n      border: 1px solid #ced4da;\r\n      vertical-align: center;\r\n      padding: 10px;\r\n      color: #6c758f;\r\n      border-radius: 5px 0 0 5px;\n}\n@media screen and (max-width: 1199px){\n.pad[data-v-782dcf83]{\r\n        padding-left: 10px;\n}\nh5[data-v-782dcf83]{\r\n        font-size: 15px;\n}\n}\r\n  \r\n  ", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.pad[data-v-782dcf83]{\r\n    padding-left: 40px;\r\n    padding-right: 0px;\n}\nimg[data-v-782dcf83] {\r\n    width: 100%;\r\n    height: 100%;\n}\n.main[data-v-782dcf83]{\r\n  \r\n    height:500px;\r\n    width: 50%;\r\n    border-radius: 5px;\n}\nbutton[data-v-782dcf83] {\r\n      padding: 15px 50px;\r\n      border: none;\r\n      border-collapse: collapse;\r\n      border-radius: 5px;\r\n      color: white;\r\n      background: #0d6aaa;\r\n      font-size: 13px;\r\n      outline: none;\n}\ninput[type=\"text\"][data-v-782dcf83] {\r\n      font-size: 13px;\r\n      padding: 15px;\r\n      outline: none;\n}\ninput[type=\"text\"][data-v-782dcf83]:focus {\r\n      outline: none;\n}\n.select-custom[data-v-782dcf83] {\r\n      padding: 13px;\n}\n.small-text[data-v-782dcf83] {\r\n      font-size: 13px;\n}\n.medium-text[data-v-782dcf83] {\r\n      font-size: 14px;\n}\n.input-custom[data-v-782dcf83] {\r\n      height: 40px;\r\n      background: #ECECEC;\n}\n.prepend[data-v-782dcf83] {\r\n  \r\n      border: 1px solid #ced4da;\r\n      vertical-align: center;\r\n      padding: 10px;\r\n      color: #6c758f;\r\n      border-radius: 5px 0 0 5px;\n}\n.msgcontent[data-v-782dcf83]{\r\n\t\r\n\r\n\tmargin-left:130px;\r\n\tfont-size:26px;\r\n\tfont-weight:600;\r\n\tline-height:40px\n}\n@media screen and (max-width: 1199px){\n.pad[data-v-782dcf83]{\r\n        padding-left: 10px;\n}\nh5[data-v-782dcf83]{\r\n        font-size: 15px;\n}\n}\n@media screen and (max-width: 500px){\n.msgcontent[data-v-782dcf83]{\r\n\t\r\n\r\n\t\tmargin-left:10px;\r\n\t\tfont-size:26px;\r\n\t\tfont-weight:600;\r\n\t\tline-height:40px\n}\n.modal[data-v-782dcf83] {\r\n\t\t\t\r\n\t\ttop: 0 !important;\n}\n}\n.modal-content[data-v-782dcf83] {\r\n\t\t\r\n\t\tborder : 7px solid red !important;\n}\n.modal[data-v-782dcf83] {\r\n\t\t\t\r\n\t\ttop: 160 !important;\n}\r\n  ", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -10791,8 +10791,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    btnpayment: function btnpayment() {
+    btnpayment: function btnpayment(e) {
       var _this4 = this;
+      return false;
       var total = document.getElementById('total').value;
       this.total = total;
       axios.post('add', {
@@ -10847,9 +10848,14 @@ __webpack_require__.r(__webpack_exports__);
         project: this.select_project,
         amount: this.total
       }).then(function (response) {
+        if (response.data.msg == "ismatured") {
+          $('#maturedAccountModal').modal('show');
+          return false;
+        }
         if (response.data.msg == "error") {
           alert(response.data.display_mesage);
-          _this5.client_name = "";
+          //this.client_name="";
+
           return false;
         } else if (response.data.msg == "no_data") {
           alert(response.data.display_mesage);
@@ -11170,7 +11176,29 @@ var render = function render() {
         return _vm.btn_change();
       }
     }
-  })])])]), _vm._v(" "), _vm._m(4)])])])]);
+  })])])]), _vm._v(" "), _vm._m(4)])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal fade",
+    attrs: {
+      id: "maturedAccountModal",
+      role: "dialog"
+    }
+  }, [_c("div", {
+    staticClass: "modal-dialog modal-lg"
+  }, [_c("div", {
+    staticClass: "modal-content"
+  }, [_c("div", {
+    staticClass: "modal-body"
+  }, [_c("div", {
+    staticStyle: {
+      "margin-top": "30px"
+    }
+  }, [_vm._m(5), _c("br"), _vm._v(" "), _c("center", [_c("p", {
+    staticStyle: {
+      "font-size": "40px",
+      "font-weight": "600",
+      "line-height": "40px"
+    }
+  }, [_vm._v("Maraming Salamat Po.")])])], 1)]), _vm._v(" "), _vm._m(6)])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -11238,6 +11266,24 @@ var staticRenderFns = [function () {
       type: "submit"
     }
   }, [_vm._v("Submit")])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "msgcontent"
+  }, [_c("p", [_vm._v("Maganda Araw. Ang iyong account ay"), _c("br"), _vm._v("\r\n\t\t\t\t\t\tnangangailangan ng karagdagang pagsusuri"), _c("br"), _vm._v(" \r\n\t\t\t\t\t\tmula sa NHA. Mangyari lamang na magpunta sa"), _c("br"), _vm._v("\r\n\t\t\t\t\t\tpinakamalapit na NHA Office upang maayos"), _c("br"), _vm._v("\r\n\t\t\t\t\t\tang iyong bayarin.")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "modal-footer"
+  }, [_c("button", {
+    staticClass: "btn btn-default",
+    attrs: {
+      type: "button",
+      "data-bs-dismiss": "modal"
+    }
+  }, [_vm._v("Close")])]);
 }];
 render._withStripped = true;
 

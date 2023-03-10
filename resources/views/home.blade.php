@@ -6,6 +6,10 @@
 <div  id="app">
     <home-component :district="{{$district}}"></home-component>
 </div>
+
+
+
+
 @stop
 
 @extends('layouts.footers')

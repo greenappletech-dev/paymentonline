@@ -29,6 +29,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/test', function () {
+    return view('welcome2');
+});
+
 Route::get('information',[PaymentDetailsController::class,'epayment'])->name('information');
 Route::get('pay_type/{id}',[PaymentDetailsController::class,'convie']);
 Route::get('project/{id}',[PaymentDetailsController::class,'proj_data']);
