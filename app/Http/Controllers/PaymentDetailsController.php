@@ -17,9 +17,10 @@ class PaymentDetailsController extends Controller
 
 
    public function epayment(){
+	   
+	   
       $district = \DB::connection('mysql2')->table('districts')->get();
-
-    return view('.home',compact('district'));
+		return view('.home',compact('district'));
    }
 
 
@@ -139,13 +140,28 @@ class PaymentDetailsController extends Controller
 	$description = "Payment for NHA monthly bill";
 	
 	
-	define('MERCHANT_ID', 'GAPPLETECHASI');
+	if($request->payment_method == "bank_account")
+	{
+		// LIVE SETUP
+		define('MERCHANT_ID', 'GAPPLETECHASI');
+		define('MERCHANT_PASSWORD', 'L38XsFRPPcmXmNP'); 
+		define('ENV_LIVE', 1); 		
+	}
+	else if($request->payment_method == "e_wallet")
+	{
+		define('MERCHANT_ID', 'GAPPLETECHASI2');
+		define('MERCHANT_PASSWORD', 'pWhSQuj3V5c6vMx'); 
+		define('ENV_LIVE', 1); 
+		
+	}
+	
+	
+	
+	
+	
 	
 	//define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
 	//define('ENV_TEST', 1);
-	
-	define('MERCHANT_PASSWORD', 'L38XsFRPPcmXmNP'); // LIVE SETUP
-	define('ENV_LIVE', 1); 
 	
 	
 	$environment = ENV_LIVE;

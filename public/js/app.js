@@ -10671,6 +10671,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['district', 'mode_payment'],
   data: function data() {
@@ -10686,6 +10690,7 @@ __webpack_require__.r(__webpack_exports__);
       total: 0,
       email: "",
       billing_number: "",
+      payment_method: null,
       amount: "",
       projectTable: [],
       paymentTable: this.mode_payment
@@ -10832,14 +10837,20 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     paymentSubmit: function paymentSubmit(e) {
-      var _this5 = this;
+      var _axios$post,
+        _this5 = this;
       e.preventDefault(); // Prevent page from reloading.
 
       var amount = this.btn_change();
       if (amount == 0) {
         return false;
       }
-      axios.post('add', {
+      var payment_method = this.payment_method;
+      if (payment_method == null) {
+        alert("Please Select Payment Method");
+        return false;
+      }
+      axios.post('add', (_axios$post = {
         bin_id: this.account_number,
         benefeciary: this.client_name,
         phone_number: this.phone_number,
@@ -10847,7 +10858,7 @@ __webpack_require__.r(__webpack_exports__);
         email: this.email,
         project: this.select_project,
         amount: this.total
-      }).then(function (response) {
+      }, _defineProperty(_axios$post, "amount", this.total), _defineProperty(_axios$post, "payment_method", this.payment_method), _axios$post)).then(function (response) {
         if (response.data.msg == "ismatured") {
           $('#maturedAccountModal').modal('show');
           return false;
@@ -11176,7 +11187,69 @@ var render = function render() {
         return _vm.btn_change();
       }
     }
-  })])])]), _vm._v(" "), _vm._m(4)])])]), _vm._v(" "), _c("div", {
+  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-xl-11 col-sm-12 mt-3",
+    staticStyle: {
+      "margin-top": "20px!"
+    }
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("label", {
+    staticClass: "medium-text"
+  }, [_vm._v("Select Payment Method")]), _vm._v(" "), _c("table", {
+    staticStyle: {
+      width: "100%"
+    },
+    attrs: {
+      border: "0"
+    }
+  }, [_c("tr", [_c("td", [_c("div", {
+    staticClass: "radio"
+  }, [_c("label", [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.payment_method,
+      expression: "payment_method"
+    }],
+    attrs: {
+      type: "radio",
+      name: "payment_method",
+      id: "bank_account",
+      value: "bank_account"
+    },
+    domProps: {
+      checked: _vm._q(_vm.payment_method, "bank_account")
+    },
+    on: {
+      change: function change($event) {
+        _vm.payment_method = "bank_account";
+      }
+    }
+  }), _vm._v("\r\n\t\t\t\t\t\t\t\t\t\t\t  Bank Account\r\n\t\t\t\t\t\t\t\t\t\t")])])]), _vm._v(" "), _c("td", [_c("div", {
+    staticClass: "radio"
+  }, [_c("label", [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.payment_method,
+      expression: "payment_method"
+    }],
+    attrs: {
+      type: "radio",
+      name: "payment_method",
+      id: "e_wallet",
+      value: "e_wallet"
+    },
+    domProps: {
+      checked: _vm._q(_vm.payment_method, "e_wallet")
+    },
+    on: {
+      change: function change($event) {
+        _vm.payment_method = "e_wallet";
+      }
+    }
+  }), _vm._v("\r\n\t\t\t\t\t\t\t\t\t\t\t  E-Wallet\r\n\t\t\t\t\t\t\t\t\t\t")])])])])])])]), _vm._v(" "), _vm._m(4)])])]), _vm._v(" "), _c("div", {
     staticClass: "modal fade",
     attrs: {
       id: "maturedAccountModal",
@@ -11255,7 +11328,7 @@ var staticRenderFns = [function () {
   return _c("div", {
     staticClass: "col-xl-11 col-sm-12 mt-3",
     staticStyle: {
-      "margin-top": "30px !important",
+      "margin-top": "10px !important",
       "margin-bottom": "25px !important"
     }
   }, [_c("div", {

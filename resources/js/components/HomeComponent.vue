@@ -77,12 +77,48 @@
                             <input type="number" class="input-custom form-control small-text" v-on:blur="btn_change()" id="amount" v-bind:value="amount"  required>
                         </div>
                 </div>
+				
+				
+				
   
   
             </div>
 			
+			<div class="col-xl-11 col-sm-12 mt-3" style="margin-top:20px!">
+					<div class="row">
+                    
+						<label class="medium-text">Select Payment Method</label>
+  
+                        <table style="width:100%" border="0">
+							<tr>
+								<td>
+									<div class="radio">
+										<label>
+										  <input type="radio" name="payment_method" v-model="payment_method" id="bank_account"  value="bank_account" >
+											&nbsp;&nbsp;Bank Account
+										</label>
+									</div>
+								</td>
+								<td>
+									<div class="radio">
+										<label>
+										  <input type="radio" name="payment_method" v-model="payment_method"  id="e_wallet" value="e_wallet" >
+											&nbsp;&nbsp;E-Wallet
+										</label>
+									</div>
+								</td>
+								
+							</tr>
+						</table>
+						
+						
+					</div>
 				
-           <div class="col-xl-11 col-sm-12 mt-3" style="margin-top:30px !important;margin-bottom:25px !important">
+		   </div>
+			
+			
+				
+           <div class="col-xl-11 col-sm-12 mt-3" style="margin-top:10px !important;margin-bottom:25px !important">
 				<div class="row">
 					<!--<button class="btn btn-block btn-primary btn-lg" v-on:click="btnpayment()">show modal</button>-->
 					<button type="submit" class="btn btn-block btn-primary btn-lg">Submit</button>
@@ -151,6 +187,7 @@
                 total: 0,
                 email:"",
                 billing_number:"",
+				payment_method:null,
                 amount:"",
                 projectTable:[],
                 paymentTable:this.mode_payment
@@ -354,7 +391,17 @@
 					if(amount == 0){
 						return false;
 					}
-
+					
+					
+					let payment_method = this.payment_method;
+					
+					if(payment_method == null){
+				
+						alert("Please Select Payment Method");
+						return false;
+						
+					}
+					
 
 					 axios.post('add',{
 					  bin_id:this.account_number,
@@ -364,6 +411,8 @@
 					  email:this.email,
 					  project:this.select_project,
 					  amount: this.total,
+					  amount: this.total,
+					  payment_method : this.payment_method,
 					})
 					.then(response=>{
 					
