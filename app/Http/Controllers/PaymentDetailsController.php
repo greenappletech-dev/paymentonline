@@ -128,6 +128,7 @@ class PaymentDetailsController extends Controller
 	  $store->email	              = $request->email;
 	  $store->amount	 		  = $request->amount;
 	  $store->transaction_date	  = $trans_date ;
+	  $store->payment_method	  = $request->payment_method;
 	  $store->save();
 
 	  $transaction_id = str_pad($store->id, 12,'0', STR_PAD_LEFT);
