@@ -142,63 +142,8 @@ html, body {
  font-weight: 700 !important;
   
 }
-.btn-green:focus,
-.btn-green.focus {
-  color: #000;
-  background-color: #82d883;
-  border-color: #8fd290;
-}
-.btn-green:hover {
-  color: #000;
-  background-color: #82d883;
-  border-color: #8fd290;
-}
-.btn-green:active,
-.btn-green.active,
-.open > .dropdown-toggle.btn-green {
-  color: #000;
-  background-color: #82d883;
-  border-color: #82d883;
-}
-.btn-green:active:hover,
-.btn-green.active:hover,
-.open > .dropdown-toggle.btn-green:hover,
-.btn-green:active:focus,
-.btn-green.active:focus,
-.open > .dropdown-toggle.btn-green:focus,
-.btn-green:active.focus,
-.btn-green.active.focus,
-.open > .dropdown-toggle.btn-green.focus {
-  color: #000;
-    background-color: #82d883;
-  border-color: #8fd290;
-}
-.btn-green:active,
-.btn-green.active,
-.open > .dropdown-toggle.btn-green {
-  background-image: none;
-}
-.btn-green.disabled:hover,
-.btn-green[disabled]:hover,
-fieldset[disabled] .btn-green:hover,
-.btn-green.disabled:focus,
-.btn-green[disabled]:focus,
-fieldset[disabled] .btn-green:focus,
-.btn-green.disabled.focus,
-.btn-green[disabled].focus,
-fieldset[disabled] .btn-green.focus {
-  background-color: #38a039;
-  border-color: #8fd290;
-}
-.btn-green .badge {
-  color: #000;
-  background-color: #38a039;
-}
 
-.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
-    position: absolute;
-    margin-left: 0px !important; 
-}
+
 
 .icheck > label {
     padding-left: 20px !important; 
@@ -292,6 +237,50 @@ fieldset[disabled] .btn-green.focus {
 		}
 	}
 	
+	
+	
+	 @media screen and (max-width:500px){
+		
+		.positionbutton {
+			margin-top: 100px;
+			margin-left: 200px;
+		}
+		
+		.margin-2 {
+			margin: 30px;
+		}
+		
+			
+		.col-centered {
+			float: none;
+			margin: 0 auto;
+		}
+		
+		
+		.margin-adjust{
+			
+			padding-left : 110px;
+			padding-right : 110px;
+		}
+	
+		
+		 .welcome-button {
+			padding: 15px 50px;
+			border: none;
+			border-collapse: collapse;
+			border-radius: 2px !important;
+			color: white;
+			background: #0d6aaa;
+			font-size: 30px;
+			font-weight : 600;
+			outline: none;
+		}
+		
+	}
+	
+
+
+	
 </style>
   
 </head>
@@ -312,9 +301,9 @@ fieldset[disabled] .btn-green.focus {
 		
     <div id="contentWrapper" class="float">
 		<div id="row">
-		<div class="col-lg-12">
+		<div class="col-lg-12" >
 
-				<div class="margin-2">
+				<div class="margin-2   margin-adjust">
 			  
 			  
 			  
@@ -348,9 +337,9 @@ fieldset[disabled] .btn-green.focus {
 
 	
 </div>
-
+<div style="clear:both"></div>
 <footer class="main-footer2">
-		 <div class="col-lg-12">
+		 <div class="col-lg-12 col-centered">
 		 
 		 
 			<div class="col-lg-4 green_apple">
