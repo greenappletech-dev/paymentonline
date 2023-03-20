@@ -281,7 +281,7 @@ html, body {
 		}
 		
 		.wrapText {
-		inline-size: 350px;
+		inline-size: 310px;
 		overflow-wrap: break-word;
 		}
 	
