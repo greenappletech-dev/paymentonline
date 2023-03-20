@@ -319,15 +319,16 @@ html, body {
 				<div class="margin-2   margin-adjust">
 			  
 			  
-			  
+					<div class="positionbutton">
 					<table width="100%" border="0">
 						<tr>
-							<td><img src="{{ asset('image/nha_logo_1_140.png') }}" alt=""></td>
-							<td><img src="{{ asset('image/nha_logo_2_140.png') }}" alt=""></td>
-							<td><img src="{{ asset('image/GA_logo_180.png') }}" alt=""></td>
+							<td><img src="{{ asset('image/nha_logo_1_140.png') }}" alt="" style="width:90%"></td>
+							<td><img src="{{ asset('image/nha_logo_2_140.png') }}" alt="" style="width:90%"></td>
+							<td><img src="{{ asset('image/GA_logo_180.png') }}" alt="" style="width:90%"></td>
 						</tr>
 					</table>
-	
+					</div>
+					
 					<div class="positionbutton">
 						<button onclick="location.href='information'" class="welcome-button" style="width:100%">PAY NOW</button>
 						<br>
