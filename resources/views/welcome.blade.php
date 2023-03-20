@@ -276,10 +276,23 @@ html, body {
 			outline: none;
 		}
 		
+		.centeredText {
+			 text-align: justify !important;
+		}
+		
+		.wrapText {
+		inline-size: 350px;
+		overflow-wrap: break-word;
+		}
+	
+		
 	}
 	
 
-
+	.centeredText {
+			 text-align: center;
+	}
+	
 	
 </style>
   
@@ -343,31 +356,33 @@ html, body {
 		 
 		 
 			<div class="col-lg-4 green_apple">
-				<center>
+				<div class="centeredText">
 					<div style="display:block"><img src="{{ asset('images/green_apple.png') }}"></div>
-					<span class="text">© 2022 Green Apple Technologies and Systems, Inc</span>
-				</center>
+				<div class="wrapText"><span class="text">© 2022 Green Apple Technologies and Systems, Inc</span></div>
+				</div>
 			</div>
 			
 			<div class="col-lg-4" style="margin-top:30px">
-				<center>
+				<div class="centeredText">
 					<span class="text">Unit 16A Petron Mega Plaza</span><br>
 					<span class="text">358 Sen. Gil. J. Puyat Avenue</span><br>
 					<span class="text">Bel-air, Makati City</span><br>
-				</center>
+				</div>
 			</div>
 			<div class="col-lg-4" style="margin-top:30px">
-				<center>
+				<div class="centeredText">
 					<span class="text">Customer hotline : +63 927 522 9568</span><br>
 					<span class="text">Green Apple Tel. No: +63 8 681 9680</span><br>
 					<span class="text">Inquire : inquiry@greenappletech.ph</span><br>
-				</center>
+				</div>
 			</div>
 		</div>
   </footer>
   <footer class="main-footer3">
     <div class="container">
-      <center><strong><a href="javascript:void(0)" class="link" id="privacy-policy">Privacy Policy</a>&nbsp;&nbsp;<span class="link">|</span>&nbsp;&nbsp;<a href="javascript:void(0)" class="link" id="Transaction-Security">Transaction Security</a></strong></center>
+      <div class="centeredText">
+	  <strong><a href="javascript:void(0)" class="link" id="privacy-policy">Privacy Policy</a>&nbsp;&nbsp;<span class="link">|</span>&nbsp;&nbsp;<a href="javascript:void(0)" class="link" id="Transaction-Security">Transaction Security</a></strong>
+	  </div>
 	</div>
   </footer>
 
