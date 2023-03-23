@@ -261,9 +261,6 @@ class PaymentDetailsController extends Controller
 	public function callback(Request $request)
     {
 	
-
-	
-	
 	  $store = new data_results();
       $store->txnid = @$request->txnid;
 	  $store->procid = @$request->procid;
@@ -277,20 +274,14 @@ class PaymentDetailsController extends Controller
 		$databaseName = \DB::connection('mysql2')->getDatabaseName();
 		
 		
-		$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno ";
+		$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno,t3.created_at as createdAT,t3.updated_at as updatedAT ";
 		$getallData = \DB::table('payments as t1')
 				->select(\DB::raw($select))
 				->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
 				->leftJoin('data_results AS t3','t3.txnid','=','t1.transaction_id')
 				->where('t1.transaction_id',$request->txnid)
 				->first(); 
-		
-		
-		$select = "t1.*";
-		$data_results = \DB::table('data_results as t1')
-				->select(\DB::raw($select)
-				->where('t1.transaction_id',$request->txnid)
-				->first();
+
 		
 	  // SAVE IN COLLECTION PAYMENT (invoices table)	
 	  if($request->status == "S" ){
@@ -326,8 +317,8 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'updated_by' => null,
 				
-				'created_at' => $data_results->created_at,
-				'updated_at' => $data_results->updated_at
+				'created_at' => @$getallData->createdAT,
+				'updated_at' => @$getallData->updatedAT,
 				
 			
 			]
