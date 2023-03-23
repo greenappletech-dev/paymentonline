@@ -286,6 +286,12 @@ class PaymentDetailsController extends Controller
 				->first(); 
 		
 		
+		$select = "t1.*";
+		$data_results = \DB::table('data_results as t1')
+				->select(\DB::raw($select)
+				->where('t1.transaction_id',$request->txnid)
+				->first();
+		
 	  // SAVE IN COLLECTION PAYMENT (invoices table)	
 	  if($request->status == "S" ){
 		  
@@ -319,6 +325,9 @@ class PaymentDetailsController extends Controller
 				'payment_year_to' => null,
 				'refno' => $request->refno,
 				'updated_by' => null,
+				
+				'created_at' => $data_results->created_at,
+				'updated_at' => $data_results->updated_at
 				
 			
 			]
