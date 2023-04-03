@@ -274,7 +274,7 @@ class PaymentDetailsController extends Controller
 		$databaseName = \DB::connection('mysql2')->getDatabaseName();
 		
 		
-		$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno,t3.created_at as createdAT,t3.updated_at as updatedAT ";
+		$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno,t3.created_at as createdAT,t3.updated_at as updatedAT,t1.payment_method ";
 		$getallData = \DB::table('payments as t1')
 				->select(\DB::raw($select))
 				->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
@@ -316,6 +316,8 @@ class PaymentDetailsController extends Controller
 				'payment_year_to' => null,
 				'refno' => $request->refno,
 				'updated_by' => null,
+				
+				'payment_method' => @$getallData->payment_method,
 				
 				'created_at' => @$getallData->createdAT,
 				'updated_at' => @$getallData->updatedAT,
