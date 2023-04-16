@@ -143,6 +143,8 @@
 			  <div class="modal-body">
 				<div style="margin-top:30px">
 					<div class="msgcontent">
+					
+					
 						<p>Maganda Araw. Ang iyong account ay<br>
 						nangangailangan ng karagdagang pagsusuri<br> 
 						mula sa NHA. Mangyari lamang na magpunta sa<br>

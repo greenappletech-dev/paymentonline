@@ -96,7 +96,7 @@ class PaymentDetailsController extends Controller
 				->table('invoices as t1')
 				->select(\DB::raw($select))
 				->leftjoin('loans as t2','t2.loan_id','=','t1.loan_number')				
-				->whereIn('t1.particulars', ['Principal','Cash','cash','HOUSING AMORTIZATION'])
+				->whereIn('t1.particulars', ['Principal','Cash','cash','HOUSING AMORTIZATION','Interest on Amortization'])
 				->whereNotNull('t1.or_number')
 				->where('t2.beneficiaries_id', $request->bin_id)
 				->get();
