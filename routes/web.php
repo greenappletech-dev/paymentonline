@@ -47,6 +47,8 @@ Route::post('checkBIN_id',[PaymentDetailsController::class,'checkBIN_id']);
 //Route::get('/portal', 'WebsiteController@index');
 
 Route::get('/portal',[WebsiteController::class,'index']);
+Route::post('/checkIFvalidDetails',[WebsiteController::class,'checkIFvalidDetails']);
+
 
 Route::get('/website',[WebsiteController::class,'website']);
 Route::post('/getprojectofficeRelated',[WebsiteController::class,'getprojectofficeRelated']);

@@ -56,8 +56,36 @@ class WebsiteController extends Controller
 		return response()->json($data);
 		
 	}
+	
+	public function checkIFvalidDetails(Request $request){
+		
+		
+			
+			
+			if( 
+				\DB::connection('mysql2')->table('beneficiaries as t1')
+				->leftJoin('loans AS t2','t2.beneficiaries_id','=','t1.beneficiaries_id')	
+				->where('t2.beneficiaries_id', $request->beneficiaries_id)	
+				->where('t2.district_id', $request->district)	
+				->where('t2.project_office_id', $request->project_office)	
+				->where('t1.last_name', $request->last_name)	
+				->exists()
+			)
+			{
+				
+				echo "exist";
+			}
+			else{
+				
+				echo "notexist";
+			}
+
+			
+			
+	}
 	public function searchByDetails(Request $request)
 	{
+
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
 					CONCAT(t1.last_name,' ',t1.first_name,' ',t1.middle_name) as Name, 

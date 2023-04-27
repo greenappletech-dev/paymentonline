@@ -32,6 +32,11 @@
 	<script src="{{ asset('adminlte/bootstrap/js/bootstrap.min.js')}}"></script>
 	<!-- AdminLTE App -->
 	<script src="{{ asset('adminlte/dist/js/app.min.js')}}"></script>
+	
+	
+<!-- sweet alert  !-->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.js"></script>
 
 
  
@@ -330,7 +335,8 @@ body {
 	
    
    
-    <form method="POST" action="{{ url('searchByDetails') }}" id="FormLogin" >
+    <!--<form method="POST" action="{{ url('searchByDetails') }}" id="FormLogin" >-->
+	<form id="FormLogin" method="POST" action="">
      @csrf 
 		 <div class="row">
 			<div class="col-lg-12">
@@ -359,11 +365,12 @@ body {
 				</div>
 			</div>
 		</div>
+		</form>
 		<div style="clear:both;margin-bottom:15px"></div>
 		<div class="form-group has-feedback">      
-			  <button class="btn btn-primary btn-lg btn-block mb-2 mb-lg-5" type="submit">View Payment History</button>
+			  <button class="btn btn-primary btn-lg btn-block mb-2 mb-lg-5" id="view">View Payment History</button>
 		</div>
-    </form>
+
 
 
  
@@ -372,9 +379,6 @@ body {
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
-
-
-
 </div>
 
 
@@ -429,6 +433,51 @@ $('#district').change(function() {
 	
 });
 </script>
+
+
+
+<script>
+$(document).on('click','#view',function(e){
+
+	
+	let formData = $('#FormLogin').serialize();
+		$.ajax({
+			url: "{{ asset('checkIFvalidDetails') }}",
+			data : formData,
+			headers:{'X-CSRF-TOKEN':$('meta[name="_token"]').attr('content')},
+			type : 'POST',
+			success:function(res){				
+				
+				
+				if(res == "notexist"){
+					
+					swal({
+						type:'warning',
+						title:"Oops..",
+						html:"Data not found in our system<br><br>please check your bin, last name,district and project"
+					})
+					
+					return false;
+				}
+				else{
+					
+
+					 var url = "{{ asset('searchByDetails')}}";
+					$("#FormLogin").attr('action',url);
+					$("#FormLogin" ).submit();
+					
+				}
+				
+			}	
+		});
+	
+
+
+});
+</script>
+
+
+
 
 
 </body>
