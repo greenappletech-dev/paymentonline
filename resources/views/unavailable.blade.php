@@ -112,7 +112,7 @@
 									<div class="col-lg-12">
 										<br>
 										<br>
-								
+										<center>
 								
 											<h3>SYSTEM ADVISORY</h3>
 											<br>
@@ -120,11 +120,13 @@
 											<p style="font-size:18px;font-height:25px">
 											WE WOULD LIKE TO INFORM EVERYONE THAT AS OF MAY 03, 2023, ONLINE PAYMENTS WILL BE TEMPORARILY DEACTIVATED DUE TO SYSTEM UPDATES TO SERVE YOU BETTER. YOU MAY STILL PAY THROUGH OUR FIELD COLLECTORS AND DISTRICT CASHIERS FOR THE MEANTIME. THANK YOU FOR YOUR UNDERSTANDING.
 											</p>
+										</center>
+										
 										<br>
 										<br>
 										
 										<center>	
-										<p>For inquiries or questions regarding the status of your payment, you may <a href="https://www.greenappletech.ph/" target="_blank">contact us here</a>.</p>	
+										<p>For inquiries or questions regarding the status of your payment, you may <a href="http://www.greenappletech.ph/" target="_blank">contact us here</a>.</p>	
 											
 
 									</center>
