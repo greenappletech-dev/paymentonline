@@ -19,6 +19,10 @@ class PaymentDetailsController extends Controller
    public function epayment(){
 	   
 	   
+	   
+	  return view('.unavailable');
+	   
+	   exit;
       $district = \DB::connection('mysql2')->table('districts')->get();
 		return view('.home',compact('district'));
    }
