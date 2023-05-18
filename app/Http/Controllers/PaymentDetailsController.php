@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\PaymentDetail;
 use App\Models\data_results;
 use App\Models\payments;
-
+use Illuminate\Support\Facades\DB;
 
 use Crazymeeks\Foundation\PaymentGateway\Dragonpay;
 
@@ -15,16 +15,40 @@ class PaymentDetailsController extends Controller
 {
 
 
+	public function test(){
+		
+		//$user = \DB::connection('sqlsrv')->table('NM_Users')->get();
+		
+			//$sql="Select * from NM_Users";
+			//$query =  \DB::connection('sqlsrv')->select($sql);
+			//$res = $query->result();
+			 //print_r($query );
+		
+			  try {
+				\DB::connection('sqlsrv')->getPdo();
+				if(\DB::connection('sqlsrv')->getDatabaseName()){
+					echo "Yes! Successfully connected to the DB: " . \DB::connection('sqlsrv')->getDatabaseName();
+				}else{
+					die("Could not find the database. Please check your configuration.");
+				}
+			} catch (\Exception $e) {
+				die("Could not open connection to database server.  Please check your configuration.");
+			}
+		
+
+			
+	}
+
+
 
    public function epayment(){
-	   
-	   
-	   
-	  return view('.unavailable');
-	   
-	   exit;
+	    
+	  //return view('.unavailable');
+	  //exit;
+	  
+	  
       $district = \DB::connection('mysql2')->table('districts')->get();
-		return view('.home',compact('district'));
+	  return view('.home',compact('district'));
    }
 
 

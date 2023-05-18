@@ -15,6 +15,10 @@ use App\Http\Controllers\WebsiteController;
 |
 */
 
+
+
+
+
 //COMMAND 
 Route::get('/clear_cache', function() {
     $exitCode = Artisan::call('config:clear');
@@ -30,9 +34,14 @@ Route::get('/', function () {
 });
 
 
+/*
 Route::get('/test', function () {
     return view('welcome2');
 });
+*/
+
+Route::get('test',[PaymentDetailsController::class,'test'])->name('test');
+
 
 Route::get('information',[PaymentDetailsController::class,'epayment'])->name('information');
 Route::get('pay_type/{id}',[PaymentDetailsController::class,'convie']);
