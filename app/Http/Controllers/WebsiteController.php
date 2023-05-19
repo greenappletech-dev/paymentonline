@@ -216,7 +216,7 @@ class WebsiteController extends Controller
 			
 			
 			
-			$status = array('S'=>"SUCCESSFUL",'P'=>"PENDING");
+			$status = array('S'=>"SUCCESSFUL",'P'=>"PENDING", "F" => "FAILED");
 			if(!empty($onlinepayment)){
 				
 				foreach ($onlinepayment as $dd){
