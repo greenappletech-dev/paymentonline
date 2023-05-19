@@ -154,7 +154,7 @@ class PaymentDetailsController extends Controller
 		}
 		
 		
-		exit;
+		
 	  
 	  $select ="t1.*";
 	  $getData = \DB::connection('mysql2')
