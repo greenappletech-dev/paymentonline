@@ -109,15 +109,52 @@ class PaymentDetailsController extends Controller
 		}
 		else{
 			
+			/*
 			if($checkifexist->ismatured == 1)
-			{
+			{	
+				$output = array("display_mesage" => "Magandang Araw. Ang iyong account ay nangangaailangan ng  karagdagang pagsusuri mula sa NHA. Mangyari lamang na magpunta sa pinakamalapit na NHA Office upang maayos ang iyong bayarin. Maraming Salamat Po.","msg"=>"ismatured");
+				return response()->json($output);
+				exit;
+			}
+			*/
+			
+			$dateToday = $trans_date = date("Y-m-d");
+			$matured_date = $checkifexist->matured_date;
+			
+			
+			$today_time = strtotime($dateToday);
+			$expire_time = strtotime($matured_date);
+
+			if ($expire_time < $today_time) {
+				/* do Something */ 
+				
+				
+				\DB::connection('mysql2')
+				->table('loans')
+				->where('loan_id', $checkifexist->loan_id)
+				->update([
+					'ismatured' => 1
+				]);
+				
+				
 				
 				$output = array("display_mesage" => "Magandang Araw. Ang iyong account ay nangangaailangan ng  karagdagang pagsusuri mula sa NHA. Mangyari lamang na magpunta sa pinakamalapit na NHA Office upang maayos ang iyong bayarin. Maraming Salamat Po.","msg"=>"ismatured");
 				return response()->json($output);
 				exit;
 			}
 			
+			
+			
+			
+			
+			
+			
+			
+			
 		}
+		
+		
+		exit;
 	  
 	  $select ="t1.*";
 	  $getData = \DB::connection('mysql2')

@@ -83,6 +83,8 @@ class WebsiteController extends Controller
 			
 			
 	}
+	
+	
 	public function searchByDetails(Request $request)
 	{
 
@@ -239,24 +241,8 @@ class WebsiteController extends Controller
 					$totalamount = $totalamount  + $dd->amount;
 				}
 			}
+		
 			
-				
-				
-				
-				
-				
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-				
-				
 				/*
 				$data = array();
 				if(!empty($getallData)){
