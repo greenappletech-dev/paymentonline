@@ -256,7 +256,7 @@
 				 return 0;
 				 return false;
 			   }
-			   else if(amount <= 50 ){
+			   else if(amount < 50 ){
 				alert("We're sorry, but the payment amount you entered is below the minimum required amount (Php 50.00). To complete this transaction, please make sure your payment meets the minimum required amount. Thank you.");
 				 this.total=0;
 				 this.amount=0;
