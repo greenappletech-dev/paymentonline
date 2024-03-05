@@ -85,6 +85,24 @@ class PaymentDetailsController extends Controller
 		}
 	}
 
+	public function getcurrentThreshold(Request $request){
+			
+			
+			
+				$threshold = \DB::connection('mysql')
+				->table('threshold_payment as t1')
+				->select(\DB::raw("*"))
+				->first();
+			$number = $threshold->amount;
+			
+			
+			$output = array( "threshold" => $number,
+							 "decimal" => number_format((float)$number, 2, '.', ''),
+						   );
+			return response()->json($output);
+	}
+
+
    public function add_details(Request $request){
 
 	

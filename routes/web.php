@@ -50,7 +50,7 @@ Route::post('add',[PaymentDetailsController::class,'add_details']);
 Route::get('payment_redirect/{data}',[PaymentDetailsController::class,'redirect']);
 Route::get('returnPage',[PaymentDetailsController::class,'returnPage'])->name('returnPage');
 Route::post('checkBIN_id',[PaymentDetailsController::class,'checkBIN_id']);
-
+Route::post('getcurrentThreshold',[PaymentDetailsController::class,'getcurrentThreshold']);
 
 // PORTAL
 //Route::get('/portal', 'WebsiteController@index');
