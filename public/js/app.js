@@ -10735,18 +10735,33 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       });
     },
     btn_change: function btn_change() {
+      var _this3 = this;
       var amount = document.getElementById('amount').value;
+      axios.post('getcurrentThreshold', {}).then(function (response) {
+        var treshold_amount = response.data.decimal;
+        var treshold = response.data.threshold;
+        if (amount < treshold) {
+          alert("We're sorry, but the payment amount you entered is below the minimum required amount (Php " + treshold_amount + " ). To complete this transaction, please make sure your payment meets the minimum required amount. Thank you.");
+          _this3.total = 0;
+          _this3.amount = 0;
+          return 0;
+          return false;
+        }
+      })["catch"](function (error) {
+        if (error.response.status === 400) {
+          _this3.$fire({
+            title: "Error",
+            text: error.response.threshold.error,
+            type: "error",
+            timer: 3000
+          });
+        }
+      });
       if (amount == "") {
         this.total = 0;
         this.amount = 0;
       } else if (amount <= 0) {
         alert('less than P 1.00 cannot accept');
-        this.total = 0;
-        this.amount = 0;
-        return 0;
-        return false;
-      } else if (amount <= 50) {
-        alert("We're sorry, but the payment amount you entered is below the minimum required amount (Php 50.00). To complete this transaction, please make sure your payment meets the minimum required amount. Thank you.");
         this.total = 0;
         this.amount = 0;
         return 0;
@@ -10757,7 +10772,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       }
     },
     CheckBinifExist: function CheckBinifExist() {
-      var _this3 = this;
+      var _this4 = this;
       var account_number = document.getElementById('account_number').value;
       var district = document.getElementById('district').value;
       var project_id = document.getElementById('project_id').value;
@@ -10785,15 +10800,15 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       }).then(function (response) {
         console.log(response.data.msg);
         if (response.data.msg == "error") {
-          _this3.client_name = "";
+          _this4.client_name = "";
           alert(response.data.display_mesage);
           return false;
         } else {
-          _this3.client_name = response.data.data.full_name;
+          _this4.client_name = response.data.data.full_name;
         }
       })["catch"](function (error) {
         if (error.response.status === 400) {
-          _this3.$fire({
+          _this4.$fire({
             title: "Error",
             text: error.response.data.error,
             type: "error",
@@ -10803,7 +10818,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       });
     },
     btnpayment: function btnpayment(e) {
-      var _this4 = this;
+      var _this5 = this;
       return false;
       var total = document.getElementById('total').value;
       this.total = total;
@@ -10833,7 +10848,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         // }
       })["catch"](function (error) {
         if (error.response.status === 400) {
-          _this4.$fire({
+          _this5.$fire({
             title: "Error",
             text: error.response.data.error,
             type: "error",
@@ -10844,7 +10859,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
     },
     paymentSubmit: function paymentSubmit(e) {
       var _axios$post,
-        _this5 = this;
+        _this6 = this;
       e.preventDefault(); // Prevent page from reloading.
 
       var amount = this.btn_change();
@@ -10898,7 +10913,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         // }
       })["catch"](function (error) {
         if (error.response.status === 400) {
-          _this5.$fire({
+          _this6.$fire({
             title: "Error",
             text: error.response.data.error,
             type: "error",
