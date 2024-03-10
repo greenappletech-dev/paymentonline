@@ -244,9 +244,11 @@
           btn_change(){
            
 			   let amount = document.getElementById('amount').value;
-			
+			  let project_id = document.getElementById('project_id').value;
 			   
-			   axios.post('getcurrentThreshold',{})
+			   axios.post('getcurrentThreshold',{
+			   project_id:project_id,
+			   })
 			   .then(response=>{
 			   
 					let treshold_amount = response.data.decimal;

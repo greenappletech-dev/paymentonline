@@ -10737,7 +10737,10 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
     btn_change: function btn_change() {
       var _this3 = this;
       var amount = document.getElementById('amount').value;
-      axios.post('getcurrentThreshold', {}).then(function (response) {
+      var project_id = document.getElementById('project_id').value;
+      axios.post('getcurrentThreshold', {
+        project_id: project_id
+      }).then(function (response) {
         var treshold_amount = response.data.decimal;
         var treshold = response.data.threshold;
         if (amount < treshold) {

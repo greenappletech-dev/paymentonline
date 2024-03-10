@@ -89,11 +89,14 @@ class PaymentDetailsController extends Controller
 			
 			
 			
-				$threshold = \DB::connection('mysql')
-				->table('threshold_payment as t1')
-				->select(\DB::raw("*"))
-				->first();
-			$number = $threshold->amount;
+			$threshold = \DB::connection('mysql2')
+			->table('project_offices as t1')
+			->select(\DB::raw("*"))
+			->where('t1.id', $request->project_id)
+			->first();
+			
+			
+			$number = $threshold->amount_thresholds;
 			
 			
 			$output = array( "threshold" => $number,
