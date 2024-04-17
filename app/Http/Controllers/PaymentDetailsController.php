@@ -350,7 +350,7 @@ class PaymentDetailsController extends Controller
 		if($request->status == 'S'){
 			$trnx = @$request->txnid;
 			$separate = explode("-", $trnx);
-			if($separate=='R3'){
+			if($separate[0]=='R3'){
 				$dataArr = [
 					'txnid' => @$request->txnid,
 					'status' => $request->status,
@@ -444,7 +444,7 @@ class PaymentDetailsController extends Controller
 		$trnx = $request->txnid;
 		$trnx = @$request->txnid;
 		$separate = explode("-", $trnx);
-		if($separate=='R3'){
+		if($separate[0]=='R3'){
 			$dataArr = [
 				'message' => $request->message,
 				'txnid' => $request->txnid,
