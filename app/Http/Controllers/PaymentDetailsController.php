@@ -426,10 +426,10 @@ class PaymentDetailsController extends Controller
 	public function return_url(Request $request){
 		
 		
-		$trnx = $request->txnid;
+		$trnx = @$request->txnid;
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
-			$retrieve = data_results::where('txnid',$request->txnid)->first();
+			$retrieve = data_results::where('txnid',@$request->txnid)->first();
 			$dataArr = [
 				'message' => $retrieve->message,
 				'txnid' => $retrieve->txnid,
