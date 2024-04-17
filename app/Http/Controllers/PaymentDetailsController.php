@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 use SimpleXMLElement;
-use Illuminate\Support\Facades\Storage;
+use App\Models\payments;
+use App\Models\data_results;
 use Illuminate\Http\Request;
 use App\Models\PaymentDetail;
-use App\Models\data_results;
-use App\Models\payments;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Redirect;
 use Crazymeeks\Foundation\PaymentGateway\Dragonpay;
 
 class PaymentDetailsController extends Controller
@@ -429,7 +430,10 @@ class PaymentDetailsController extends Controller
 			'status' => $request->status,
 			'refno' => $request->refno,
 		];
-		return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
+		// return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
+		$url = 'https://56ee-161-49-94-151.ngrok-free.app/api/return_url'.http_build_query($dataArr);
+		return Redirect::to($url);
+		//Test
 		// $message = $request->message;
 		// $txnid = $request->txnid;
 		// $status = $request->status;
