@@ -431,7 +431,7 @@ class PaymentDetailsController extends Controller
 			'refno' => $request->refno,
 		];
 		// return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
-		$url = 'https://56ee-161-49-94-151.ngrok-free.app/api/return_url'.http_build_query($dataArr);
+		$url = 'https://56ee-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
 		return Redirect::to($url);
 		//Test
 		// $message = $request->message;
