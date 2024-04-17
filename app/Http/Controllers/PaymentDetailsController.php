@@ -220,8 +220,9 @@ class PaymentDetailsController extends Controller
 	  $store->save();
 
 	  $transaction_id = str_pad($store->id, 12,'0', STR_PAD_LEFT);
+	  $transaction_id = 'R4'.$transaction_id;
       $update = payments::where('id',$store->id)->first();
-      $update->transaction_id='R4'.$transaction_id;
+      $update->transaction_id=$transaction_id;
       $update->save();
 
      
