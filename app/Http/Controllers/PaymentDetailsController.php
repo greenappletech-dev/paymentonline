@@ -220,8 +220,9 @@ class PaymentDetailsController extends Controller
 	  $store->save();
 
 	  $transaction_id = str_pad($store->id, 12,'0', STR_PAD_LEFT);
+	  $transaction_id = 'R4-'.$transaction_id;
       $update = payments::where('id',$store->id)->first();
-      $update->transaction_id='R4'.$transaction_id;
+      $update->transaction_id=$transaction_id;
       $update->save();
 
      
@@ -347,18 +348,14 @@ class PaymentDetailsController extends Controller
 	public function callback(Request $request)
     {
 		if($request->status == 'S'){
-			$trnx = $request->txnid;
-			$separate = str_split($trnx);
-			$region='';
-			for($i=0; $i<2; $i++){
-				$region.=$separate[$i];
-			}
-			if($region=='R3'){
+			$trnx = @$request->txnid;
+			$separate = implode('-', $trnx);
+			if($separate=='R3'){
 				$dataArr = [
-					'txnid' => $request->txnid,
+					'txnid' => @$request->txnid,
 					'status' => $request->status,
 					'refno' => $request->refno,
-					'procid' => $request->procid
+					'procid' => @$request->procid
 				];
 				// return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
 				$url = 'https://56ee-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
@@ -445,12 +442,9 @@ class PaymentDetailsController extends Controller
 	public function return_url(Request $request){
 		
 		$trnx = $request->txnid;
-		$separate = str_split($trnx);
-		$region='';
-		for($i=0; $i<2; $i++){
-			$region.=$separate[$i];
-		}
-		if($region=='R3'){
+		$trnx = @$request->txnid;
+		$separate = implode('-', $trnx);
+		if($separate=='R3'){
 			$dataArr = [
 				'message' => $request->message,
 				'txnid' => $request->txnid,
