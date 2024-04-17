@@ -430,6 +430,7 @@ class PaymentDetailsController extends Controller
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
 			$retrieve = data_results::where('txnid',@$request->txnid)->first();
+			dd($retrieve);
 			$dataArr = [
 				'message' => $retrieve->message,
 				'txnid' => $retrieve->txnid,
