@@ -423,7 +423,13 @@ class PaymentDetailsController extends Controller
 	
 	public function return_url(Request $request){
 		
-		return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $request);
+		$dataArr = [
+			'message' => $request->message,
+			'txnid' => $request->txnid,
+			'status' => $request->status,
+			'refno' => $request->refno,
+		];
+		return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
 		// $message = $request->message;
 		// $txnid = $request->txnid;
 		// $status = $request->status;
