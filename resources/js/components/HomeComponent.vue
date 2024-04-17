@@ -244,6 +244,39 @@
           btn_change(){
            
 			   let amount = document.getElementById('amount').value;
+			  let project_id = document.getElementById('project_id').value;
+			   
+			   axios.post('getcurrentThreshold',{
+			   project_id:project_id,
+			   })
+			   .then(response=>{
+			   
+					let treshold_amount = response.data.decimal;
+					let treshold = response.data.threshold;
+
+					 if(amount < treshold ){
+						alert("We're sorry, but the payment amount you entered is below the minimum required amount (Php "+treshold_amount+" ). To complete this transaction, please make sure your payment meets the minimum required amount. Thank you.");
+						this.total=0;
+						this.amount=0;
+						return 0;
+						return false;
+				   }
+					 
+			  
+			  })
+			  .catch(error=>{
+				if(error.response.status === 400){
+					this.$fire({
+					title: "Error",
+					text: error.response.threshold.error,
+					type: "error",
+					timer: 3000
+					})
+				}
+			  })
+						   
+			 
+			 
 			   
 			   if(amount == ""){
 				 this.total=0;
@@ -257,8 +290,8 @@
 				 return false;
 			   }
 			   else if(amount>=1){
-			   this.amount = amount;
-			   this.total = parseInt(amount)+this.con_fee;
+				this.amount = amount;
+				this.total = parseInt(amount)+this.con_fee;
 			   }
            
          },
