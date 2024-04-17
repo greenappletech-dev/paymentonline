@@ -347,8 +347,7 @@ class PaymentDetailsController extends Controller
 
 	public function callback(Request $request)
     {
-
-		$trnx = @$request->txnid;
+		$trnx = $request->txnid;
 			$separate = explode("-", $trnx);
 			if($separate[0]=='R3'){
 				$dataArr = [
@@ -357,6 +356,7 @@ class PaymentDetailsController extends Controller
 					'refno' => $request->refno,
 					'procid' => $request->procid
 				];
+				dd($dataArr);
 				// return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
 				$url = 'https://56ee-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
 				return Redirect::to($url);
