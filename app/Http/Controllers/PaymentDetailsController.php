@@ -429,8 +429,8 @@ class PaymentDetailsController extends Controller
 		$trnx = @$request->txnid;
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
-			$retrieve = data_results::where('txnid',@$request->txnid)->first();
-			dd($retrieve);
+			sleep(5);
+			$retrieve = data_results::where('txnid',$request->txnid)->first();
 			$dataArr = [
 				'message' => $retrieve->message,
 				'txnid' => $retrieve->txnid,
