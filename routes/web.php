@@ -65,7 +65,7 @@ Route::post('/searchByDetails',[WebsiteController::class,'searchByDetails']);
 Route::post('/getData',[WebsiteController::class,'getData']);
 
 
-Route::post('payment_callback',[PaymentDetailsController::class,'callback']);
+
 
 
 // Auth::routes();

@@ -131,7 +131,6 @@ class PaymentDetailsController extends Controller
 		}
 		else{
 			
-			// update today 05/19/2023
 			/*
 			if($checkifexist->ismatured == 1)
 			{	
@@ -239,7 +238,7 @@ class PaymentDetailsController extends Controller
 	}
 	else if($request->payment_method == "e_wallet")
 	{
-		// define('MERCHANT_ID', 'GAPPLETECHASI2');
+		define('MERCHANT_ID', 'GAPPLETECHASI2');
 		// define('MERCHANT_PASSWORD', 'pWhSQuj3V5c6vMx'); 
 		// define('ENV_LIVE', 1); 
 		
@@ -323,10 +322,12 @@ class PaymentDetailsController extends Controller
 		 
 
 		  //TEST URL
+		  
 		  if ($environment == ENV_TEST) {
 			  
 		    $url = 'http://test.dragonpay.ph/Pay.aspx?';
 		  }
+		  
 		  
 		  //LIVE
 		//   if ($environment == ENV_LIVE){ 
@@ -347,30 +348,29 @@ class PaymentDetailsController extends Controller
 
 	public function callback(Request $request)
     {
-		$trnx = $request->txnid;
-			$separate = explode("-", $trnx);
-			if($separate[0]=='R3'){
-				$dataArr = [
-					'txnid' => $request->txnid,
-					'status' => $request->status,
-					'refno' => $request->refno,
-					'procid' => $request->procid
-				];
-				dd($dataArr);
-				// return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
-				$url = 'https://56ee-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
-				return Redirect::to($url);
-			}
+	
+	  $store = new data_results();
+      $store->txnid = @$request->txnid;
+	  $store->procid = @$request->procid;
+      $store->refno = $request->refno;
+      $store->status = $request->status;
+      $store->message = $request->message;
+      $store->digest = $request->digest;
+      $store->save();
 		
-	//   $store = new data_results();
-    //   $store->txnid = @$request->txnid;
-	//   $store->procid = @$request->procid;
-    //   $store->refno = $request->refno;
-    //   $store->status = $request->status;
-    //   $store->message = $request->message;
-    //   $store->digest = $request->digest;
-    //   $store->save();
-		
+	  $trnx = $store->txnid;
+		$separate = explode("-", $trnx);
+		if($separate[0]=='R3'){
+			$dataArr = [
+				'txnid' => $store->txnid,
+				'status' => $store->status,
+				'refno' => $store->refno,
+				'procid' => $store->procid
+			];
+			// return redirect('https://56ee-161-49-94-151.ngrok-free.app/api/return_url')->with('data', $dataArr);
+			$url = 'https://56ee-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
+			return Redirect::to($url);
+		}
 		
 	// 	$databaseName = \DB::connection('mysql2')->getDatabaseName();
 		
@@ -427,6 +427,9 @@ class PaymentDetailsController extends Controller
 	// 		]
 	// 	);
 		  
+		  
+		  
+		  
 	//   }
 	
 	
@@ -436,8 +439,8 @@ class PaymentDetailsController extends Controller
 	
 	public function return_url(Request $request){
 		
+		
 		$trnx = $request->txnid;
-		$trnx = @$request->txnid;
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
 			$dataArr = [
@@ -461,7 +464,6 @@ class PaymentDetailsController extends Controller
 	
 		return view('.returnPage', compact('message','txnid','status','refno'));
 		}
-		
 	}
 	
 }
