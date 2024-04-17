@@ -221,7 +221,7 @@ class PaymentDetailsController extends Controller
 
 	  $transaction_id = str_pad($store->id, 12,'0', STR_PAD_LEFT);
       $update = payments::where('id',$store->id)->first();
-      $update->transaction_id='R4-'.$transaction_id;
+      $update->transaction_id='R4'.$transaction_id;
       $update->save();
 
      
@@ -348,9 +348,12 @@ class PaymentDetailsController extends Controller
     {
 		if($request->status == 'S'){
 			$trnx = $request->txnid;
-			$separete = explode('-',$trnx);
-
-			if($separete[0]=='R3'){
+			$separate = str_split($trnx);
+			$region='';
+			for($i=0; $i<2; $i++){
+				$region.=$separate[$i];
+			}
+			if($region=='R3'){
 				$dataArr = [
 					'txnid' => $request->txnid,
 					'status' => $request->status,
@@ -442,8 +445,12 @@ class PaymentDetailsController extends Controller
 	public function return_url(Request $request){
 		
 		$trnx = $request->txnid;
-		$separete = explode('-',$trnx);
-		if($separete[0]=='R3'){
+		$separate = str_split($trnx);
+		$region='';
+		for($i=0; $i<2; $i++){
+			$region.=$separate[$i];
+		}
+		if($region=='R3'){
 			$dataArr = [
 				'message' => $request->message,
 				'txnid' => $request->txnid,
