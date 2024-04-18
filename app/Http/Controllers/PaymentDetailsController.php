@@ -358,17 +358,17 @@ class PaymentDetailsController extends Controller
       $store->digest = $request->digest;
       $store->save();
 
-	  $trnx = @$request->txnid;
+	  $trnx = $store->txnid;
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
 			// sleep(5);
 			// $retrieve = data_results::where('txnid',$request->txnid)->first();
 			$dataArr = [
-				'message' => $request->message,
-				'txnid' => $request->txnid,
-				'status' => $request->status,
-				'refno' => $request->refno,
-				'proid' => $request->procid,
+				'message' => $store->message,
+				'txnid' => $store->txnid,
+				'status' => $store->status,
+				'refno' => $store->refno,
+				'proid' => $store->procid,
 			];
 			$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
 			return Redirect::to($url);
