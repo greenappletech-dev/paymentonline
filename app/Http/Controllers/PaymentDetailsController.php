@@ -370,7 +370,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'proid' => $request->procid,
 			];
-			$url = 'https://66bd-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
+			$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		
@@ -454,7 +454,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $retrieve->refno,
 				'proid' => $retrieve->procid,
 			];
-			$url = 'https://66bd-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
+			$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		else{
