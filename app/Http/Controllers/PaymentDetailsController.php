@@ -357,7 +357,7 @@ class PaymentDetailsController extends Controller
       $store->message = $request->message;
       $store->digest = $request->digest;
       $store->save();
-
+	  sleep(2);
 	  $trnx = $store->txnid;
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
