@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ModePayment extends Model
+class OnlinePayment extends Model
 {
     use HasFactory;
-    protected $connection= 'mysql3';
-    protected $table = 'mode_of_payments';
+
+    protected $connection = 'mysql3';
+    protected $table = 'online_payments';
 }
