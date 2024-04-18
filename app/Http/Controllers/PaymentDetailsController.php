@@ -359,15 +359,15 @@ class PaymentDetailsController extends Controller
       $store->save();
 	//   sleep(2);
 
-	  $dataArr = [
-		'message' => $store->message,
-		'txnid' => $store->txnid,
-		'status' => $store->status,
-		'refno' => $store->refno,
-		'proid' => $store->procid,
-	];
-	$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
-	return Redirect::to($url);
+	//   $dataArr = [
+	// 	'message' => $store->message,
+	// 	'txnid' => $store->txnid,
+	// 	'status' => $store->status,
+	// 	'refno' => $store->refno,
+	// 	'proid' => $store->procid,
+	// ];
+	// $url = 'https://42ed-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
+	// return Redirect::to($url);
 
 	//   $trnx = $store->txnid;
 	// 	$separate = explode("-", $trnx);
@@ -445,31 +445,32 @@ class PaymentDetailsController extends Controller
 	public function return_url(Request $request){
 		
 		
-		// $trnx = @$request->txnid;
-		// $separate = explode("-", $trnx);
-		// if($separate[0]=='R3'){
-		// 	// sleep(5);
-		// 	// $retrieve = data_results::where('txnid',$request->txnid)->first();
-		// 	$dataArr = [
-		// 		'message' => $request->message,
-		// 		'txnid' => $request->txnid,
-		// 		'status' => $request->status,
-		// 		'refno' => $request->refno,
-		// 	];
-		// 	$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
-		// 	return Redirect::to($url);
-		// }
-		// else{
-		// // Test
-		// $message = $request->message;
-		// $txnid = $request->txnid;
-		// $status = $request->status;
-		// $refno = $request->refno;
+		$trnx = @$request->txnid;
+		$separate = explode("-", $trnx);
+		if($separate[0]=='R3'){
+			sleep(5);
+			$retrieve = data_results::where('txnid',$request->txnid)->first();
+			$dataArr = [
+				'message' => $retrieve->message,
+				'txnid' => $retrieve->txnid,
+				'status' => $retrieve->status,
+				'refno' => $retrieve->refno,
+				'procid' => $retrieve->procid
+			];
+			$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
+			return Redirect::to($url);
+		}
+		else{
+		// Test
+		$message = $request->message;
+		$txnid = $request->txnid;
+		$status = $request->status;
+		$refno = $request->refno;
 	
 	
 	
-		// return view('.returnPage', compact('message','txnid','status','refno'));
-		// }
+		return view('.returnPage', compact('message','txnid','status','refno'));
+		}
 	}
 	
 }
