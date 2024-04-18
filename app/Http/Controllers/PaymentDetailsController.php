@@ -358,21 +358,24 @@ class PaymentDetailsController extends Controller
       $store->digest = $request->digest;
       $store->save();
 	  sleep(2);
-	  $trnx = $store->txnid;
-		$separate = explode("-", $trnx);
-		if($separate[0]=='R3'){
-			// sleep(5);
-			// $retrieve = data_results::where('txnid',$request->txnid)->first();
-			$dataArr = [
-				'message' => $store->message,
-				'txnid' => $store->txnid,
-				'status' => $store->status,
-				'refno' => $store->refno,
-				'proid' => $store->procid,
-			];
-			$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
-			return Redirect::to($url);
-		}
+
+	  $dataArr = [
+		'message' => $store->message,
+		'txnid' => $store->txnid,
+		'status' => $store->status,
+		'refno' => $store->refno,
+		'proid' => $store->procid,
+	];
+	$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/payment_callback?'.http_build_query($dataArr);
+	return Redirect::to($url);
+
+	//   $trnx = $store->txnid;
+	// 	$separate = explode("-", $trnx);
+	// 	if($separate[0]=='R3'){
+	// 		// sleep(5);
+	// 		// $retrieve = data_results::where('txnid',$request->txnid)->first();
+			
+	// 	}
 		
 	// 	$databaseName = \DB::connection('mysql2')->getDatabaseName();
 		
