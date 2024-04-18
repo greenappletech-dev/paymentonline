@@ -445,14 +445,13 @@ class PaymentDetailsController extends Controller
 		$trnx = @$request->txnid;
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
-			sleep(5);
-			$retrieve = data_results::where('txnid',$request->txnid)->first();
+			// sleep(5);
+			// $retrieve = data_results::where('txnid',$request->txnid)->first();
 			$dataArr = [
-				'message' => $retrieve->message,
-				'txnid' => $retrieve->txnid,
-				'status' => $retrieve->status,
-				'refno' => $retrieve->refno,
-				'proid' => $retrieve->procid,
+				'message' => $request->message,
+				'txnid' => $request->txnid,
+				'status' => $request->status,
+				'refno' => $request->refno,
 			];
 			$url = 'https://42ed-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
