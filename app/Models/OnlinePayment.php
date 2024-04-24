@@ -10,5 +10,5 @@ class OnlinePayment extends Model
     use HasFactory;
 
     protected $connection = 'mysql3';
-    protected $table = 'online_payments';
+    protected $table = 'bcs_staging.online_payments';
 }

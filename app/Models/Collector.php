@@ -9,5 +9,5 @@ class Collector extends Model
 {
     use HasFactory;
     protected $collection = 'mysql3';
-    protected $table = 'collectors';
+    protected $table = 'bcs_staging.collectors';
 }
