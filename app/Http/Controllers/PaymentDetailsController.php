@@ -113,7 +113,27 @@ class PaymentDetailsController extends Controller
 
 
    public function add_details(Request $request){
+	
+	// $beneficiary = Beneficiary::where('bin', 'B35005467')->first();
+	// $collector = Collector::where('user_id',1)->first();
+	// dd($collector);
+	// 			$current_date = date('Y-m-d');
+		
+	// 			$collection = new Collection();
+	// 			$collection->transact_date = $current_date;
+	// 			$collection->value_date = $current_date;
+	// 			$collection->beneficiary_id = $beneficiary->id;
+	// 			$collection->name = $beneficiary->name;
+	// 			$collection->mode_of_payment_id = '1';
+	// 			$collection->collector_id = $collector->id;
+	// 			$collection->amount_paid = 100;
+	// 			$collection->online_channel_reference = 'test';
+	// 			$collection->user_id = 1;
+	// 			$collection->mobile_number = '09123456789';
+	// 			$collection->email = 'test@gmail.com';
+	// 			$collection->remarks = 'Online Transaction';
 
+	// dd($collection);
 	// $mode = ModePayment::get();
 	// dd($mode);
 	  $trans_date = date("y-m-d h:i:s");
@@ -170,14 +190,6 @@ class PaymentDetailsController extends Controller
 				return response()->json($output);
 				exit;
 			}
-			
-			
-			
-			
-			
-			
-			
-			
 			
 		}
 		
