@@ -12,6 +12,7 @@ use App\Models\data_results;
 use Illuminate\Http\Request;
 use App\Models\OnlinePayment;
 use App\Models\PaymentDetail;
+use App\Models\SystemParameter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
@@ -375,6 +376,7 @@ class PaymentDetailsController extends Controller
 			if($result->payment_status == 'S'){
 				$beneficiary = Beneficiary::where('bin', $result->account_number)->first();
 				$collector = Collector::where('user_id',1)->first();
+				$system_parameter = SystemParameter::first();
 				$current_date = date('Y-m-d');
 		
 				$collection = new Collection();
@@ -386,6 +388,7 @@ class PaymentDetailsController extends Controller
 				$collection->collector_id = $collector->id;
 				$collection->amount_paid = $result->amount;
 				$collection->online_channel_reference = $result->references;
+				$collection->collection_item_id = $system_parameter->default_collection_item_id;
 				$collection->user_id = 1;
 				$collection->mobile_number = $result->phone_number;
 				$collection->email = $result->email;
@@ -470,7 +473,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'proid' => $request->procid,
 			];
-			$url = 'https://ncr3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
+			$url = 'https://nha3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		else{
