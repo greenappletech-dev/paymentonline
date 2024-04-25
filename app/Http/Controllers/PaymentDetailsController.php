@@ -114,28 +114,6 @@ class PaymentDetailsController extends Controller
 
    public function add_details(Request $request){
 	
-	// $beneficiary = Beneficiary::where('bin', 'B35005467')->first();
-	// $collector = Collector::where('user_id',1)->first();
-	// dd($collector);
-	// 			$current_date = date('Y-m-d');
-		
-	// 			$collection = new Collection();
-	// 			$collection->transact_date = $current_date;
-	// 			$collection->value_date = $current_date;
-	// 			$collection->beneficiary_id = $beneficiary->id;
-	// 			$collection->name = $beneficiary->name;
-	// 			$collection->mode_of_payment_id = '1';
-	// 			$collection->collector_id = $collector->id;
-	// 			$collection->amount_paid = 100;
-	// 			$collection->online_channel_reference = 'test';
-	// 			$collection->user_id = 1;
-	// 			$collection->mobile_number = '09123456789';
-	// 			$collection->email = 'test@gmail.com';
-	// 			$collection->remarks = 'Online Transaction';
-
-	// dd($collection);
-	// $mode = ModePayment::get();
-	// dd($mode);
 	  $trans_date = date("y-m-d h:i:s");
 	  
 	  
@@ -250,14 +228,14 @@ class PaymentDetailsController extends Controller
 	{
 		// LIVE SETUP
 		define('MERCHANT_ID', 'GAPPLETECHASI');
-		// define('MERCHANT_PASSWORD', 'L38XsFRPPcmXmNP'); 
-		// define('ENV_LIVE', 1); 		
+		define('MERCHANT_PASSWORD', 'L38XsFRPPcmXmNP'); 
+		define('ENV_LIVE', 1); 		
 	}
 	else if($request->payment_method == "e_wallet")
 	{
 		define('MERCHANT_ID', 'GAPPLETECHASI2');
-		// define('MERCHANT_PASSWORD', 'pWhSQuj3V5c6vMx'); 
-		// define('ENV_LIVE', 1); 
+		define('MERCHANT_PASSWORD', 'pWhSQuj3V5c6vMx'); 
+		define('ENV_LIVE', 1); 
 		
 	}
 	
@@ -266,11 +244,11 @@ class PaymentDetailsController extends Controller
 	
 	
 	
-	define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
-	define('ENV_TEST', 1);
+	// define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
+	// define('ENV_TEST', 1);
 	
 	
-	$environment = ENV_TEST;
+	$environment = ENV_LIVE;
    
     $errors = array();
 	$is_link = false;
@@ -340,17 +318,17 @@ class PaymentDetailsController extends Controller
 
 		  //TEST URL
 		  
-		  if ($environment == ENV_TEST) {
+		//   if ($environment == ENV_TEST) {
 			  
-		    $url = 'http://test.dragonpay.ph/Pay.aspx?';
-		  }
+		//     $url = 'http://test.dragonpay.ph/Pay.aspx?';
+		//   }
 		  
 		  
 		  //LIVE
-		//   if ($environment == ENV_LIVE){ 
+		  if ($environment == ENV_LIVE){ 
 			  
-		// 	  $url = 'https://gw.dragonpay.ph/Pay.aspx?';
-		//   }
+			  $url = 'https://gw.dragonpay.ph/Pay.aspx?';
+		  }
 
 		
 		  //echo $url .= http_build_query($parameters, '', '&');
