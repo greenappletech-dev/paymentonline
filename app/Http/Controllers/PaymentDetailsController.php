@@ -473,7 +473,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'proid' => $request->procid,
 			];
-			$url = 'https://nha3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
+			$url = 'https://ncr3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		else{
