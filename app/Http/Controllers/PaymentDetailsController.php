@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 use SimpleXMLElement;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
-use App\Models\PaymentDetail;
-use App\Models\data_results;
 use App\Models\payments;
-use Illuminate\Support\Facades\DB;
+use App\Models\Collector;
+use App\Models\Collection;
+use App\Models\Beneficiary;
+use App\Models\ModePayment;
+use App\Models\data_results;
 
+use Illuminate\Http\Request;
+use App\Models\OnlinePayment;
+use App\Models\PaymentDetail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Crazymeeks\Foundation\PaymentGateway\Dragonpay;
 
 class PaymentDetailsController extends Controller
@@ -107,7 +113,6 @@ class PaymentDetailsController extends Controller
 
 
    public function add_details(Request $request){
-
 	
 	  $trans_date = date("y-m-d h:i:s");
 	  
@@ -163,14 +168,6 @@ class PaymentDetailsController extends Controller
 				return response()->json($output);
 				exit;
 			}
-			
-			
-			
-			
-			
-			
-			
-			
 			
 		}
 		
@@ -247,8 +244,8 @@ class PaymentDetailsController extends Controller
 	
 	
 	
-	//define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
-	//define('ENV_TEST', 1);
+	// define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
+	// define('ENV_TEST', 1);
 	
 	
 	$environment = ENV_LIVE;
@@ -320,12 +317,12 @@ class PaymentDetailsController extends Controller
 		 
 
 		  //TEST URL
-		  /*
-		  if ($environment == ENV_TEST) {
+		  
+		//   if ($environment == ENV_TEST) {
 			  
-		    $url = 'http://test.dragonpay.ph/Pay.aspx?';
-		  }
-		  */
+		//     $url = 'http://test.dragonpay.ph/Pay.aspx?';
+		//   }
+		  
 		  
 		  //LIVE
 		  if ($environment == ENV_LIVE){ 
@@ -355,76 +352,129 @@ class PaymentDetailsController extends Controller
       $store->message = $request->message;
       $store->digest = $request->digest;
       $store->save();
-		
-		
-		$databaseName = \DB::connection('mysql2')->getDatabaseName();
-		
-		
-		$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno,t3.created_at as createdAT,t3.updated_at as updatedAT,t1.payment_method ";
-		$getallData = \DB::table('payments as t1')
-				->select(\DB::raw($select))
-				->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
-				->leftJoin('data_results AS t3','t3.txnid','=','t1.transaction_id')
-				->where('t1.transaction_id',$request->txnid)
-				->first(); 
 
+	  $trnx = @$request->txnid;
+		$separate = explode("-", $trnx);
+		if($separate[0]=='R3'){
+			// $reg3 = DB::connection('mysql3')->table('online_payments')->where('transaction_no',@$request->txnid)->first();
+			$payment_mode = ModePayment::where('online_channel_code', $request->procid)->first();
+			if(empty($payment_mode)){
+				$payment_mode = new ModePayment();
+				$payment_mode->name = $request->procid;
+				$payment_mode->is_online_channel = 1;
+				$payment_mode->online_channel_code = $request->procid;
+				$payment_mode->save();
+
+			}
+			$result = OnlinePayment::where('transaction_no',$request->txnid)->first();
+			$result->payment_status = $request->status;
+			$result->references = $request->refno;
+			$result->payment_type = $payment_mode->id;
+			$result->save();
+
+			if($result->payment_status == 'S'){
+				$beneficiary = Beneficiary::where('bin', $result->account_number)->first();
+				$collector = Collector::where('user_id',1)->first();
+				$current_date = date('Y-m-d');
 		
-	  // SAVE IN COLLECTION PAYMENT (invoices table)	
-	  if($request->status == "S" ){
-		  
-		  
-		  
-		 	\DB::connection('mysql2')->table('invoices')->insert(
-			[
-			
-				'loan_id' => @$getallData->loan_id, 
-				'loan_number' => @$getallData->loan_number,
-				'invoice_number' => @$getallData->transaction_id,
-				'particulars' => 'Principal',
-				'particulars_id' => '1',
-				'modeofpayment_id' => 0,
-				'modeofpayment' => @$getallData->procid,
-				'date' => null,
-				'amount_paid' => @$getallData->amount,
-				'user' => 3,
-				'or_number' => null,
-				'or_number_series' => 0,
-				'orseries_id' => 0,
-				'came_from' => null,
-				'collection_by' => @$getallData->procid,
-				'collector_id' => 0,
-				'remarks' => null,
-				'old_loan_number' => null,
-				'old_beneficiaries_id' => null,
-				'payment_month_from' => null,
-				'payment_year_from' => null,
-				'payment_month_to' => null,
-				'payment_year_to' => null,
-				'refno' => $request->refno,
-				'updated_by' => null,
+				$collection = new Collection();
+				$collection->transact_date = $current_date;
+				$collection->value_date = $current_date;
+				$collection->beneficiary_id = $beneficiary->id;
+				$collection->name = $beneficiary->name;
+				$collection->mode_of_payment_id = $result->payment_type;
+				$collection->collector_id = $collector->id;
+				$collection->amount_paid = $result->amount;
+				$collection->online_channel_reference = $result->references;
+				$collection->user_id = 1;
+				$collection->mobile_number = $result->phone_number;
+				$collection->email = $result->email;
+				$collection->remarks = 'Online Transaction';
+				$collection->save();
 				
-				'payment_method' => @$getallData->payment_method,
+			  }
+		}
+
+		else{
+			$databaseName = \DB::connection('mysql2')->getDatabaseName();
 				
-				'created_at' => @$getallData->createdAT,
-				'updated_at' => @$getallData->updatedAT,
 				
-			
-			]
-		);
-		  
-		  
-		  
-		  
-	  }
-	
-	
-		
+				$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno,t3.created_at as createdAT,t3.updated_at as updatedAT,t1.payment_method ";
+				$getallData = \DB::table('payments as t1')
+						->select(\DB::raw($select))
+						->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
+						->leftJoin('data_results AS t3','t3.txnid','=','t1.transaction_id')
+						->where('t1.transaction_id',$request->txnid)
+						->first(); 
+
+				
+			// SAVE IN COLLECTION PAYMENT (invoices table)	
+			if($request->status == "S" ){
+				
+				
+				
+					\DB::connection('mysql2')->table('invoices')->insert(
+					[
+					
+						'loan_id' => @$getallData->loan_id, 
+						'loan_number' => @$getallData->loan_number,
+						'invoice_number' => @$getallData->transaction_id,
+						'particulars' => 'Principal',
+						'particulars_id' => '1',
+						'modeofpayment_id' => 0,
+						'modeofpayment' => @$getallData->procid,
+						'date' => null,
+						'amount_paid' => @$getallData->amount,
+						'user' => 3,
+						'or_number' => null,
+						'or_number_series' => 0,
+						'orseries_id' => 0,
+						'came_from' => null,
+						'collection_by' => @$getallData->procid,
+						'collector_id' => 0,
+						'remarks' => null,
+						'old_loan_number' => null,
+						'old_beneficiaries_id' => null,
+						'payment_month_from' => null,
+						'payment_year_from' => null,
+						'payment_month_to' => null,
+						'payment_year_to' => null,
+						'refno' => $request->refno,
+						'updated_by' => null,
+						
+						'payment_method' => @$getallData->payment_method,
+						
+						'created_at' => @$getallData->createdAT,
+						'updated_at' => @$getallData->updatedAT,
+						
+					
+					]
+				);
+			}
+		}
 		
     }
 	
 	public function return_url(Request $request){
 		
 		
+		$trnx = @$request->txnid;
+		$separate = explode("-", $trnx);
+		if($separate[0]=='R3'){
+			// sleep(5);
+			// $retrieve = data_results::where('txnid',$request->txnid)->first();
+			$dataArr = [
+				'message' => $request->message,
+				'txnid' => $request->txnid,
+				'status' => $request->status,
+				'refno' => $request->refno,
+				'proid' => $request->procid,
+			];
+			$url = 'http://nha3-payment-staging.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
+			return Redirect::to($url);
+		}
+		else{
+		// Test
 		$message = $request->message;
 		$txnid = $request->txnid;
 		$status = $request->status;
@@ -433,6 +483,7 @@ class PaymentDetailsController extends Controller
 	
 	
 		return view('.returnPage', compact('message','txnid','status','refno'));
+		}
 	}
 	
 }
