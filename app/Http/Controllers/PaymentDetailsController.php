@@ -150,8 +150,8 @@ class PaymentDetailsController extends Controller
 			
 			$today_time = strtotime($dateToday);
 			$expire_time = strtotime($matured_date);
-
-			if ($expire_time < $today_time) {
+			
+			if ($expire_time < $today_time && $expire_time != null) {
 				/* do Something */ 
 				
 				
