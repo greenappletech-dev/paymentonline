@@ -381,7 +381,6 @@ class PaymentDetailsController extends Controller
 		
 				$collection = new Collection();
 				$collection->transact_date = $current_date;
-				$collection->value_date = $current_date;
 				$collection->beneficiary_id = $beneficiary->id;
 				$collection->name = $beneficiary->name;
 				$collection->mode_of_payment_id = $result->payment_type;
@@ -473,7 +472,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'proid' => $request->procid,
 			];
-			$url = 'https://ncr3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
+			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		else{
