@@ -18,19 +18,20 @@ class WebsiteController extends Controller
         
     }
 	
-	public function index()
-	{
-		 
+	public function index($type)
+	{		 
 		 \DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
 	
 		 $data = array(
 			//'districts'=>districts::All(),
 			'districts'=>\DB::connection('mysql2')->table('districts')->get(),
+			'type' => $type
 		 );
 
         return view('.portal',$data);
 		 
 	} 
+
 	public function website()
 	{
 		 
@@ -58,8 +59,6 @@ class WebsiteController extends Controller
 	}
 	
 	public function checkIFvalidDetails(Request $request){
-		
-		
 			
 			
 			if( 
@@ -109,14 +108,21 @@ class WebsiteController extends Controller
 				->leftJoin('lots as lot','lot.id','=','t2.lot_id')
 				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
 				->first(); 	
-				
-				
+
+		if($request->trxn_type == 'notice'){
+			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->first();
 			
-		return view('.website',array('data' => $request->all(),'customer'=>$getCus));
+			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment));
+		}
+		else{
+			return view('.website',array('data' => $request->all(),'customer'=>$getCus));
+		}
+		
 		
 	}
 	public function getData(Request $request)
 	{
+
 		
 	
 			$select ="
