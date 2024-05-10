@@ -93,7 +93,7 @@
                     <th style="width: 3%; border-right-color: white; height: 10px; padding: 3px;"><b>INILIBANG TUBO</b></th>
                     <th style="width: 3%; height: 10px; padding: 3px;"><b>INILIBANG MULTA</b></th>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th style="width: 11%; border: none; text-align: left;"><b>ISR-Res'1 House/Lot</b></th>
                     <th style="width: 5%; border: none;"><b>176,264.78</b></th>
                     <th style="width: 8%; border: none;"><b>11/2020-4/2024</b></th>
@@ -103,7 +103,37 @@
                     <th style="width: 3%; border: none;"><b>.00</b></th>
                     <th style="width: 3%; border: none;"><b>.00</b></th>
                     <th style="width: 3%; border: none;"><b>41,913.49</b></th>
+                </tr> -->
+              
+                <tr>
+                    <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->housing_material_name }}</b></th>
+                    <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_housing->act_bal, 2, '.', ',') }}</b></th>
+                    <th style="width: 8%; border: none;"><b>{{ $get_project_bcs_housing->fod}} - {{ $housing_data['get_project_bcs_housing_to_date']}}</b></th>
+                    <th style="width: 4%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_kasalukuyan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_nakaraan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_multa'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_tubo'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;"><b>??</b></th>
+                    <th style="width: 3%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_kabuuan'], 2, '.', ',') }}</b></th>
                 </tr>
+
+                 
+                <tr>
+                    <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->lot_name }}</b></th>
+                    <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_lot->act_bal, 2, '.', ',') }}</b></th>
+                    <th style="width: 8%; border: none;"><b>{{ $get_project_bcs_lot->fod}} - {{ $lot_data['get_project_bcs_lot_to_date']}}</b></th>
+                    <th style="width: 4%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_kasalukuyan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_nakaraan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_multa'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_tubo'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;"><b>??</b></th>
+                    <th style="width: 3%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',') }}</b></th>
+                </tr>
+        
+
+                @php
+                    $grandTotal =  number_format($housing_data['get_project_bcs_housing_kabuuan'] + $lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',');
+                @endphp
             </thead>
         </table>
     </div>
@@ -121,7 +151,7 @@
         <tr>
             <td style="width: 5%; border: none; text-align: left; "><b>MGA PAUNAWA:</b></td>
             <td style="width: 3%; border: none;"><b>HALAGANG DAPAT BAYARAN====>>></b></td>
-            <td style="width: 3%; border: none; text-align: right;"><b>45,167.77</b></td>
+            <td style="width: 3%; border: none; text-align: right;"><b>{{ $grandTotal }}</b></td>
         </tr>
     </table>
     <table style="border-collapse: collapse; margin-top: 0%; margin-bottom: 0%; ;" >
