@@ -104,30 +104,42 @@
                     <th style="width: 3%; border: none;"><b>.00</b></th>
                     <th style="width: 3%; border: none;"><b>41,913.49</b></th>
                 </tr> -->
+                
+                @php
+                    function convertDate($input_date){
+                     
+                        $date = new DateTime($input_date);
+
+                        // Format the DateTime object into the desired format
+                        $formattedDate = $date->format('m/Y');
+
+                        echo $formattedDate;
+                    }
+                @endphp
               
                 <tr>
                     <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->housing_material_name }}</b></th>
                     <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_housing->act_bal, 2, '.', ',') }}</b></th>
-                    <th style="width: 8%; border: none;"><b>{{ $get_project_bcs_housing->fod}} - {{ $housing_data['get_project_bcs_housing_to_date']}}</b></th>
-                    <th style="width: 4%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_kasalukuyan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_nakaraan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_multa'], 2, '.', ',') }}</b></th>
-                    <th style="width: 3%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_tubo'], 2, '.', ',') }}</b></th>
+                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ convertDate($get_project_bcs_housing->fod)}} - {{ convertDate($housing_data['get_project_bcs_housing_to_date'])}}</b></th>
+                    <th style="width: 4%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_kasalukuyan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_nakaraan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_multa'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_tubo'], 2, '.', ',') }}</b></th>
                     <th style="width: 3%; border: none;"><b>??</b></th>
-                    <th style="width: 3%; border: none;"><b>{{ number_format($housing_data['get_project_bcs_housing_kabuuan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_kabuuan'], 2, '.', ',') }}</b></th>
                 </tr>
 
                  
                 <tr>
                     <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->lot_name }}</b></th>
                     <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_lot->act_bal, 2, '.', ',') }}</b></th>
-                    <th style="width: 8%; border: none;"><b>{{ $get_project_bcs_lot->fod}} - {{ $lot_data['get_project_bcs_lot_to_date']}}</b></th>
-                    <th style="width: 4%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_kasalukuyan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_nakaraan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_multa'], 2, '.', ',') }}</b></th>
-                    <th style="width: 3%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_tubo'], 2, '.', ',') }}</b></th>
+                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ convertDate($get_project_bcs_lot->fod)}} - {{ convertDate($lot_data['get_project_bcs_lot_to_date'])}}</b></th>
+                    <th style="width: 4%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_kasalukuyan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_nakaraan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_multa'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_tubo'], 2, '.', ',') }}</b></th>
                     <th style="width: 3%; border: none;"><b>??</b></th>
-                    <th style="width: 3%; border: none;"><b>{{ number_format($lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',') }}</b></th>
                 </tr>
         
 
