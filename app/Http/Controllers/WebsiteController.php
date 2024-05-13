@@ -131,37 +131,46 @@ class WebsiteController extends Controller
 			->orderBy('bcs_due.tx_date', 'DESC')
 			->get();
 
-			$firstIteration = true;
-			$get_project_bcs_housing_nakaraan = 0;
-			$get_project_bcs_housing_kasalukuyan = 0;
-			$get_project_bcs_housing_multa = 0;
-			$get_project_bcs_housing_tubo = 0;
-			foreach($get_bcs_due_housing as $item){
-				if (!$firstIteration) {
-					$get_project_bcs_housing_nakaraan += $item->deb_amt;
-				} else {
-					// Skip adding deb_amt during the first iteration
-					$get_project_bcs_housing_kasalukuyan = $item->deb_amt;
-					$get_project_bcs_housing_to_date = $item->tx_date;
-					$firstIteration = false; // Set the flag to false after the first iteration
+			
+			if($get_bcs_due_housing->count() > 0){
+				$firstIteration = true;
+				$get_project_bcs_housing_nakaraan = 0;
+				$get_project_bcs_housing_kasalukuyan = 0;
+				$get_project_bcs_housing_multa = 0;
+				$get_project_bcs_housing_tubo = 0;
+				foreach($get_bcs_due_housing as $item){
+					if (!$firstIteration) {
+						$get_project_bcs_housing_nakaraan += $item->deb_amt;
+					} else {
+						// Skip adding deb_amt during the first iteration
+						$get_project_bcs_housing_kasalukuyan = $item->deb_amt;
+						$get_project_bcs_housing_to_date = $item->tx_date;
+						$firstIteration = false; // Set the flag to false after the first iteration
+					}
+					
+					$get_project_bcs_housing_multa = $item->deb_del;
+					$get_project_bcs_housing_tubo = $item->deb_int;
 				}
-				
-				$get_project_bcs_housing_multa = $item->deb_del;
-				$get_project_bcs_housing_tubo = $item->deb_int;
+	
+				$get_project_bcs_housing_kabuuan = $get_project_bcs_housing_nakaraan + $get_project_bcs_housing_kasalukuyan + $get_project_bcs_housing_multa + $get_project_bcs_housing_tubo;
+	
+	
+				$housing_data = [
+					'get_project_bcs_housing_nakaraan' => $get_project_bcs_housing_nakaraan,
+					'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
+					'get_project_bcs_housing_multa' => $get_project_bcs_housing_multa,
+					'get_project_bcs_housing_tubo' => $get_project_bcs_housing_tubo,
+					'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
+					'get_project_bcs_housing_to_date' => $get_project_bcs_housing_to_date,
+					'get_project_bcs_housing_kabuuan' => $get_project_bcs_housing_kabuuan,
+				];
+			}
+			else{
+				$housing_data = [];
+				$total_bcs = $get_bcs_due_housing->count();  
 			}
 
-			$get_project_bcs_housing_kabuuan = $get_project_bcs_housing_nakaraan + $get_project_bcs_housing_kasalukuyan + $get_project_bcs_housing_multa + $get_project_bcs_housing_tubo;
-
-
-			$housing_data = [
-				'get_project_bcs_housing_nakaraan' => $get_project_bcs_housing_nakaraan,
-				'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
-				'get_project_bcs_housing_multa' => $get_project_bcs_housing_multa,
-				'get_project_bcs_housing_tubo' => $get_project_bcs_housing_tubo,
-				'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
-				'get_project_bcs_housing_to_date' => $get_project_bcs_housing_to_date,
-				'get_project_bcs_housing_kabuuan' => $get_project_bcs_housing_kabuuan,
-			];
+		
 
 
 			////////////////////////// LOT CODE /////////////////////
@@ -179,38 +188,44 @@ class WebsiteController extends Controller
 			->orderBy('bcs_due.tx_date', 'DESC')
 			->get();
 
-			$firstIteration = true;
-			$get_project_bcs_lot_nakaraan = 0;
-			$get_project_bcs_lot_kasalukuyan = 0;
-			$get_project_bcs_lot_multa = 0;
-			$get_project_bcs_lot_tubo = 0;
-			foreach($get_bcs_due_housing_lot as $item){
-				if (!$firstIteration) {
-					$get_project_bcs_lot_nakaraan += $item->deb_amt;
-				} else {
-					// Skip adding deb_amt during the first iteration
-					$get_project_bcs_lot_kasalukuyan = $item->deb_amt;
-					$get_project_bcs_lot_to_date = $item->tx_date;
-
-					$firstIteration = false; // Set the flag to false after the first iteration
+			if($get_bcs_due_housing_lot->count() > 0){
+				$firstIteration = true;
+				$get_project_bcs_lot_nakaraan = 0;
+				$get_project_bcs_lot_kasalukuyan = 0;
+				$get_project_bcs_lot_multa = 0;
+				$get_project_bcs_lot_tubo = 0;
+				foreach($get_bcs_due_housing_lot as $item){
+					if (!$firstIteration) {
+						$get_project_bcs_lot_nakaraan += $item->deb_amt;
+					} else {
+						// Skip adding deb_amt during the first iteration
+						$get_project_bcs_lot_kasalukuyan = $item->deb_amt;
+						$get_project_bcs_lot_to_date = $item->tx_date;
+	
+						$firstIteration = false; // Set the flag to false after the first iteration
+					}
+					
+					$get_project_bcs_lot_multa = $item->deb_del;
+					$get_project_bcs_lot_tubo = $item->deb_int;
 				}
-				
-				$get_project_bcs_lot_multa = $item->deb_del;
-				$get_project_bcs_lot_tubo = $item->deb_int;
+	
+				$get_project_bcs_lot_kabuuan = $get_project_bcs_lot_nakaraan + $get_project_bcs_lot_kasalukuyan + $get_project_bcs_lot_multa + $get_project_bcs_lot_tubo;
+	
+				$lot_data = [
+					'get_project_bcs_lot_nakaraan' => $get_project_bcs_lot_nakaraan,
+					'get_project_bcs_lot_kasalukuyan' => $get_project_bcs_lot_kasalukuyan,
+					'get_project_bcs_lot_multa' => $get_project_bcs_lot_multa,
+					'get_project_bcs_lot_tubo' => $get_project_bcs_lot_tubo,
+					'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
+					'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
+				];
+			}
+			else{
+				$lot_data = [];
+				$total_bcs += $get_bcs_due_housing_lot->count();  
 			}
 
-			$get_project_bcs_lot_kabuuan = $get_project_bcs_lot_nakaraan + $get_project_bcs_lot_kasalukuyan + $get_project_bcs_lot_multa + $get_project_bcs_lot_tubo;
-
-			$lot_data = [
-				'get_project_bcs_lot_nakaraan' => $get_project_bcs_lot_nakaraan,
-				'get_project_bcs_lot_kasalukuyan' => $get_project_bcs_lot_kasalukuyan,
-				'get_project_bcs_lot_multa' => $get_project_bcs_lot_multa,
-				'get_project_bcs_lot_tubo' => $get_project_bcs_lot_tubo,
-				'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
-				'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
-			];
-
-			$total_bcs = $get_bcs_due_housing_lot->count() + $get_bcs_due_housing->count();  
+	
 			
 			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs));
 			

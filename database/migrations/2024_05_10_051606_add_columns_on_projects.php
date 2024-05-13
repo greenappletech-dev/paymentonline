@@ -13,7 +13,7 @@ class AddColumnsOnProjects extends Migration
      */
     public function up()
     {
-        Schema::table('project_offices', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('project_offices', function (Blueprint $table) {
             $table->string('housing_material_code')->nullable();
             $table->string('lot_code')->nullable();
             $table->string('housing_material_name')->nullable();
@@ -28,7 +28,7 @@ class AddColumnsOnProjects extends Migration
      */
     public function down()
     {
-        Schema::table('project_offices', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('project_offices', function (Blueprint $table) {
             $table->dropColumn('housing_material_code');
             $table->dropColumn('lot_code');
         });

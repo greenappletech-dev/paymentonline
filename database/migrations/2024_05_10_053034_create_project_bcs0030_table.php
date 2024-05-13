@@ -13,7 +13,7 @@ class CreateProjectBcs0030Table extends Migration
      */
     public function up()
     {
-        Schema::create('project_bcs0030', function (Blueprint $table) {
+        Schema::connection('mysql2')->create('project_bcs0030', function (Blueprint $table) {
             $table->id();
             $table->integer('project_office_id');
             $table->string('bin');
@@ -32,6 +32,6 @@ class CreateProjectBcs0030Table extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_bcs0030');
+        Schema::connection('mysql2')->dropIfExists('project_bcs0030');
     }
 }
