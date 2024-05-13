@@ -13,7 +13,7 @@ class CreateProjectBcsdueTable extends Migration
      */
     public function up()
     {
-        Schema::create('paymentonline_staging.project_bcsdue', function (Blueprint $table) {
+        Schema::connection('mysql2')->create('project_bcsdue', function (Blueprint $table) {
             $table->id();
             $table->integer('project_office_id');
             $table->string('bin');
@@ -34,6 +34,6 @@ class CreateProjectBcsdueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('paymentonline_staging.project_bcsdue');
+        Schema::connection('mysql2')->dropIfExists('project_bcsdue');
     }
 }
