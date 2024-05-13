@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Beneficiary extends Model
+class SystemParameter extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql3';
-    protected $table = 'nha_region3_bcs.beneficiaries';
+    protected $connection= 'mysql3';
+    protected $table = 'nha_region3_bcs.system_parameters';
 }

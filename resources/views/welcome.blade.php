@@ -333,7 +333,10 @@ html, body {
 						<button onclick="location.href='information'" class="welcome-button" style="width:100%">PAY NOW</button>
 						<br>
 						<br>
-						<button onclick="location.href='portal'" class="welcome-button" style="width:100%">VIEW PAYMENTS</button>
+						<button onclick="location.href='portal/payment'" class="welcome-button" style="width:100%">VIEW PAYMENTS</button>
+						<br>
+						<br>
+						<button onclick="location.href='portal/notice'" class="welcome-button" style="width:100%">VIEW BILLING NOTICE</button>
 					</div>
 				
 			 

@@ -55,7 +55,8 @@ Route::post('getcurrentThreshold',[PaymentDetailsController::class,'getcurrentTh
 // PORTAL
 //Route::get('/portal', 'WebsiteController@index');
 
-Route::get('/portal',[WebsiteController::class,'index']);
+Route::get('/portal/{type}',[WebsiteController::class,'index']);
+// Route::get('/billing_portal',[WebsiteController::class, 'notice']);
 Route::post('/checkIFvalidDetails',[WebsiteController::class,'checkIFvalidDetails']);
 
 

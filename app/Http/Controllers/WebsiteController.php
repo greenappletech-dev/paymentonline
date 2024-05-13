@@ -18,19 +18,20 @@ class WebsiteController extends Controller
         
     }
 	
-	public function index()
-	{
-		 
+	public function index($type)
+	{		 
 		 \DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
 	
 		 $data = array(
 			//'districts'=>districts::All(),
 			'districts'=>\DB::connection('mysql2')->table('districts')->get(),
+			'type' => $type
 		 );
 
         return view('.portal',$data);
 		 
 	} 
+
 	public function website()
 	{
 		 
@@ -58,8 +59,6 @@ class WebsiteController extends Controller
 	}
 	
 	public function checkIFvalidDetails(Request $request){
-		
-		
 			
 			
 			if( 
@@ -86,7 +85,8 @@ class WebsiteController extends Controller
 	
 	
 	public function searchByDetails(Request $request)
-	{
+	{	
+		// dd($request);
 
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
@@ -109,14 +109,121 @@ class WebsiteController extends Controller
 				->leftJoin('lots as lot','lot.id','=','t2.lot_id')
 				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
 				->first(); 	
+
+		if($request->trxn_type == 'notice'){
+			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->first();
+
+			$get_project_office = \DB::connection('mysql2')->table('project_offices as p1')
+						->where('p1.id', $request->project_office)
+						->first();
+
+
+			$get_project_bcs_housing = \DB::connection('mysql2')->table('project_bcs0030 as proj_bcs')
+			->where('proj_bcs.project_office_id', $request->project_office)
+			->where('proj_bcs.bin', $request->beneficiaries_id)
+			->where('proj_bcs.acct_type', $get_project_office->housing_material_code)
+			->first();
+
+			$get_bcs_due_housing = \DB::connection('mysql2')->table('project_bcsdue as bcs_due')
+			->where('bcs_due.project_office_id', $request->project_office)
+			->where('bcs_due.bin', $request->beneficiaries_id)
+			->where('bcs_due.acct_type', $get_project_office->housing_material_code)
+			->orderBy('bcs_due.tx_date', 'DESC')
+			->get();
+
+			$firstIteration = true;
+			$get_project_bcs_housing_nakaraan = 0;
+			$get_project_bcs_housing_kasalukuyan = 0;
+			$get_project_bcs_housing_multa = 0;
+			$get_project_bcs_housing_tubo = 0;
+			foreach($get_bcs_due_housing as $item){
+				if (!$firstIteration) {
+					$get_project_bcs_housing_nakaraan += $item->deb_amt;
+				} else {
+					// Skip adding deb_amt during the first iteration
+					$get_project_bcs_housing_kasalukuyan = $item->deb_amt;
+					$get_project_bcs_housing_to_date = $item->tx_date;
+					$firstIteration = false; // Set the flag to false after the first iteration
+				}
 				
+				$get_project_bcs_housing_multa = $item->deb_del;
+				$get_project_bcs_housing_tubo = $item->deb_int;
+			}
+
+			$get_project_bcs_housing_kabuuan = $get_project_bcs_housing_nakaraan + $get_project_bcs_housing_kasalukuyan + $get_project_bcs_housing_multa + $get_project_bcs_housing_tubo;
+
+
+			$housing_data = [
+				'get_project_bcs_housing_nakaraan' => $get_project_bcs_housing_nakaraan,
+				'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
+				'get_project_bcs_housing_multa' => $get_project_bcs_housing_multa,
+				'get_project_bcs_housing_tubo' => $get_project_bcs_housing_tubo,
+				'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
+				'get_project_bcs_housing_to_date' => $get_project_bcs_housing_to_date,
+				'get_project_bcs_housing_kabuuan' => $get_project_bcs_housing_kabuuan,
+			];
+
+
+			////////////////////////// LOT CODE /////////////////////
+
+			$get_project_bcs_lot = \DB::connection('mysql2')->table('project_bcs0030 as proj_bcs')
+			->where('proj_bcs.project_office_id', $request->project_office)
+			->where('proj_bcs.bin', $request->beneficiaries_id)
+			->where('proj_bcs.acct_type', $get_project_office->lot_code)
+			->first();
+
+			$get_bcs_due_housing_lot = \DB::connection('mysql2')->table('project_bcsdue as bcs_due')
+			->where('bcs_due.project_office_id', $request->project_office)
+			->where('bcs_due.bin', $request->beneficiaries_id)
+			->where('bcs_due.acct_type', $get_project_office->lot_code)
+			->orderBy('bcs_due.tx_date', 'DESC')
+			->get();
+
+			$firstIteration = true;
+			$get_project_bcs_lot_nakaraan = 0;
+			$get_project_bcs_lot_kasalukuyan = 0;
+			$get_project_bcs_lot_multa = 0;
+			$get_project_bcs_lot_tubo = 0;
+			foreach($get_bcs_due_housing_lot as $item){
+				if (!$firstIteration) {
+					$get_project_bcs_lot_nakaraan += $item->deb_amt;
+				} else {
+					// Skip adding deb_amt during the first iteration
+					$get_project_bcs_lot_kasalukuyan = $item->deb_amt;
+					$get_project_bcs_lot_to_date = $item->tx_date;
+
+					$firstIteration = false; // Set the flag to false after the first iteration
+				}
 				
+				$get_project_bcs_lot_multa = $item->deb_del;
+				$get_project_bcs_lot_tubo = $item->deb_int;
+			}
+
+			$get_project_bcs_lot_kabuuan = $get_project_bcs_lot_nakaraan + $get_project_bcs_lot_kasalukuyan + $get_project_bcs_lot_multa + $get_project_bcs_lot_tubo;
+
+			$lot_data = [
+				'get_project_bcs_lot_nakaraan' => $get_project_bcs_lot_nakaraan,
+				'get_project_bcs_lot_kasalukuyan' => $get_project_bcs_lot_kasalukuyan,
+				'get_project_bcs_lot_multa' => $get_project_bcs_lot_multa,
+				'get_project_bcs_lot_tubo' => $get_project_bcs_lot_tubo,
+				'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
+				'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
+			];
+
+			$total_bcs = $get_bcs_due_housing_lot->count() + $get_bcs_due_housing->count();  
 			
-		return view('.website',array('data' => $request->all(),'customer'=>$getCus));
+			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs));
+			
+		}
+		else{
+			return view('.website',array('data' => $request->all(),'customer'=>$getCus));
+		}
+		
 		
 	}
 	public function getData(Request $request)
 	{
+
 		
 	
 			$select ="

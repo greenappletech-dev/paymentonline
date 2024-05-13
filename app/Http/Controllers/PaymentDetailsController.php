@@ -12,6 +12,7 @@ use App\Models\data_results;
 use Illuminate\Http\Request;
 use App\Models\OnlinePayment;
 use App\Models\PaymentDetail;
+use App\Models\SystemParameter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
@@ -114,28 +115,6 @@ class PaymentDetailsController extends Controller
 
    public function add_details(Request $request){
 	
-	// $beneficiary = Beneficiary::where('bin', 'B35005467')->first();
-	// $collector = Collector::where('user_id',1)->first();
-	// dd($collector);
-	// 			$current_date = date('Y-m-d');
-		
-	// 			$collection = new Collection();
-	// 			$collection->transact_date = $current_date;
-	// 			$collection->value_date = $current_date;
-	// 			$collection->beneficiary_id = $beneficiary->id;
-	// 			$collection->name = $beneficiary->name;
-	// 			$collection->mode_of_payment_id = '1';
-	// 			$collection->collector_id = $collector->id;
-	// 			$collection->amount_paid = 100;
-	// 			$collection->online_channel_reference = 'test';
-	// 			$collection->user_id = 1;
-	// 			$collection->mobile_number = '09123456789';
-	// 			$collection->email = 'test@gmail.com';
-	// 			$collection->remarks = 'Online Transaction';
-
-	// dd($collection);
-	// $mode = ModePayment::get();
-	// dd($mode);
 	  $trans_date = date("y-m-d h:i:s");
 	  
 	  
@@ -172,8 +151,8 @@ class PaymentDetailsController extends Controller
 			
 			$today_time = strtotime($dateToday);
 			$expire_time = strtotime($matured_date);
-
-			if ($expire_time < $today_time) {
+			
+			if ($expire_time < $today_time && $expire_time != null) {
 				/* do Something */ 
 				
 				
@@ -250,14 +229,14 @@ class PaymentDetailsController extends Controller
 	{
 		// LIVE SETUP
 		define('MERCHANT_ID', 'GAPPLETECHASI');
-		// define('MERCHANT_PASSWORD', 'L38XsFRPPcmXmNP'); 
-		// define('ENV_LIVE', 1); 		
+		define('MERCHANT_PASSWORD', 'L38XsFRPPcmXmNP'); 
+		define('ENV_LIVE', 1); 		
 	}
 	else if($request->payment_method == "e_wallet")
 	{
 		define('MERCHANT_ID', 'GAPPLETECHASI2');
-		// define('MERCHANT_PASSWORD', 'pWhSQuj3V5c6vMx'); 
-		// define('ENV_LIVE', 1); 
+		define('MERCHANT_PASSWORD', 'pWhSQuj3V5c6vMx'); 
+		define('ENV_LIVE', 1); 
 		
 	}
 	
@@ -266,11 +245,11 @@ class PaymentDetailsController extends Controller
 	
 	
 	
-	define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
-	define('ENV_TEST', 1);
+	// define('MERCHANT_PASSWORD', 'JVty8Vc5EnmiB8k'); // TESTING SETUP
+	// define('ENV_TEST', 1);
 	
 	
-	$environment = ENV_TEST;
+	$environment = ENV_LIVE;
    
     $errors = array();
 	$is_link = false;
@@ -340,17 +319,17 @@ class PaymentDetailsController extends Controller
 
 		  //TEST URL
 		  
-		  if ($environment == ENV_TEST) {
+		//   if ($environment == ENV_TEST) {
 			  
-		    $url = 'http://test.dragonpay.ph/Pay.aspx?';
-		  }
+		//     $url = 'http://test.dragonpay.ph/Pay.aspx?';
+		//   }
 		  
 		  
 		  //LIVE
-		//   if ($environment == ENV_LIVE){ 
+		  if ($environment == ENV_LIVE){ 
 			  
-		// 	  $url = 'https://gw.dragonpay.ph/Pay.aspx?';
-		//   }
+			  $url = 'https://gw.dragonpay.ph/Pay.aspx?';
+		  }
 
 		
 		  //echo $url .= http_build_query($parameters, '', '&');
@@ -397,17 +376,18 @@ class PaymentDetailsController extends Controller
 			if($result->payment_status == 'S'){
 				$beneficiary = Beneficiary::where('bin', $result->account_number)->first();
 				$collector = Collector::where('user_id',1)->first();
+				$system_parameter = SystemParameter::first();
 				$current_date = date('Y-m-d');
 		
 				$collection = new Collection();
 				$collection->transact_date = $current_date;
-				$collection->value_date = $current_date;
 				$collection->beneficiary_id = $beneficiary->id;
 				$collection->name = $beneficiary->name;
 				$collection->mode_of_payment_id = $result->payment_type;
 				$collection->collector_id = $collector->id;
 				$collection->amount_paid = $result->amount;
 				$collection->online_channel_reference = $result->references;
+				$collection->collection_item_id = $system_parameter->default_collection_item_id;
 				$collection->user_id = 1;
 				$collection->mobile_number = $result->phone_number;
 				$collection->email = $result->email;
@@ -492,7 +472,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'proid' => $request->procid,
 			];
-			$url = 'http://nha3-payment-staging.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
+			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		else{
@@ -501,8 +481,6 @@ class PaymentDetailsController extends Controller
 		$txnid = $request->txnid;
 		$status = $request->status;
 		$refno = $request->refno;
-	
-	
 	
 		return view('.returnPage', compact('message','txnid','status','refno'));
 		}
