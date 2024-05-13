@@ -113,6 +113,7 @@ class WebsiteController extends Controller
 		if($request->trxn_type == 'notice'){
 			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->first();
 
+
 			$get_project_office = \DB::connection('mysql2')->table('project_offices as p1')
 						->where('p1.id', $request->project_office)
 						->first();
