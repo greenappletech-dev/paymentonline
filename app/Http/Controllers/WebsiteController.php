@@ -201,8 +201,6 @@ class WebsiteController extends Controller
 
 			$get_project_bcs_lot_kabuuan = $get_project_bcs_lot_nakaraan + $get_project_bcs_lot_kasalukuyan + $get_project_bcs_lot_multa + $get_project_bcs_lot_tubo;
 
-
-
 			$lot_data = [
 				'get_project_bcs_lot_nakaraan' => $get_project_bcs_lot_nakaraan,
 				'get_project_bcs_lot_kasalukuyan' => $get_project_bcs_lot_kasalukuyan,
@@ -211,8 +209,11 @@ class WebsiteController extends Controller
 				'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
 				'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
 			];
+
+			$total_bcs = $get_bcs_due_housing_lot->count() + $get_bcs_due_housing->count();  
 			
-			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data));
+			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs));
+			
 		}
 		else{
 			return view('.website',array('data' => $request->all(),'customer'=>$getCus));

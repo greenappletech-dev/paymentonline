@@ -455,27 +455,20 @@ $(document).on('click','#view',function(e){
 			headers:{'X-CSRF-TOKEN':$('meta[name="_token"]').attr('content')},
 			type : 'POST',
 			success:function(res){				
-				
-				
 				if(res == "notexist"){
-					
 					swal({
 						type:'warning',
 						title:"Oops..",
 						html:"Data not found in our system<br><br>please check your bin, last name,district and project"
 					})
-					
 					return false;
 				}
 				else{
-					
 
-					 var url = "{{ asset('searchByDetails')}}";
+					var url = "{{ asset('searchByDetails')}}";
 					$("#FormLogin").attr('action',url);
 					$("#FormLogin" ).submit();
-					
 				}
-				
 			}	
 		});
 	

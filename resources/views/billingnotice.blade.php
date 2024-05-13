@@ -1,3 +1,42 @@
+@if($total_bcs == 0)
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('adminlte/bootstrap/css/bootstrap.min.css')}}">
+    <title>NO DATA FOUND</title>
+    <style>
+        
+    </style>
+    <script>
+        // Function to redirect after a specified time
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+
+        // Automatically redirect after 3 seconds
+        setTimeout(function() {
+            redirectTo('/portal/notice'); // Change URL to desired destination
+        }, 3000); // 3000 milliseconds = 3 seconds
+    </script>
+</head>
+<body>
+    <div class="d-flex align-items-center justify-content-center">
+        <div style="text-align: center;">    
+            <h1>NO DATA FOUND!</h1>
+            <p>Redirecting in 3 seconds...</p>
+            <p>If you are not redirected, click the button below.</p>
+            <!-- Button for manual redirection -->
+            <button onclick="redirectTo('/portal/notice')" class="btn btn-primary">Click Here to Redirect</button>
+        </div>
+    </div>
+  
+</body>
+</html>
+
+@else
+
 <html>
 
 <style>
@@ -196,3 +235,4 @@
 </body>
 
 </html>
+@endif
