@@ -167,10 +167,13 @@ class WebsiteController extends Controller
 					'get_project_bcs_housing_to_date' => $get_project_bcs_housing_to_date,
 					'get_project_bcs_housing_kabuuan' => $get_project_bcs_housing_kabuuan,
 				];
+
+				$total_bcs = $get_bcs_due_housing->count();  
+
 			}
 			else{
 				$housing_data = [];
-				$total_bcs = $get_bcs_due_housing->count();  
+				$total_bcs = 0;
 			}
 
 		
@@ -222,10 +225,13 @@ class WebsiteController extends Controller
 					'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
 					'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
 				];
+
+				$total_bcs += $get_bcs_due_housing_lot->count();  
+
 			}
 			else{
 				$lot_data = [];
-				$total_bcs += $get_bcs_due_housing_lot->count();  
+				$total_bcs = 0;
 			}
 
 	
