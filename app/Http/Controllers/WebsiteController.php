@@ -88,6 +88,8 @@ class WebsiteController extends Controller
 	{	
 		// dd($request);
 
+			$total_bcs = 0;
+
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
 					CONCAT(t1.last_name,' ',t1.first_name,' ',t1.middle_name) as Name, 
