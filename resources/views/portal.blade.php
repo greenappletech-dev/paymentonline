@@ -363,12 +363,20 @@ body {
 				  <label for="exampleInputEmail1">Last Name</label>
 				  <input type="text" class="form-control" id="last_name" name="last_name" >
 				</div>
+				<div class="form-group">
+					<!-- Hold type -->
+				  <input type="text" class="form-control" id="trxn_type" name="trxn_type" value="{{ $type }}" style="display: none">
+				</div>
 			</div>
 		</div>
 		</form>
 		<div style="clear:both;margin-bottom:15px"></div>
-		<div class="form-group has-feedback">      
-			  <button class="btn btn-primary btn-lg btn-block mb-2 mb-lg-5" id="view">View Payment History</button>
+		<div class="form-group has-feedback">
+			@if($type == 'notice')
+				<button class="btn btn-primary btn-lg btn-block mb-2 mb-lg-5" id="view">View Billing Notice</button>
+			@else
+				<button class="btn btn-primary btn-lg btn-block mb-2 mb-lg-5" id="view">View Payment History</button>
+			@endif      
 		</div>
 
 
@@ -447,27 +455,20 @@ $(document).on('click','#view',function(e){
 			headers:{'X-CSRF-TOKEN':$('meta[name="_token"]').attr('content')},
 			type : 'POST',
 			success:function(res){				
-				
-				
 				if(res == "notexist"){
-					
 					swal({
 						type:'warning',
 						title:"Oops..",
 						html:"Data not found in our system<br><br>please check your bin, last name,district and project"
 					})
-					
 					return false;
 				}
 				else{
-					
 
-					 var url = "{{ asset('searchByDetails')}}";
+					var url = "{{ asset('searchByDetails')}}";
 					$("#FormLogin").attr('action',url);
 					$("#FormLogin" ).submit();
-					
 				}
-				
 			}	
 		});
 	

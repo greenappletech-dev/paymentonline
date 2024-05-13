@@ -482,8 +482,6 @@ class PaymentDetailsController extends Controller
 		$status = $request->status;
 		$refno = $request->refno;
 	
-	
-	
 		return view('.returnPage', compact('message','txnid','status','refno'));
 		}
 	}
