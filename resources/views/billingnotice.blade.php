@@ -1,5 +1,5 @@
 @if($total_bcs == 0)
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -34,9 +34,7 @@
   
 </body>
 </html>
-
 @else
-
 <html>
 
 <style>
@@ -91,9 +89,39 @@
 <body onload="window.print()">
 
 <header>
+    @php
+        function convertDate($input_date){
+            
+            $date = new DateTime($input_date);
+
+            // Format the DateTime object into the desired format
+            $formattedDate = $date->format('m/Y');
+
+            echo $formattedDate;
+        }
+
+        function convertDateWithMonth($input_date){
+            
+            $date = new DateTime($input_date);
+            $format_day = $date->format('jS');
+            $format_month_year = $date->format('F, Y');
+
+            echo $format_month_year;
+        }
+
+        function addMonth($input_date){
+
+            $date = new DateTime($input_date);
+            $date->modify('+1 month');
+            $formattedDate = $date->format('m/Y');
+            echo $formattedDate;
+        }
+    @endphp
+
+
     <div class="container">
         <span class="nha"><b>NATIONAL HOUSING AUTHORITY</b></span>
-        <span class="bns">BN# : 32940 </span>
+        <span class="bns">BN# :</span>
     </div>
     <div class="container">
         <span class="bn"><b>BILLING NOTICE</b></span>
@@ -105,12 +133,12 @@
     </div>
     
     <div class="con" style="font-weight: bold;">
-        <p style="text-align: left; margin-top: 0%; margin-bottom: 0%;">BIN NO : {{ $customer->BIN }}</p>
+        <p style="text-align: left; margin-top: 0%; margin-bottom: 0%;">ACCT NO : {{ $customer->com_code }} / BIN NO : {{ $customer->BIN }}</p>
         <p style="text-align: right; margin-top: 0%; margin-bottom: 0%;">{{ $customer->district }}  {{ $customer->region }}</p>
     </div>
     
     <div class="con" style="font-weight: bold;">
-        <p style="text-align: left; margin-top: 0%; ">PARA SA BUWAN NG Abril, 2024</p>
+        <p style="text-align: left; margin-top: 0%; ">PARA SA BUWAN NG {{ convertDateWithMonth($from)}}</p>
         <p style="text-align: right; margin-top: 0%;">PANGALAN: {{$customer->Name }}</p>
     </div>
 </header>
@@ -144,22 +172,11 @@
                     <th style="width: 3%; border: none;"><b>41,913.49</b></th>
                 </tr> -->
                 
-                @php
-                    function convertDate($input_date){
-                     
-                        $date = new DateTime($input_date);
-
-                        // Format the DateTime object into the desired format
-                        $formattedDate = $date->format('m/Y');
-
-                        echo $formattedDate;
-                    }
-                @endphp
-              
+       
                 <tr>
                     <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->housing_material_name }}</b></th>
                     <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_housing->act_bal, 2, '.', ',') }}</b></th>
-                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ convertDate($get_project_bcs_housing->fod)}} - {{ convertDate($housing_data['get_project_bcs_housing_to_date'])}}</b></th>
+                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ $get_project_bcs_housing->monpdto == null ? convertDate($get_project_bcs_housing->fod) : addMonth($get_project_bcs_housing->monpdto) }} - {{ convertDate($housing_data['get_project_bcs_housing_to_date'])}}</b></th>
                     <th style="width: 4%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_kasalukuyan'], 2, '.', ',') }}</b></th>
                     <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_nakaraan'], 2, '.', ',') }}</b></th>
                     <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_multa'], 2, '.', ',') }}</b></th>
@@ -168,7 +185,6 @@
                     <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_kabuuan'], 2, '.', ',') }}</b></th>
                 </tr>
 
-                 
                 <tr>
                     <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->lot_name }}</b></th>
                     <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_lot->act_bal, 2, '.', ',') }}</b></th>
@@ -181,7 +197,6 @@
                     <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',') }}</b></th>
                 </tr>
         
-
                 @php
                     $grandTotal =  number_format($housing_data['get_project_bcs_housing_kabuuan'] + $lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',');
                 @endphp
@@ -212,11 +227,10 @@
         </tr>
     </table>
 
- 
     <table>
         <tbody>
             <tr>
-                <td style="width: 15%; text-align: left;"><b>A: HULING ARAW NA NAGBAYAD: {{ date("m/d/Y",strtotime($last_payed->date)) }}</b></td>
+                <td style="width: 15%; text-align: left;"><b>A: HULING ARAW NA NAGBAYAD: {{  $last_payed == '' ? '' :date("m/d/Y",strtotime($last_payed->transact_date)) }}</b></td>
                 <td style="width: 10%; vertical-align: top; white-space: nowrap;"><b>C: KUNG MAGBABAYAD SA OPISINA, MANGYARING PAKIDALA ANG PAUNAWANG ITO.</b></td>
             </tr>
             <tr>
@@ -225,9 +239,7 @@
                     <b>D. ANG KOLEKTOR AY BABALIK SA ____________ PARA SA BAYAD.</b><br>
                     <span style="margin-left: 175px;"><b>(PETSA)</b></span>
                 </td>
-                
-                </tr>
-            
+            </tr>
         </tbody>
     </table>
 </main>

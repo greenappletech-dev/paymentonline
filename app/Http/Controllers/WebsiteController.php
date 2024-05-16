@@ -88,9 +88,12 @@ class WebsiteController extends Controller
 	{	
 		// dd($request);
 
+			$total_bcs = 0;
+
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
 					CONCAT(t1.last_name,' ',t1.first_name,' ',t1.middle_name) as Name, 
+					t1.com_code,
 					reg.name as region,
 					dis.name as district,
 					ofc.name as project_office,
@@ -134,6 +137,7 @@ class WebsiteController extends Controller
 			
 			if($get_bcs_due_housing->count() > 0){
 				$firstIteration = true;
+				$from = '';
 				$get_project_bcs_housing_nakaraan = 0;
 				$get_project_bcs_housing_kasalukuyan = 0;
 				$get_project_bcs_housing_multa = 0;
@@ -141,14 +145,19 @@ class WebsiteController extends Controller
 				foreach($get_bcs_due_housing as $item){
 					if (!$firstIteration) {
 						$get_project_bcs_housing_nakaraan += $item->deb_amt;
+						if($from < $item->tx_date)
+						{
+							$from = $item->tx_date;
+						}
 					} else {
 						// Skip adding deb_amt during the first iteration
 						$get_project_bcs_housing_kasalukuyan = $item->deb_amt;
 						$get_project_bcs_housing_to_date = $item->tx_date;
+						$from = $item->tx_date;
 						$firstIteration = false; // Set the flag to false after the first iteration
 					}
 					
-					$get_project_bcs_housing_multa = $item->deb_del;
+					$get_project_bcs_housing_multa += $item->deb_del;
 					$get_project_bcs_housing_tubo = $item->deb_int;
 				}
 	
@@ -164,10 +173,14 @@ class WebsiteController extends Controller
 					'get_project_bcs_housing_to_date' => $get_project_bcs_housing_to_date,
 					'get_project_bcs_housing_kabuuan' => $get_project_bcs_housing_kabuuan,
 				];
+
+				$total_bcs = $get_bcs_due_housing->count();  
+
 			}
 			else{
 				$housing_data = [];
-				$total_bcs = $get_bcs_due_housing->count();  
+				$total_bcs = 0;
+
 			}
 
 		
@@ -205,7 +218,7 @@ class WebsiteController extends Controller
 						$firstIteration = false; // Set the flag to false after the first iteration
 					}
 					
-					$get_project_bcs_lot_multa = $item->deb_del;
+					$get_project_bcs_lot_multa += $item->deb_del;
 					$get_project_bcs_lot_tubo = $item->deb_int;
 				}
 	
@@ -219,15 +232,18 @@ class WebsiteController extends Controller
 					'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
 					'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
 				];
+
+				$total_bcs += $get_bcs_due_housing_lot->count();  
+
 			}
 			else{
 				$lot_data = [];
-				$total_bcs += $get_bcs_due_housing_lot->count();  
+				$total_bcs = 0;
 			}
 
-	
+			// dd($total_bcs);
 			
-			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs));
+			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs, 'from' => $from));
 			
 		}
 		else{
@@ -239,8 +255,6 @@ class WebsiteController extends Controller
 	public function getData(Request $request)
 	{
 
-		
-	
 			$select ="
 						t1.id,
 						t1.invoice_number,
@@ -266,7 +280,6 @@ class WebsiteController extends Controller
 			->get(); 	
 			
 
-			
 			$databaseName = DB::connection('mysql2')->getDatabaseName();
 			
 			
@@ -300,16 +313,6 @@ class WebsiteController extends Controller
 						->where('t1.beneficiaries_id', $request->beneficiaries_id)
 						->whereNotNull('t2.txnid')
 						->get();
-
-			
-			
-	
-			
-	
-			
-			
-			
-	
 			
 			### COLLECT ALL PAYMENT
 			$collection =array();
