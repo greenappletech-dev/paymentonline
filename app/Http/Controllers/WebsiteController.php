@@ -227,7 +227,7 @@ class WebsiteController extends Controller
 				}
 				}
 				
-			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'bcs_collection' => $bcs_collection, 'total_bcs' => $total_bcs));
+			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'bcs_collection' => $bcs_collection, 'total_bcs' => $total_bcs, 'from' => $from));
 			
 		}
 		else{

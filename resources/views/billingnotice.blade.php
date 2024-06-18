@@ -139,7 +139,7 @@
     </div>
     
     <div class="con" style="font-weight: bold;">
-        <p style="text-align: left; margin-top: 0%; ">PARA SA BUWAN NG Abril, 2024</p>
+        <p style="text-align: left; margin-top: 0%; ">PARA SA BUWAN NG {{ convertDateWithMonth($from)}} </p>
         <p style="text-align: right; margin-top: 0%;">PANGALAN: {{$customer->Name }}</p>
     </div>
 </header>
