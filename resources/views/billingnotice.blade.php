@@ -1,40 +1,39 @@
 @if($total_bcs == 0)
-   <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('adminlte/bootstrap/css/bootstrap.min.css')}}">
-    <title>NO DATA FOUND</title>
-    <style>
-        
-    </style>
-    <script>
-        // Function to redirect after a specified time
-        function redirectTo(url) {
-            window.location.href = url;
-        }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ asset('adminlte/bootstrap/css/bootstrap.min.css')}}">
+        <title>NO DATA FOUND</title>
+        <style>
+            
+        </style>
+        <script>
+            // Function to redirect after a specified time
+            function redirectTo(url) {
+                window.location.href = url;
+            }
 
-        // Automatically redirect after 3 seconds
-        setTimeout(function() {
-            redirectTo('/portal/notice'); // Change URL to desired destination
-        }, 3000); // 3000 milliseconds = 3 seconds
-    </script>
-</head>
-<body>
-    <div class="d-flex align-items-center justify-content-center">
-        <div style="text-align: center;">    
-            <h1>NO DATA FOUND!</h1>
-            <p>Redirecting in 3 seconds...</p>
-            <p>If you are not redirected, click the button below.</p>
-            <!-- Button for manual redirection -->
-            <button onclick="redirectTo('/portal/notice')" class="btn btn-primary">Click Here to Redirect</button>
+            // Automatically redirect after 3 seconds
+            setTimeout(function() {
+                redirectTo('/portal/notice'); // Change URL to desired destination
+            }, 3000); // 3000 milliseconds = 3 seconds
+        </script>
+    </head>
+    <body>
+        <div class="d-flex align-items-center justify-content-center">
+            <div style="text-align: center;">    
+                <h1>NO DATA FOUND!</h1>
+                <p>Redirecting in 3 seconds...</p>
+                <p>If you are not redirected, click the button below.</p>
+                <!-- Button for manual redirection -->
+                <button onclick="redirectTo('/portal/notice')" class="btn btn-primary">Click Here to Redirect</button>
+            </div>
         </div>
-    </div>
-  
-</body>
-</html>
-
+    
+    </body>
+    </html>
 @else
 
 <html>
@@ -91,9 +90,39 @@
 <body onload="window.print()">
 
 <header>
+@php
+        function convertDate($input_date){
+            
+            $date = new DateTime($input_date);
+
+            // Format the DateTime object into the desired format
+            $formattedDate = $date->format('m/Y');
+
+            echo $formattedDate;
+        }
+
+        function convertDateWithMonth($input_date){
+            
+            $date = new DateTime($input_date);
+            $format_day = $date->format('jS');
+            $format_month_year = $date->format('F, Y');
+
+            echo $format_month_year;
+        }
+
+        function addMonth($input_date){
+
+            $date = new DateTime($input_date);
+            $date->modify('+1 month');
+            $formattedDate = $date->format('m/Y');
+            echo $formattedDate;
+        }
+
+        $grandTotal = 0;
+    @endphp
     <div class="container">
         <span class="nha"><b>NATIONAL HOUSING AUTHORITY</b></span>
-        <span class="bns">BN# : 32940 </span>
+        <span class="bns">BN# : </span>
     </div>
     <div class="container">
         <span class="bn"><b>BILLING NOTICE</b></span>
@@ -116,7 +145,7 @@
 </header>
 <main>
     <div class="row">
-        <table style="width: 100%; text-align: left; margin-top: 0px; margin-bottom: 0px;">
+    <table style="width: 100%; text-align: left; margin-top: 0px; margin-bottom: 0px;">
             <thead>
                 <tr>
                     <th rowspan="2" style="width: 20%; height: 10px; padding: 3px;"><b>TRANSAKSYON</b></th>
@@ -132,59 +161,28 @@
                     <th style="width: 3%; border-right-color: white; height: 10px; padding: 3px;"><b>INILIBANG TUBO</b></th>
                     <th style="width: 3%; height: 10px; padding: 3px;"><b>INILIBANG MULTA</b></th>
                 </tr>
-                <!-- <tr>
-                    <th style="width: 11%; border: none; text-align: left;"><b>ISR-Res'1 House/Lot</b></th>
-                    <th style="width: 5%; border: none;"><b>176,264.78</b></th>
-                    <th style="width: 8%; border: none;"><b>11/2020-4/2024</b></th>
-                    <th style="width: 4%; border: none;"><b>935.65</b></th>
-                    <th style="width: 1%; border: none;"><b>37,426.00</b></th>
-                    <th style="width: 1%; border: none;"><b>3,551.84</b></th>
-                    <th style="width: 3%; border: none;"><b>.00</b></th>
-                    <th style="width: 3%; border: none;"><b>.00</b></th>
-                    <th style="width: 3%; border: none;"><b>41,913.49</b></th>
-                </tr> -->
-                
-                @php
-                    function convertDate($input_date){
-                     
-                        $date = new DateTime($input_date);
-
-                        // Format the DateTime object into the desired format
-                        $formattedDate = $date->format('m/Y');
-
-                        echo $formattedDate;
-                    }
-                @endphp
-              
+            
+                @foreach($bcs_collection as $item)
                 <tr>
-                    <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->housing_material_name }}</b></th>
-                    <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_housing->act_bal, 2, '.', ',') }}</b></th>
-                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ convertDate($get_project_bcs_housing->fod)}} - {{ convertDate($housing_data['get_project_bcs_housing_to_date'])}}</b></th>
-                    <th style="width: 4%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_kasalukuyan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_nakaraan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_multa'], 2, '.', ',') }}</b></th>
-                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_tubo'], 2, '.', ',') }}</b></th>
-                    <th style="width: 3%; border: none;"><b>??</b></th>
-                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($housing_data['get_project_bcs_housing_kabuuan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 11%; border: none; text-align: left;"><b>{{ $item['acct_type'] }}</b></th>
+                    <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($item['act_bal'], 2, '.', ',') }}</b></th>
+                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ $item['upload_date'] == null ? convertDate($item['fod']) : addMonth($item['upload_date']) }} - {{ convertDate($item['to_date'])}}</b></th>
+                    <th style="width: 4%; border: none;text-align:right"><b>{{ number_format($item['kasalukuyan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($item['nakaraan'], 2, '.', ',') }}</b></th>
+                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($item['multa'], 2, '.', ',') }}</b></th>
+                    <th style="width: 3%; border: none;text-align:right"><b>0.00</b></th>
+                    <th style="width: 3%; border: none;"><b>0.00</b></th>
+                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($item['kabuuan'], 2, '.', ',') }}</b></th>
                 </tr>
 
-                 
-                <tr>
-                    <th style="width: 11%; border: none; text-align: left;"><b>{{ $get_project_office->lot_name }}</b></th>
-                    <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($get_project_bcs_lot->act_bal, 2, '.', ',') }}</b></th>
-                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ convertDate($get_project_bcs_lot->fod)}} - {{ convertDate($lot_data['get_project_bcs_lot_to_date'])}}</b></th>
-                    <th style="width: 4%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_kasalukuyan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_nakaraan'], 2, '.', ',') }}</b></th>
-                    <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_multa'], 2, '.', ',') }}</b></th>
-                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_tubo'], 2, '.', ',') }}</b></th>
-                    <th style="width: 3%; border: none;"><b>??</b></th>
-                    <th style="width: 3%; border: none;text-align:right"><b>{{ number_format($lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',') }}</b></th>
-                </tr>
-        
-
                 @php
-                    $grandTotal =  number_format($housing_data['get_project_bcs_housing_kabuuan'] + $lot_data['get_project_bcs_lot_kabuuan'], 2, '.', ',');
+                    $grandTotal += $item['kabuuan'];
                 @endphp
+
+                @endforeach
+
+
+               
             </thead>
         </table>
     </div>
