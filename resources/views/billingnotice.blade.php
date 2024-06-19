@@ -17,7 +17,7 @@
 
             // Automatically redirect after 3 seconds
             setTimeout(function() {
-                redirectTo('paymentonline/portal/notice'); // Change URL to desired destination
+                redirectTo('portal/notice'); // Change URL to desired destination
             }, 3000); // 3000 milliseconds = 3 seconds
         </script>
     </head>
