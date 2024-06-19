@@ -168,7 +168,7 @@ class WebsiteController extends Controller
 
 			$bcs_collection = collect([]);
 			$total_bcs = 0;
-
+			$from = '';
 			foreach($project_bcs_collections as $project_bcs_coll){
 				$data_collection = \DB::connection('mysql2')->table('project_bcsdue as bcs_due')
 				->where('bcs_due.project_office_id', $project_bcs_coll->project_office_id)
@@ -226,7 +226,6 @@ class WebsiteController extends Controller
 				$total_bcs = 0;
 				}
 				}
-				
 			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'bcs_collection' => $bcs_collection, 'total_bcs' => $total_bcs, 'from' => $from));
 			
 		}
