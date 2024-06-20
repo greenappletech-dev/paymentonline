@@ -104,28 +104,6 @@ class WebsiteController extends Controller
 		
 			$total_bcs = 0;
 
-			$selectQuery ="
-					t1.beneficiaries_id as BIN,
-					CONCAT(t1.last_name,' ',t1.first_name,' ',t1.middle_name) as Name, 
-					reg.name as region,
-					dis.name as district,
-					ofc.name as project_office,
-					phase.name as phase,
-					block.name as block,
-					lot.name as lot
-					";
-				$getCus = \DB::connection('mysql2')->table('beneficiaries as t1')
-				->select(\DB::raw($selectQuery))
-				->leftJoin('loans AS t2','t2.beneficiaries_id','=','t1.beneficiaries_id')				
-				->leftJoin('districts as dis','dis.id','=','t2.district_id')
-				->leftJoin('regions as reg','reg.id','=','dis.region_id')
-				->leftJoin('project_offices as ofc','ofc.id','=','t2.project_office_id')
-				->leftJoin('phases as phase','phase.id','=','t2.phase_id')
-				->leftJoin('blocks as block','block.id','=','t2.block_id')
-				->leftJoin('lots as lot','lot.id','=','t2.lot_id')
-				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
-				->first();
-
 		if($request->trxn_type == 'notice'){
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
@@ -230,6 +208,28 @@ class WebsiteController extends Controller
 			
 		}
 		else{
+			$selectQuery ="
+					t1.beneficiaries_id as BIN,
+					CONCAT(t1.last_name,' ',t1.first_name,' ',t1.middle_name) as Name, 
+					reg.name as region,
+					dis.name as district,
+					ofc.name as project_office,
+					phase.name as phase,
+					block.name as block,
+					lot.name as lot
+					";
+				$getCus = \DB::connection('mysql2')->table('beneficiaries as t1')
+				->select(\DB::raw($selectQuery))
+				->leftJoin('loans AS t2','t2.beneficiaries_id','=','t1.beneficiaries_id')				
+				->leftJoin('districts as dis','dis.id','=','t2.district_id')
+				->leftJoin('regions as reg','reg.id','=','dis.region_id')
+				->leftJoin('project_offices as ofc','ofc.id','=','t2.project_office_id')
+				->leftJoin('phases as phase','phase.id','=','t2.phase_id')
+				->leftJoin('blocks as block','block.id','=','t2.block_id')
+				->leftJoin('lots as lot','lot.id','=','t2.lot_id')
+				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
+				->first();
+
 			return view('.website',array('data' => $request->all(),'customer'=>$getCus));
 		}
 		

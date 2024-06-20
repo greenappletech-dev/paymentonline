@@ -9,5 +9,5 @@ class Beneficiary extends Model
 {
     use HasFactory;
     protected $connection = 'mysql3';
-    protected $table = 'nha_region3_bcs.beneficiaries';
+    protected $table = 'nha_region3_bcs2.beneficiaries';
 }
