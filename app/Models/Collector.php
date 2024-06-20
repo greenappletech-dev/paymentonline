@@ -9,5 +9,5 @@ class Collector extends Model
 {
     use HasFactory;
     protected $collection = 'mysql3';
-    protected $table = 'nha_region3_bcs.collectors';
+    protected $table = 'nha_region3_bcs2.collectors';
 }

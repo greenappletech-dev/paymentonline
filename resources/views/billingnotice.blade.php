@@ -28,7 +28,7 @@
                 <p>Redirecting in 3 seconds...</p>
                 <p>If you are not redirected, click the button below.</p>
                 <!-- Button for manual redirection -->
-                <button onclick="redirectTo('/portal/notice')" class="btn btn-primary">Click Here to Redirect</button>
+                <button onclick="redirectTo('portal/notice')" class="btn btn-primary">Click Here to Redirect</button>
             </div>
         </div>
     
