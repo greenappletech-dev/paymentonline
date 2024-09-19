@@ -182,7 +182,7 @@ class PaymentDetailsController extends Controller
 				->where('t2.beneficiaries_id', $request->bin_id)
 				->get();
 
-			if([$getData && count($getData) == 0] && $is_NHA_payment == false ){
+			if($getData && count($getData) == 0 && $is_NHA_payment == false ){
 		  
 				$display_mesage="Mukhang ito ang unang pagkakataon na kayo ay magbabayad sa amin. Kung ito ang iyong unang pagkakataon na magbayad sa Green Apple Technologies, mangyari lamang na pumunta sa inyong pinakamalapit na NHA Collection Office upang gawin ang inyong unang bayad. Pagkatapos, maaari mo ng gamitin ang channel na ito para sa inyong mga susunod na pagbabayad. Salamat.";
 				
