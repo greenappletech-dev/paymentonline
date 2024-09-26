@@ -235,8 +235,7 @@ class WebsiteController extends Controller
 
 			return view('.website',array('data' => $request->all(),'customer'=>$getCus));
 		}
-		
-		
+	}
 	}
 	public function getData(Request $request)
 	{
