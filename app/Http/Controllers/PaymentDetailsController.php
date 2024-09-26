@@ -144,14 +144,15 @@ class PaymentDetailsController extends Controller
 				exit;
 			}
 			*/
-			
+
+			$is_NHA_payment = \DB::connection('mysql2')->table('beneficiaries')->where('beneficiaries_id', $request->bin_id)->first()->is_NHA_payment;
+
 			$dateToday = $trans_date = date("Y-m-d");
 			$matured_date = $checkifexist->matured_date;
 			
 			
 			$today_time = strtotime($dateToday);
 			$expire_time = strtotime($matured_date);
-			
 			if ($expire_time < $today_time && $expire_time != null) {
 				/* do Something */ 
 				
@@ -169,12 +170,8 @@ class PaymentDetailsController extends Controller
 				return response()->json($output);
 				exit;
 			}
-			
 		}
 		
-		
-		
-	  
 	  $select ="t1.*";
 	  $getData = \DB::connection('mysql2')
 				->table('invoices as t1')
@@ -184,24 +181,16 @@ class PaymentDetailsController extends Controller
 				->whereNotNull('t1.or_number')
 				->where('t2.beneficiaries_id', $request->bin_id)
 				->get();
+
+			if($getData && count($getData) == 0 && $is_NHA_payment == false ){
+		  
+				$display_mesage="Mukhang ito ang unang pagkakataon na kayo ay magbabayad sa amin. Kung ito ang iyong unang pagkakataon na magbayad sa Green Apple Technologies, mangyari lamang na pumunta sa inyong pinakamalapit na NHA Collection Office upang gawin ang inyong unang bayad. Pagkatapos, maaari mo ng gamitin ang channel na ito para sa inyong mga susunod na pagbabayad. Salamat.";
 				
-		
+				$output = array("msg"=>"no_data","display_mesage"=>$display_mesage);
+				return response()->json($output);
+				exit;
+			}
 
-		
-		if($getData && count($getData) == 0){
-		  
-		  
-			$display_mesage="Mukhang ito ang unang pagkakataon na kayo ay magbabayad sa amin. Kung ito ang iyong unang pagkakataon na magbayad sa Green Apple Technologies, mangyari lamang na pumunta sa inyong pinakamalapit na NHA Collection Office upang gawin ang inyong unang bayad. Pagkatapos, maaari mo ng gamitin ang channel na ito para sa inyong mga susunod na pagbabayad. Salamat.";
-			
-			$output = array("msg"=>"no_data","display_mesage"=>$display_mesage);
-			return response()->json($output);
-			exit;
-		}
-	
-	  
-
-	  
-	  
 	  $store = new payments();
 	  $store->transaction_id	  = "";
 	  $store->district_id 		  = @$request->district;
