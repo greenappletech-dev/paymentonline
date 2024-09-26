@@ -174,7 +174,7 @@ class WebsiteController extends Controller
 								'acct_type' =>  $project_bcs_coll->acct_type,
 								'act_bal' => $project_bcs_coll->act_bal,
 								'nakaraan' => $get_project_bcs_housing_nakaraan ,
-								'monpdto' => $project_bcs_coll->monpdto,
+								'monpdto' => $last_payment->date,
 								'fod' => $project_bcs_coll->fod,
 								'kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
 								'multa' => $get_project_bcs_housing_multa,
