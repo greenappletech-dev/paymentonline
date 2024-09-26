@@ -166,7 +166,7 @@
                 <tr>
                     <th style="width: 11%; border: none; text-align: left;"><b>{{ $item['acct_type'] }}</b></th>
                     <th style="width: 5%; border: none;text-align:right"><b>{{ number_format($item['act_bal'], 2, '.', ',') }}</b></th>
-                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ $item['upload_date'] == null ? convertDate($item['fod']) : addMonth($item['upload_date']) }} - {{ convertDate($item['to_date'])}}</b></th>
+                    <th style="width: 8%; border: none;font-size:14px;"><b>{{ $item['monpdto'] == null ? convertDate($item['fod']) : addMonth($item['monpdto']) }} - {{ convertDate($item['to_date'])}}</b></th>
                     <th style="width: 4%; border: none;text-align:right"><b>{{ number_format($item['kasalukuyan'], 2, '.', ',') }}</b></th>
                     <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($item['nakaraan'], 2, '.', ',') }}</b></th>
                     <th style="width: 1%; border: none;text-align:right"><b>{{ number_format($item['multa'], 2, '.', ',') }}</b></th>
