@@ -96,7 +96,8 @@ class WebsiteController extends Controller
 					ofc.name as project_office,
 					phase.name as phase,
 					block.name as block,
-					lot.name as lot
+					lot.name as lot,
+					t2.id as loan_tbl_id
 					";
 				$getCus = \DB::connection('mysql2')->table('beneficiaries as t1')
 				->select(\DB::raw($selectQuery))
@@ -111,7 +112,7 @@ class WebsiteController extends Controller
 				->first(); 	
 
 		if($request->trxn_type == 'notice'){
-			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->first();
+			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->where('id', $getCus->loan_tbl_id)->first();
 
 			$get_project_office = \DB::connection('mysql2')->table('project_offices as p1')
 						->where('p1.id', $request->project_office)
