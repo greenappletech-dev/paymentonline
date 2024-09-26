@@ -136,6 +136,7 @@ class WebsiteController extends Controller
 			$total_bcs = 0;
 
 
+			$from = '';
 			
 			if($get_bcs_due_housing->count() > 0){
 				$firstIteration = true;
@@ -146,6 +147,11 @@ class WebsiteController extends Controller
 				foreach($get_bcs_due_housing as $item){
 					if (!$firstIteration) {
 						$get_project_bcs_housing_nakaraan += $item->deb_amt;
+
+						if($from < $item->tx_date)
+						{
+							$from = $item->tx_date;
+						}
 					} else {
 						// Skip adding deb_amt during the first iteration
 						$get_project_bcs_housing_kasalukuyan = $item->deb_amt;
@@ -197,6 +203,9 @@ class WebsiteController extends Controller
 			->orderBy('bcs_due.tx_date', 'DESC')
 			->get();
 
+
+			$from = '';
+
 			if($get_bcs_due_housing_lot->count() > 0){
 				$firstIteration = true;
 				$get_project_bcs_lot_nakaraan = 0;
@@ -206,6 +215,12 @@ class WebsiteController extends Controller
 				foreach($get_bcs_due_housing_lot as $item){
 					if (!$firstIteration) {
 						$get_project_bcs_lot_nakaraan += $item->deb_amt;
+
+						if($from < $item->tx_date)
+						{
+							$from = $item->tx_date;
+						}
+
 					} else {
 						// Skip adding deb_amt during the first iteration
 						$get_project_bcs_lot_kasalukuyan = $item->deb_amt;
@@ -240,7 +255,7 @@ class WebsiteController extends Controller
 
 	
 			
-			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs));
+			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs, 'from' => $from));
 			
 		}
 		else{
