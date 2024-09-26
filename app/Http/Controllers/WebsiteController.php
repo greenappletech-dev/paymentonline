@@ -110,9 +110,9 @@ class WebsiteController extends Controller
 				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
 				->first(); 	
 
-		$total_bcs = 0;
 
 		if($request->trxn_type == 'notice'){
+			
 			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->first();
 
 			$get_project_office = \DB::connection('mysql2')->table('project_offices as p1')
@@ -132,6 +132,9 @@ class WebsiteController extends Controller
 			->where('bcs_due.acct_type', $get_project_office->housing_material_code)
 			->orderBy('bcs_due.tx_date', 'DESC')
 			->get();
+
+			$total_bcs = 0;
+
 
 			
 			if($get_bcs_due_housing->count() > 0){
@@ -166,10 +169,14 @@ class WebsiteController extends Controller
 					'get_project_bcs_housing_to_date' => $get_project_bcs_housing_to_date,
 					'get_project_bcs_housing_kabuuan' => $get_project_bcs_housing_kabuuan,
 				];
+
+				$total_bcs = $get_bcs_due_housing->count();  
+
 			}
 			else{
 				$housing_data = [];
-				$total_bcs = $get_bcs_due_housing->count();  
+				$total_bcs = 0;  
+
 			}
 
 		
@@ -221,10 +228,14 @@ class WebsiteController extends Controller
 					'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
 					'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
 				];
+
+				$total_bcs += $get_bcs_due_housing_lot->count();  
+
 			}
 			else{
 				$lot_data = [];
-				$total_bcs += $get_bcs_due_housing_lot->count();  
+				$total_bcs = 0;  
+
 			}
 
 	
