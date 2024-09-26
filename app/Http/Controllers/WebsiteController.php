@@ -124,7 +124,7 @@ class WebsiteController extends Controller
 				->where('p1.id', $request->project_office)
 				->first();
 
-				$project_bcs_collections = \DB::connection('mysql')->table('project_bcs0030 as proj_bcs')
+				$project_bcs_collections = \DB::connection('mysql2')->table('project_bcs0030 as proj_bcs')
 				->where('proj_bcs.project_office_id', $request->project_office)
 				->where('proj_bcs.bin', $request->beneficiaries_id)
 				->get();
@@ -134,7 +134,7 @@ class WebsiteController extends Controller
 
 				foreach($project_bcs_collections as $project_bcs_coll){
 
-						$data_collection = \DB::connection('mysql')->table('project_bcsdue as bcs_due')
+						$data_collection = \DB::connection('mysql2')->table('project_bcsdue as bcs_due')
 						->where('bcs_due.project_office_id', $project_bcs_coll->project_office_id)
 						->where('bcs_due.bin', $request->beneficiaries_id)
 						->where('bcs_due.acct_type', $project_bcs_coll->acct_type)
