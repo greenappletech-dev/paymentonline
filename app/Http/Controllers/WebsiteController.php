@@ -110,6 +110,8 @@ class WebsiteController extends Controller
 				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
 				->first(); 	
 
+		$total_bcs = 0;
+
 		if($request->trxn_type == 'notice'){
 			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->first();
 
