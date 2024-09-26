@@ -214,7 +214,7 @@
     <table>
         <tbody>
             <tr>
-                <td style="width: 15%; text-align: left;"><b>A: HULING ARAW NA NAGBAYAD: {{ date("m/d/Y",strtotime($last_payed->date)) }}</b></td>
+                <td style="width: 15%; text-align: left;"><b>A: HULING ARAW NA NAGBAYAD: {{$last_payed != null ?  date("m/d/Y",strtotime($last_payed->date)) : '' }}</b></td>
                 <td style="width: 10%; vertical-align: top; white-space: nowrap;"><b>C: KUNG MAGBABAYAD SA OPISINA, MANGYARING PAKIDALA ANG PAUNAWANG ITO.</b></td>
             </tr>
             <tr>
