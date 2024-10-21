@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\IpLog;
 use SimpleXMLElement;
 use App\Models\payments;
 use App\Models\Collector;
@@ -488,6 +489,13 @@ class PaymentDetailsController extends Controller
 		   else{
 			   Log::info('invalid IP ');
 			   Log::info($ip);
+			   $unreg_ip = new IpLog();
+			   $unreg_ip->ip = $ip;
+			   $unreg_ip->txnid = @$request->txnid;
+			   $unreg_ip->refno = $request->refno;
+			   $unreg_ip->status = $request->status;
+			   $unreg_ip->save();
+
 		   }	
    }
 	
