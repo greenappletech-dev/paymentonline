@@ -14,6 +14,7 @@ use App\Models\OnlinePayment;
 use App\Models\PaymentDetail;
 use App\Models\SystemParameter;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Crazymeeks\Foundation\PaymentGateway\Dragonpay;
@@ -331,120 +332,164 @@ class PaymentDetailsController extends Controller
    }
    
 
-	public function callback(Request $request)
-    {
-	
-	  $store = new data_results();
-      $store->txnid = @$request->txnid;
-	  $store->procid = @$request->procid;
-      $store->refno = $request->refno;
-      $store->status = $request->status;
-      $store->message = $request->message;
-      $store->digest = $request->digest;
-      $store->save();
-
-	  $trnx = @$request->txnid;
-		$separate = explode("-", $trnx);
-		if($separate[0]=='R3'){
-			// $reg3 = DB::connection('mysql3')->table('online_payments')->where('transaction_no',@$request->txnid)->first();
-			$payment_mode = ModePayment::where('online_channel_code', $request->procid)->first();
-			if(empty($payment_mode)){
-				$payment_mode = new ModePayment();
-				$payment_mode->name = $request->procid;
-				$payment_mode->is_online_channel = 1;
-				$payment_mode->online_channel_code = $request->procid;
-				$payment_mode->save();
-
-			}
-			$result = OnlinePayment::where('transaction_no',$request->txnid)->first();
-			$result->payment_status = $request->status;
-			$result->references = $request->refno;
-			$result->payment_type = $payment_mode->id;
-			$result->save();
-
-			if($result->payment_status == 'S'){
-				$beneficiary = Beneficiary::where('bin', $result->account_number)->first();
-				$collector = Collector::where('user_id',1)->first();
-				$system_parameter = SystemParameter::first();
-				$current_date = date('Y-m-d');
-		
-				$collection = new Collection();
-				$collection->transact_date = $current_date;
-				$collection->beneficiary_id = $beneficiary->id;
-				$collection->name = $beneficiary->name;
-				$collection->mode_of_payment_id = $result->payment_type;
-				$collection->collector_id = $collector->id;
-				$collection->amount_paid = $result->amount;
-				$collection->online_channel_reference = $result->references;
-				$collection->collection_item_id = $system_parameter->default_collection_item_id;
-				$collection->user_id = 1;
-				$collection->mobile_number = $result->phone_number;
-				$collection->email = $result->email;
-				$collection->remarks = 'Online Transaction';
-				$collection->save();
+   public function callback(Request $request)
+   {
+	    // Get Ip
+		$ip = $request->ip();
+		// Seperate by dot(.)
+		$explode = explode(".",$ip);
+		// concat index 0 - 2
+		$check_value = $explode[0].'.'.$explode[1].'.'.$explode[2];
+		// default value
+		$result = false;
+		// check IP format
+		if($check_value == '119.81.124'){
+			// check the range of IP
+			for($last_ip_digits = 1; $last_ip_digits < 239; $last_ip_digits++){
+				// convert to string
+				$convert = (string) $last_ip_digits;
+				// check if the result is true
+				if($ip == $check_value.'.'.$convert){
+					$result = true;
+				}
 				
-			  }
-		}
-
-		else{
-			$databaseName = \DB::connection('mysql2')->getDatabaseName();
-				
-				
-				$select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno,t3.created_at as createdAT,t3.updated_at as updatedAT,t1.payment_method ";
-				$getallData = \DB::table('payments as t1')
-						->select(\DB::raw($select))
-						->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
-						->leftJoin('data_results AS t3','t3.txnid','=','t1.transaction_id')
-						->where('t1.transaction_id',$request->txnid)
-						->first(); 
-
-				
-			// SAVE IN COLLECTION PAYMENT (invoices table)	
-			if($request->status == "S" ){
-				
-				
-				
-					\DB::connection('mysql2')->table('invoices')->insert(
-					[
-					
-						'loan_id' => @$getallData->loan_id, 
-						'loan_number' => @$getallData->loan_number,
-						'invoice_number' => @$getallData->transaction_id,
-						'particulars' => 'Principal',
-						'particulars_id' => '1',
-						'modeofpayment_id' => 0,
-						'modeofpayment' => @$getallData->procid,
-						'date' => null,
-						'amount_paid' => @$getallData->amount,
-						'user' => 3,
-						'or_number' => null,
-						'or_number_series' => 0,
-						'orseries_id' => 0,
-						'came_from' => null,
-						'collection_by' => @$getallData->procid,
-						'collector_id' => 0,
-						'remarks' => null,
-						'old_loan_number' => null,
-						'old_beneficiaries_id' => null,
-						'payment_month_from' => null,
-						'payment_year_from' => null,
-						'payment_month_to' => null,
-						'payment_year_to' => null,
-						'refno' => $request->refno,
-						'updated_by' => null,
-						
-						'payment_method' => @$getallData->payment_method,
-						
-						'created_at' => @$getallData->createdAT,
-						'updated_at' => @$getallData->updatedAT,
-						
-					
-					]
-				);
 			}
 		}
+		else if($check_value == '20.44.220'){
+			// check the range of IP
+			for($last_ip_digits = 80; $last_ip_digits < 95; $last_ip_digits++){
+				// convert to string
+				$convert = (string) $last_ip_digits;
+				// check if the result is true
+				if($ip == $check_value.'.'.$convert){
+					$result = true;
+				}
+				
+			}
+		}
+		else if($ip == '40.119.209.232' || $ip == '13.67.93.149'){
+			$result = true;
+		}
 		
-    }
+	   if($result){
+		   Log::info('true');
+		   Log::info($ip);
+
+		   $store = new data_results();
+		   $store->txnid = @$request->txnid;
+		   $store->procid = @$request->procid;
+		   $store->refno = $request->refno;
+		   $store->status = $request->status;
+		   $store->message = $request->message;
+		   $store->digest = $request->digest;
+		   $store->save();
+
+		   $trnx = @$request->txnid;
+			   $separate = explode("-", $trnx);
+			   if($separate[0]=='R3'){
+				   // $reg3 = DB::connection('mysql3')->table('online_payments')->where('transaction_no',@$request->txnid)->first();
+				   $payment_mode = ModePayment::where('online_channel_code', $request->procid)->first();
+				   if(empty($payment_mode)){
+					   $payment_mode = new ModePayment();
+					   $payment_mode->name = $request->procid;
+					   $payment_mode->is_online_channel = 1;
+					   $payment_mode->online_channel_code = $request->procid;
+					   $payment_mode->save();
+
+				   }
+				   $result = OnlinePayment::where('transaction_no',$request->txnid)->first();
+				   $result->payment_status = $request->status;
+				   $result->references = $request->refno;
+				   $result->payment_type = $payment_mode->id;
+				   $result->save();
+
+				   if($result->payment_status == 'S'){
+					   $beneficiary = Beneficiary::where('bin', $result->account_number)->first();
+					   $collector = Collector::where('user_id',1)->first();
+					   $system_parameter = SystemParameter::first();
+					   $current_date = date('Y-m-d');
+			   
+					   $collection = new Collection();
+					   $collection->transact_date = $current_date;
+					   $collection->beneficiary_id = $beneficiary->id;
+					   $collection->name = $beneficiary->name;
+					   $collection->mode_of_payment_id = $result->payment_type;
+					   $collection->collector_id = $collector->id;
+					   $collection->amount_paid = $result->amount;
+					   $collection->online_channel_reference = $result->references;
+					   $collection->collection_item_id = $system_parameter->default_collection_item_id;
+					   $collection->user_id = 1;
+					   $collection->mobile_number = $result->phone_number;
+					   $collection->email = $result->email;
+					   $collection->remarks = 'Online Transaction';
+					   $collection->save();
+					   
+				   }
+			   }
+
+			   else{
+				   $databaseName = \DB::connection('mysql2')->getDatabaseName();
+					   
+					   
+					   $select = "t1.*,t2.loan_id as loan_number, t2.id as  loan_id,t3.procid,t3.procid,t3.refno,t3.created_at as createdAT,t3.updated_at as updatedAT,t1.payment_method ";
+					   $getallData = \DB::table('payments as t1')
+							   ->select(\DB::raw($select))
+							   ->leftJoin($databaseName.'.loans as t2','t2.beneficiaries_id','=','t1.beneficiaries_id')
+							   ->leftJoin('data_results AS t3','t3.txnid','=','t1.transaction_id')
+							   ->where('t1.transaction_id',$request->txnid)
+							   ->first(); 
+
+					   
+				   // SAVE IN COLLECTION PAYMENT (invoices table)	
+				   if($request->status == "S" ){
+					   
+					   
+					   
+						   \DB::connection('mysql2')->table('invoices')->insert(
+						   [
+						   
+							   'loan_id' => @$getallData->loan_id, 
+							   'loan_number' => @$getallData->loan_number,
+							   'invoice_number' => @$getallData->transaction_id,
+							   'particulars' => 'Principal',
+							   'particulars_id' => '1',
+							   'modeofpayment_id' => 0,
+							   'modeofpayment' => @$getallData->procid,
+							   'date' => null,
+							   'amount_paid' => @$getallData->amount,
+							   'user' => 3,
+							   'or_number' => null,
+							   'or_number_series' => 0,
+							   'orseries_id' => 0,
+							   'came_from' => null,
+							   'collection_by' => @$getallData->procid,
+							   'collector_id' => 0,
+							   'remarks' => null,
+							   'old_loan_number' => null,
+							   'old_beneficiaries_id' => null,
+							   'payment_month_from' => null,
+							   'payment_year_from' => null,
+							   'payment_month_to' => null,
+							   'payment_year_to' => null,
+							   'refno' => $request->refno,
+							   'updated_by' => null,
+							   
+							   'payment_method' => @$getallData->payment_method,
+							   
+							   'created_at' => @$getallData->createdAT,
+							   'updated_at' => @$getallData->updatedAT,
+							   
+						   
+						   ]
+					   );
+				   }
+			   }
+		   }
+		   else{
+			   Log::info('invalid IP ');
+			   Log::info($ip);
+		   }	
+   }
 	
 	public function return_url(Request $request){
 		
