@@ -554,6 +554,19 @@ class PaymentDetailsController extends Controller
 			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
+		else if($separate[0]=='EB'){
+			// sleep(5);
+			// $retrieve = data_results::where('txnid',$request->txnid)->first();
+			$dataArr = [
+				'message' => $request->message,
+				'txnid' => $request->txnid,
+				'status' => $request->status,
+				'refno' => $request->refno,
+				'proid' => $request->procid,
+			];
+			$url = 'https://f22e-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
+			return Redirect::to($url);
+		}
 		else{
 		// Test
 		$message = $request->message;
