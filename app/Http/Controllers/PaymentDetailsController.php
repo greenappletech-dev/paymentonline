@@ -564,7 +564,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'proid' => $request->procid,
 			];
-			$url = 'https://f22e-161-49-94-151.ngrok-free.app/api/return_url?'.http_build_query($dataArr);
+			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		else{
