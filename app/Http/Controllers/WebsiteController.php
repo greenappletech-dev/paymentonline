@@ -88,8 +88,6 @@ class WebsiteController extends Controller
 	{	
 		// dd($request);
 
-			$total_bcs = 0;
-
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
 					CONCAT(t1.last_name,' ',t1.first_name,' ',t1.middle_name) as Name, 
@@ -98,7 +96,8 @@ class WebsiteController extends Controller
 					ofc.name as project_office,
 					phase.name as phase,
 					block.name as block,
-					lot.name as lot
+					lot.name as lot,
+					t2.id as loan_tbl_id
 					";
 				$getCus = \DB::connection('mysql2')->table('beneficiaries as t1')
 				->select(\DB::raw($selectQuery))
@@ -112,132 +111,91 @@ class WebsiteController extends Controller
 				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
 				->first(); 	
 
+
 		if($request->trxn_type == 'notice'){
-			$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->first();
 
+				$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->where('id', $getCus->loan_tbl_id)->first();
 
-			$get_project_office = \DB::connection('mysql2')->table('project_offices as p1')
-						->where('p1.id', $request->project_office)
-						->first();
-
-
-			$get_project_bcs_housing = \DB::connection('mysql2')->table('project_bcs0030 as proj_bcs')
-			->where('proj_bcs.project_office_id', $request->project_office)
-			->where('proj_bcs.bin', $request->beneficiaries_id)
-			->where('proj_bcs.acct_type', $get_project_office->housing_material_code)
-			->first();
-
-			$get_bcs_due_housing = \DB::connection('mysql2')->table('project_bcsdue as bcs_due')
-			->where('bcs_due.project_office_id', $request->project_office)
-			->where('bcs_due.bin', $request->beneficiaries_id)
-			->where('bcs_due.acct_type', $get_project_office->housing_material_code)
-			->orderBy('bcs_due.tx_date', 'DESC')
-			->get();
-
-			
-			if($get_bcs_due_housing->count() > 0){
-				$firstIteration = true;
-				$get_project_bcs_housing_nakaraan = 0;
-				$get_project_bcs_housing_kasalukuyan = 0;
-				$get_project_bcs_housing_multa = 0;
-				$get_project_bcs_housing_tubo = 0;
-				foreach($get_bcs_due_housing as $item){
-					if (!$firstIteration) {
-						$get_project_bcs_housing_nakaraan += $item->deb_amt;
-					} else {
-						// Skip adding deb_amt during the first iteration
-						$get_project_bcs_housing_kasalukuyan = $item->deb_amt;
-						$get_project_bcs_housing_to_date = $item->tx_date;
-						$firstIteration = false; // Set the flag to false after the first iteration
-					}
-					
-					$get_project_bcs_housing_multa = $item->deb_del;
-					$get_project_bcs_housing_tubo = $item->deb_int;
+				if($last_payment == null){
+					$last_payment = '';	
 				}
-	
-				$get_project_bcs_housing_kabuuan = $get_project_bcs_housing_nakaraan + $get_project_bcs_housing_kasalukuyan + $get_project_bcs_housing_multa + $get_project_bcs_housing_tubo;
-	
-	
-				$housing_data = [
-					'get_project_bcs_housing_nakaraan' => $get_project_bcs_housing_nakaraan,
-					'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
-					'get_project_bcs_housing_multa' => $get_project_bcs_housing_multa,
-					'get_project_bcs_housing_tubo' => $get_project_bcs_housing_tubo,
-					'get_project_bcs_housing_kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
-					'get_project_bcs_housing_to_date' => $get_project_bcs_housing_to_date,
-					'get_project_bcs_housing_kabuuan' => $get_project_bcs_housing_kabuuan,
-				];
 
-				$total_bcs = $get_bcs_due_housing->count();  
+				$get_project_office = \DB::connection('mysql2')->table('project_offices as p1')
+				->where('p1.id', $request->project_office)
+				->first();
 
-			}
-			else{
-				$housing_data = [];
+				$project_bcs_collections = \DB::connection('mysql2')->table('project_bcs0030 as proj_bcs')
+				->where('proj_bcs.project_office_id', $request->project_office)
+				->where('proj_bcs.bin', $request->beneficiaries_id)
+				->get();
+
+				$bcs_collection = collect([]);
 				$total_bcs = 0;
-			}
 
+				foreach($project_bcs_collections as $project_bcs_coll){
+
+						$data_collection = \DB::connection('mysql2')->table('project_bcsdue as bcs_due')
+						->where('bcs_due.project_office_id', $project_bcs_coll->project_office_id)
+						->where('bcs_due.bin', $request->beneficiaries_id)
+						->where('bcs_due.acct_type', $project_bcs_coll->acct_type)
+						->orderBy('bcs_due.tx_date', 'DESC')
+						->get();
+
+
+						$from = '';
+						if($data_collection->count() > 0){	
+							$firstIteration = true;
+							$get_project_bcs_housing_nakaraan = 0;
+							$get_project_bcs_housing_kasalukuyan = 0;
+							$get_project_bcs_housing_multa = 0;
+							$get_project_bcs_housing_tubo = 0;
+
+							foreach($data_collection as $item){
+
+								if (!$firstIteration) {
+									$get_project_bcs_housing_multa += $item->deb_del < 0 ? 0 : $item->deb_del;
+									$get_project_bcs_housing_tubo += $item->deb_int < 0 ? 0 : $item->deb_int;
+									$get_project_bcs_housing_nakaraan += ($item->deb_amt < 0 ? 0 : $item->deb_amt) + ( $item->deb_int < 0 ? 0 : $item->deb_int);
+									if($from < $item->tx_date)
+									{
+										$from = $item->tx_date;
+									}
+								} else {
+									// Skip adding deb_amt during the first iteration
+									$get_project_bcs_housing_kasalukuyan = ($item->deb_amt < 0 ? 0 : $item->deb_amt) + ($item->deb_int < 0 ? 0 : $item->deb_int);
+									$get_project_bcs_housing_to_date = $item->tx_date;
+									$from = $item->tx_date;
+									$firstIteration = false; // Set the flag to false after the first iteration
+								}
+							}
+							$get_project_bcs_housing_kabuuan = $get_project_bcs_housing_nakaraan + $get_project_bcs_housing_kasalukuyan + $get_project_bcs_housing_multa ;
+				
+							$housing_data = [
+								'acct_type' =>  $project_bcs_coll->acct_type,
+								'act_bal' => $project_bcs_coll->act_bal,
+								'nakaraan' => $get_project_bcs_housing_nakaraan ,
+								'monpdto' => $last_payment->date,
+								'fod' => $project_bcs_coll->fod,
+								'kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
+								'multa' => $get_project_bcs_housing_multa,
+								'tubo' => $get_project_bcs_housing_tubo,
+								'kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
+								'to_date' => $get_project_bcs_housing_to_date,
+								'kabuuan' => $get_project_bcs_housing_kabuuan,
+							];
+
+							$bcs_collection[] = $housing_data; 
+							$total_bcs = $data_collection->count();  
+						}
+						else{
+							$housing_data = [];
+							$total_bcs = 0;
+						}
+				}
+
+				return view('.billingnotice',array('bcs_collection' => $bcs_collection, 'data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office,  'total_bcs' => $total_bcs, 'from' => $from));
+			
 		
-
-
-			////////////////////////// LOT CODE /////////////////////
-
-			$get_project_bcs_lot = \DB::connection('mysql2')->table('project_bcs0030 as proj_bcs')
-			->where('proj_bcs.project_office_id', $request->project_office)
-			->where('proj_bcs.bin', $request->beneficiaries_id)
-			->where('proj_bcs.acct_type', $get_project_office->lot_code)
-			->first();
-
-			$get_bcs_due_housing_lot = \DB::connection('mysql2')->table('project_bcsdue as bcs_due')
-			->where('bcs_due.project_office_id', $request->project_office)
-			->where('bcs_due.bin', $request->beneficiaries_id)
-			->where('bcs_due.acct_type', $get_project_office->lot_code)
-			->orderBy('bcs_due.tx_date', 'DESC')
-			->get();
-
-			if($get_bcs_due_housing_lot->count() > 0){
-				$firstIteration = true;
-				$get_project_bcs_lot_nakaraan = 0;
-				$get_project_bcs_lot_kasalukuyan = 0;
-				$get_project_bcs_lot_multa = 0;
-				$get_project_bcs_lot_tubo = 0;
-				foreach($get_bcs_due_housing_lot as $item){
-					if (!$firstIteration) {
-						$get_project_bcs_lot_nakaraan += $item->deb_amt;
-					} else {
-						// Skip adding deb_amt during the first iteration
-						$get_project_bcs_lot_kasalukuyan = $item->deb_amt;
-						$get_project_bcs_lot_to_date = $item->tx_date;
-	
-						$firstIteration = false; // Set the flag to false after the first iteration
-					}
-					
-					$get_project_bcs_lot_multa = $item->deb_del;
-					$get_project_bcs_lot_tubo = $item->deb_int;
-				}
-	
-				$get_project_bcs_lot_kabuuan = $get_project_bcs_lot_nakaraan + $get_project_bcs_lot_kasalukuyan + $get_project_bcs_lot_multa + $get_project_bcs_lot_tubo;
-	
-				$lot_data = [
-					'get_project_bcs_lot_nakaraan' => $get_project_bcs_lot_nakaraan,
-					'get_project_bcs_lot_kasalukuyan' => $get_project_bcs_lot_kasalukuyan,
-					'get_project_bcs_lot_multa' => $get_project_bcs_lot_multa,
-					'get_project_bcs_lot_tubo' => $get_project_bcs_lot_tubo,
-					'get_project_bcs_lot_to_date' => $get_project_bcs_lot_to_date,
-					'get_project_bcs_lot_kabuuan' => $get_project_bcs_lot_kabuuan,
-				];
-
-				$total_bcs += $get_bcs_due_housing_lot->count();  
-
-			}
-			else{
-				$lot_data = [];
-				$total_bcs = 0;
-			}
-
-	
-			
-			return view('.billingnotice',array('data' => $request->all(),'customer'=>$getCus, 'last_payed' => $last_payment, 'get_project_office' => $get_project_office, 'get_project_bcs_housing' => $get_project_bcs_housing, 'housing_data' => $housing_data, 'lot_data' => $lot_data, 'get_project_bcs_lot' => $get_project_bcs_lot, 'lot_data' => $lot_data, 'total_bcs' => $total_bcs));
-			
 		}
 		else{
 			return view('.website',array('data' => $request->all(),'customer'=>$getCus));
