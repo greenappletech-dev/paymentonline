@@ -445,44 +445,56 @@ class PaymentDetailsController extends Controller
 				   if($request->status == "S" ){
 					   
 					   
-					   
-						   \DB::connection('mysql2')->table('invoices')->insert(
-						   [
-						   
-							   'loan_id' => @$getallData->loan_id, 
-							   'loan_number' => @$getallData->loan_number,
-							   'invoice_number' => @$getallData->transaction_id,
-							   'particulars' => 'Principal',
-							   'particulars_id' => '1',
-							   'modeofpayment_id' => 0,
-							   'modeofpayment' => @$getallData->procid,
-							   'date' => null,
-							   'amount_paid' => @$getallData->amount,
-							   'user' => 3,
-							   'or_number' => null,
-							   'or_number_series' => 0,
-							   'orseries_id' => 0,
-							   'came_from' => null,
-							   'collection_by' => @$getallData->procid,
-							   'collector_id' => 0,
-							   'remarks' => null,
-							   'old_loan_number' => null,
-							   'old_beneficiaries_id' => null,
-							   'payment_month_from' => null,
-							   'payment_year_from' => null,
-							   'payment_month_to' => null,
-							   'payment_year_to' => null,
-							   'refno' => $request->refno,
-							   'updated_by' => null,
-							   
-							   'payment_method' => @$getallData->payment_method,
-							   
-							   'created_at' => @$getallData->createdAT,
-							   'updated_at' => @$getallData->updatedAT,
-							   
-						   
-						   ]
-					   );
+								  $select   = "t1.*";
+								  $refnoAlreadyExists = \DB::connection('mysql2')
+											->table('invoices as t1')
+											->select(\DB::raw($select))		
+											->where('t1.refno', $request->refno)
+											->exists();
+											
+											
+									if ($refnoAlreadyExists) { 
+									
+										   Log::info($request);
+										  
+								
+									} 
+									else{ 
+									
+									   \DB::connection('mysql2')->table('invoices')->insert([
+										   'loan_id' => @$getallData->loan_id, 
+										   'loan_number' => @$getallData->loan_number,
+										   'invoice_number' => @$getallData->transaction_id,
+										   'particulars' => 'Principal',
+										   'particulars_id' => '1',
+										   'modeofpayment_id' => 0,
+										   'modeofpayment' => @$getallData->procid,
+										   'date' => null,
+										   'amount_paid' => @$getallData->amount,
+										   'user' => 3,
+										   'or_number' => null,
+										   'or_number_series' => 0,
+										   'orseries_id' => 0,
+										   'came_from' => null,
+										   'collection_by' => @$getallData->procid,
+										   'collector_id' => 0,
+										   'remarks' => null,
+										   'old_loan_number' => null,
+										   'old_beneficiaries_id' => null,
+										   'payment_month_from' => null,
+										   'payment_year_from' => null,
+										   'payment_month_to' => null,
+										   'payment_year_to' => null,
+										   'refno' => $request->refno,
+										   'updated_by' => null,
+										   
+										   'payment_method' => @$getallData->payment_method,
+										   
+										   'created_at' => @$getallData->createdAT,
+										   'updated_at' => @$getallData->updatedAT,
+										   
+									   ]);
+								   }
 				   }
 			   }
 		   }
