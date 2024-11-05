@@ -405,26 +405,28 @@ class PaymentDetailsController extends Controller
 				   $result->save();
 
 				   if($result->payment_status == 'S'){
+					   $check_collection = Collection::where('online_channel_reference', $result->references)->exists();
 					   $beneficiary = Beneficiary::where('bin', $result->account_number)->first();
 					   $collector = Collector::where('user_id',1)->first();
 					   $system_parameter = SystemParameter::first();
 					   $current_date = date('Y-m-d');
-			   
-					   $collection = new Collection();
-					   $collection->transact_date = $current_date;
-					   $collection->beneficiary_id = $beneficiary->id;
-					   $collection->name = $beneficiary->name;
-					   $collection->mode_of_payment_id = $result->payment_type;
-					   $collection->collector_id = $collector->id;
-					   $collection->amount_paid = $result->amount;
-					   $collection->online_channel_reference = $result->references;
-					   $collection->collection_item_id = $system_parameter->default_collection_item_id;
-					   $collection->user_id = 1;
-					   $collection->mobile_number = $result->phone_number;
-					   $collection->email = $result->email;
-					   $collection->remarks = 'Online Transaction';
-					   $collection->save();
-					   
+
+						if(!$check_collection){
+							$collection = new Collection();
+							$collection->transact_date = $current_date;
+							$collection->beneficiary_id = $beneficiary->id;
+							$collection->name = $beneficiary->name;
+							$collection->mode_of_payment_id = $result->payment_type;
+							$collection->collector_id = $collector->id;
+							$collection->amount_paid = $result->amount;
+							$collection->online_channel_reference = $result->references;
+							$collection->collection_item_id = $system_parameter->default_collection_item_id;
+							$collection->user_id = 1;
+							$collection->mobile_number = $result->phone_number;
+							$collection->email = $result->email;
+							$collection->remarks = 'Online Transaction';
+							$collection->save();
+						}
 				   }
 			   }
 
@@ -444,45 +446,49 @@ class PaymentDetailsController extends Controller
 				   // SAVE IN COLLECTION PAYMENT (invoices table)	
 				   if($request->status == "S" ){
 					   
+							$check_invoice = \DB::connection('mysql2')->table('invoices')->where('refno', $request->refno)->exists();
+
+							if(!$check_invoice){
+								\DB::connection('mysql2')->table('invoices')->insert(
+									[
+									
+										'loan_id' => @$getallData->loan_id, 
+										'loan_number' => @$getallData->loan_number,
+										'invoice_number' => @$getallData->transaction_id,
+										'particulars' => 'Principal',
+										'particulars_id' => '1',
+										'modeofpayment_id' => 0,
+										'modeofpayment' => @$getallData->procid,
+										'date' => null,
+										'amount_paid' => @$getallData->amount,
+										'user' => 3,
+										'or_number' => null,
+										'or_number_series' => 0,
+										'orseries_id' => 0,
+										'came_from' => null,
+										'collection_by' => @$getallData->procid,
+										'collector_id' => 0,
+										'remarks' => null,
+										'old_loan_number' => null,
+										'old_beneficiaries_id' => null,
+										'payment_month_from' => null,
+										'payment_year_from' => null,
+										'payment_month_to' => null,
+										'payment_year_to' => null,
+										'refno' => $request->refno,
+										'updated_by' => null,
+										
+										'payment_method' => @$getallData->payment_method,
+										
+										'created_at' => @$getallData->createdAT,
+										'updated_at' => @$getallData->updatedAT,
+										
+									
+									]
+								);
+							}
 					   
-					   
-						   \DB::connection('mysql2')->table('invoices')->insert(
-						   [
-						   
-							   'loan_id' => @$getallData->loan_id, 
-							   'loan_number' => @$getallData->loan_number,
-							   'invoice_number' => @$getallData->transaction_id,
-							   'particulars' => 'Principal',
-							   'particulars_id' => '1',
-							   'modeofpayment_id' => 0,
-							   'modeofpayment' => @$getallData->procid,
-							   'date' => null,
-							   'amount_paid' => @$getallData->amount,
-							   'user' => 3,
-							   'or_number' => null,
-							   'or_number_series' => 0,
-							   'orseries_id' => 0,
-							   'came_from' => null,
-							   'collection_by' => @$getallData->procid,
-							   'collector_id' => 0,
-							   'remarks' => null,
-							   'old_loan_number' => null,
-							   'old_beneficiaries_id' => null,
-							   'payment_month_from' => null,
-							   'payment_year_from' => null,
-							   'payment_month_to' => null,
-							   'payment_year_to' => null,
-							   'refno' => $request->refno,
-							   'updated_by' => null,
-							   
-							   'payment_method' => @$getallData->payment_method,
-							   
-							   'created_at' => @$getallData->createdAT,
-							   'updated_at' => @$getallData->updatedAT,
-							   
-						   
-						   ]
-					   );
+						
 				   }
 			   }
 		   }
