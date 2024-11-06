@@ -529,13 +529,11 @@ class PaymentDetailsController extends Controller
 		else if($separate[0]=='EB'){
 			// sleep(5);
 			// $retrieve = data_results::where('txnid',$request->txnid)->first();
-			$dataArr = [
-				'message' => $request->message,
-				'txnid' => $request->txnid,
-				'status' => $request->status,
-				'refno' => $request->refno,
-				'proid' => $request->procid,
-			];
+
+			$message = $request->message;
+			$txnid = $request->txnid;
+			$status = $request->status;
+			$refno = $request->refno;
 		
 			return view('.ebossreturnpage', compact('message','txnid','status','refno'));
 		}
