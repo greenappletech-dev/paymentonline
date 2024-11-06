@@ -25,6 +25,8 @@ class PaymentDetailsController extends Controller
 
 
 	public function test(){
+
+	
 		
 		//$user = \DB::connection('sqlsrv')->table('NM_Users')->get();
 		
@@ -388,6 +390,7 @@ class PaymentDetailsController extends Controller
 		   $trnx = @$request->txnid;
 			   $separate = explode("-", $trnx);
 			   if($separate[0]=='R3'){
+					//this is for region III callback
 				   // $reg3 = DB::connection('mysql3')->table('online_payments')->where('transaction_no',@$request->txnid)->first();
 				   $payment_mode = ModePayment::where('online_channel_code', $request->procid)->first();
 				   if(empty($payment_mode)){
@@ -429,8 +432,42 @@ class PaymentDetailsController extends Controller
 						}
 				   }
 			   }
+			   else if($separate[0]=='EB'){
+					//this is for EBOSS Bais callback
+					$result = \DB::connection('mysql')->table('eboss_payments')
+					->where('transaction_no', $request->txnid)
+					->first();
+					// $result = OnlinePayment::where('transaction_no',$request->txnid)->first();
+					$result->payment_status = $request->status;
+					$result->references = $request->refno;
+					$result->save();
+ 
+					// if($result->payment_status == 'S'){
+					// 	$beneficiary = Beneficiary::where('bin', $result->account_number)->first();
+					// 	$collector = Collector::where('user_id',1)->first();
+					// 	$system_parameter = SystemParameter::first();
+					// 	$current_date = date('Y-m-d');
+				
+					// 	$collection = new Collection();
+					// 	$collection->transact_date = $current_date;
+					// 	$collection->beneficiary_id = $beneficiary->id;
+					// 	$collection->name = $beneficiary->name;
+					// 	$collection->mode_of_payment_id = $result->payment_type;
+					// 	$collection->collector_id = $collector->id;
+					// 	$collection->amount_paid = $result->amount;
+					// 	$collection->online_channel_reference = $result->references;
+					// 	$collection->collection_item_id = $system_parameter->default_collection_item_id;
+					// 	$collection->user_id = 1;
+					// 	$collection->mobile_number = $result->phone_number;
+					// 	$collection->email = $result->email;
+					// 	$collection->remarks = 'Online Transaction';
+					// 	$collection->save();
+					// }
+					
+			   }	
 
 			   else{
+					//this is for region IV callback
 				   $databaseName = \DB::connection('mysql2')->getDatabaseName();
 					   
 					   
@@ -511,6 +548,19 @@ class PaymentDetailsController extends Controller
 		$trnx = @$request->txnid;
 		$separate = explode("-", $trnx);
 		if($separate[0]=='R3'){
+			// sleep(5);
+			// $retrieve = data_results::where('txnid',$request->txnid)->first();
+			$dataArr = [
+				'message' => $request->message,
+				'txnid' => $request->txnid,
+				'status' => $request->status,
+				'refno' => $request->refno,
+				'proid' => $request->procid,
+			];
+			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
+			return Redirect::to($url);
+		}
+		else if($separate[0]=='EB'){
 			// sleep(5);
 			// $retrieve = data_results::where('txnid',$request->txnid)->first();
 			$dataArr = [
