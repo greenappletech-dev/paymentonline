@@ -97,7 +97,7 @@
 							<div class="d-flex justify-content-center align-items-center">
 							<img src="{{asset('image/bais_small.png')}}" alt="logo" style="width:50px;">
 							</div>
-							<h3 class="text-light font-weight-bold ">BAIS E-PAYMENT</h3>
+							<h3 class="text-light font-weight-bold ml-3 mr-3">BAIS E-PAYMENT</h3>
 							<img class="desktop ml-1" src="{{asset('image/GA_logo.png')}}" alt="logo" >
 						</div>
 					</div>
@@ -162,11 +162,11 @@
 								</div>	
 								
 								<div class="row">
-								  <div class="col-lg-12" style="margin-top:30px !important;margin-bottom:25px !important">
+								  <!-- <div class="col-lg-12" style="margin-top:30px !important;margin-bottom:25px !important">
 										<center>
 											<a href="{{url('information')}}" class="btn  btn-primary btn-lg" >Done</a>
 										</center>	
-									</div>
+									</div> -->
 								</div>
 				
 						
