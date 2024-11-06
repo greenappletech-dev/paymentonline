@@ -27,7 +27,7 @@
             }
             
             body {
-                background: linear-gradient(0deg, rgba(70, 243, 8, 0.47), rgba(62, 100, 49, 0.47)), url({{asset('image/nha_background.jpg')}});
+                background: linear-gradient(0deg, rgba(70, 243, 8, 0.47), rgba(62, 100, 49, 0.47)), url({{asset('image/bais_background.jpg')}});
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -95,10 +95,9 @@
 					 <div class="post">
 						<div class="d-flex justify-content-center align-items-center">
 							<div class="d-flex justify-content-center align-items-center">
-							<img src="{{asset('image/nha_logo_1.png')}}" alt="logo" style="width:50px;">
-							<img class="desktop ml-1 mr-1" src="{{asset('image/nha_logo_2.png')}}" alt="logo" >
+							<img src="{{asset('image/bais_small.png')}}" alt="logo" style="width:50px;">
 							</div>
-							<h3 class="text-light font-weight-bold ">NHA E-PAYMENT</h3>
+							<h3 class="text-light font-weight-bold ">BAIS E-PAYMENT</h3>
 							<img class="desktop ml-1" src="{{asset('image/GA_logo.png')}}" alt="logo" >
 						</div>
 					</div>
