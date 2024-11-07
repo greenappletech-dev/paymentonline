@@ -451,6 +451,8 @@ class PaymentDetailsController extends Controller
 							'digest '  => $digest, 
 						]);
 					}
+
+					return response()->json(['messsage', 'SUCCESS']);
 			   }
 			   else{
 					//this is for region IV callback
