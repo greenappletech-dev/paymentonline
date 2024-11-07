@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Crazymeeks\Foundation\PaymentGateway\Dragonpay;
+use Illuminate\Support\Facades\Http;
 
 class PaymentDetailsController extends Controller
 {
