@@ -434,26 +434,15 @@ class PaymentDetailsController extends Controller
 				   }
 			   }
 			   else if($separate[0]=='EB'){
-					$txnid = @$request->txnid;
-					$procid = @$request->procid;
-					$refno = $request->refno;
-					$status = $request->status;
-					$message = $request->message;
-					$digest = $request->digest;
 
-					if($status == 'S'){
-						//make a API call to pass the data to Bais 
-						Http::post(env('API_URL'), [
-							'txnid'  => $txnid,
-							'procid'  => $procid,
-							'refno'  => $refno,
-							'status'  => $status,
-							'message'  => $message,
-							'digest '  => $digest, 
-						]);
-					}
-
-					return response()->json(['messsage', 'SUCCESS']);
+					session()->put('txnid', @$request->txnid);
+					session()->put('procid', @$request->procid);
+					session()->put('refno', @$request->refno);
+					session()->put('status', @$request->status);
+					session()->put('message', @$request->message);
+					session()->put('digest', @$request->digest);
+					
+				
 			   }
 			   else{
 					//this is for region IV callback
@@ -549,16 +538,27 @@ class PaymentDetailsController extends Controller
 			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
-		else if($separate[0]=='EB'){
-			// sleep(5);
-			// $retrieve = data_results::where('txnid',$request->txnid)->first();
+		else if($separate[0] == 'R3'){
 
-			$message = $request->message;
-			$txnid = $request->txnid;
-			$status = $request->status;
-			$refno = $request->refno;
-		
-			return view('.ebossreturnpage', compact('message','txnid','status','refno'));
+			$txnid = session()->get('txnid');
+			$procid = session()->get('procid');
+			$refno = session()->get('refno');
+			$status = session()->get('status');
+			$message = session()->get('message');
+			$digest = session()->get('digest');
+
+			if($status == 'S'){
+					//make a API call to pass the data to Bais 
+				$response = Http::post(env('API_URL'), [
+						'txnid'  => $txnid,
+						'procid'  => $procid,
+						'refno'  => $refno,
+						'status'  => $status,
+						'message'  => $message,
+						'digest '  => $digest, 
+					]);
+				}
+				return response()->json(['messsage', 'SUCCESS']);
 		}
 		else{
 		// Test
