@@ -549,6 +549,17 @@ class PaymentDetailsController extends Controller
 			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
+		else if($separate[0]=='EB'){
+			$dataArr = [
+				'message' => $request->message,
+				'txnid' => $request->txnid,
+				'status' => $request->status,
+				'refno' => $request->refno,
+				'proid' => $request->procid,
+			];
+			$url = env('BAIS_SERVER').http_build_query($dataArr);
+			return Redirect::to($url);
+		}
 		else{
 		// Test
 		$message = $request->message;
