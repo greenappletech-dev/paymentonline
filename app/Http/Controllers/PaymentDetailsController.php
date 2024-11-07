@@ -432,6 +432,26 @@ class PaymentDetailsController extends Controller
 						}
 				   }
 			   }
+			   else if($separate[0]=='EB'){
+					$txnid = @$request->txnid;
+					$procid = @$request->procid;
+					$refno = $request->refno;
+					$status = $request->status;
+					$message = $request->message;
+					$digest = $request->digest;
+
+					if($status == 'S'){
+						//make a API call to pass the data to Bais 
+						Http::post(env('API_URL'), [
+							'txnid'  => $txnid,
+							'procid'  => $procid,
+							'refno'  => $refno,
+							'status'  => $status,
+							'message'  => $message,
+							'digest '  => $digest, 
+						]);
+					}
+			   }
 			   else{
 					//this is for region IV callback
 				   $databaseName = \DB::connection('mysql2')->getDatabaseName();
