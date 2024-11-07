@@ -558,7 +558,6 @@ class PaymentDetailsController extends Controller
 						'digest '  => $digest, 
 					]);
 				}
-				return response()->json(['messsage', 'SUCCESS']);
 		}
 		else{
 		// Test
