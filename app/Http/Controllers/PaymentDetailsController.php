@@ -538,7 +538,7 @@ class PaymentDetailsController extends Controller
 			$url = 'https://nhar3-payment.greenappletechph.com/api/return_url?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
-		else if($separate[0] == 'R3'){
+		else if($separate[0] == 'EB'){
 
 			$txnid = session()->get('txnid');
 			$procid = session()->get('procid');
