@@ -557,7 +557,7 @@ class PaymentDetailsController extends Controller
 				'refno' => $request->refno,
 				'proid' => $request->procid,
 			];
-			$url = env('BAIS_SERVER').http_build_query($dataArr);
+			$url = env('BAIS_SERVER').'?'.http_build_query($dataArr);
 			return Redirect::to($url);
 		}
 		else{
