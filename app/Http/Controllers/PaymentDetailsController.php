@@ -441,8 +441,7 @@ class PaymentDetailsController extends Controller
 					$message = $request->message;
 					$digest = $request->digest;
 
-					if($status == 'S'){
-						//make a API call to pass the data to Bais 
+					//make a API call to pass the data to Bais 
 					$response = Http::post(env('API_URL'), [
 							'txnid'  => $txnid,
 							'procid'  => $procid,
@@ -451,7 +450,6 @@ class PaymentDetailsController extends Controller
 							'message'  => $message,
 							'digest '  => $digest, 
 						]);
-					}
 
 					return response()->json(['messsage', 'SUCCESS']);
 			   }
