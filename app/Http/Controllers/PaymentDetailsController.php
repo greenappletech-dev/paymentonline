@@ -470,11 +470,15 @@ class PaymentDetailsController extends Controller
 				   // SAVE IN COLLECTION PAYMENT (invoices table)	
 				   if($request->status == "S" ){
 					   
-							$check_invoice = \DB::connection('mysql2')->table('invoices')->where('refno', $request->refno)->exists();
-
-							if(!$check_invoice){
-								\DB::connection('mysql2')->table('invoices')->insert(
-									[
+							$refnoAlreadyExists = \DB::connection('mysql2')->table('invoices')->where('refno', $request->refno)->exists();
+							
+							if ($refnoAlreadyExists) { 
+									
+								   Log::info($request);
+							} 
+							else {
+								
+								\DB::connection('mysql2')->table('invoices')->insert([
 									
 										'loan_id' => @$getallData->loan_id, 
 										'loan_number' => @$getallData->loan_number,
@@ -508,8 +512,7 @@ class PaymentDetailsController extends Controller
 										'updated_at' => @$getallData->updatedAT,
 										
 									
-									]
-								);
+									]);
 							}
 					   
 						
