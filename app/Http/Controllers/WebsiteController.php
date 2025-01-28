@@ -114,7 +114,7 @@ class WebsiteController extends Controller
 
 		if($request->trxn_type == 'notice'){
 
-				$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->where('id', $getCus->loan_tbl_id)->first();
+				$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->where('loan_id', $getCus->loan_tbl_id)->first();
 
 				if($last_payment == null){
 					$last_payment = '';	
