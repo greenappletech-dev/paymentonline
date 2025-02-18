@@ -59,14 +59,14 @@ class WebsiteController extends Controller
 	}
 	
 	public function checkIFvalidDetails(Request $request){
-			
-			
+
 			if( 
+				
 				\DB::connection('mysql2')->table('beneficiaries as t1')
 				->leftJoin('loans AS t2','t2.beneficiaries_id','=','t1.beneficiaries_id')	
 				->where('t2.beneficiaries_id', $request->beneficiaries_id)	
-				->where('t2.district_id', $request->district)	
-				->where('t2.project_office_id', $request->project_office)	
+				->where('t1.district_id', $request->district)	
+				->where('t1.project_office_id', $request->project_office)	
 				->where('t1.last_name', $request->last_name)	
 				->exists()
 			)
@@ -86,7 +86,6 @@ class WebsiteController extends Controller
 	
 	public function searchByDetails(Request $request)
 	{	
-		// dd($request);
 
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
@@ -153,7 +152,7 @@ class WebsiteController extends Controller
 							foreach($data_collection as $item){
 
 								if (!$firstIteration) {
-									$get_project_bcs_housing_multa += $item->deb_del < 0 ? 0 : $item->deb_del;
+									$get_project_bcs_housing_multa += $item->deb_del ;
 									$get_project_bcs_housing_tubo += $item->deb_int < 0 ? 0 : $item->deb_int;
 									$get_project_bcs_housing_nakaraan += ($item->deb_amt < 0 ? 0 : $item->deb_amt) + ( $item->deb_int < 0 ? 0 : $item->deb_int);
 									if($from < $item->tx_date)
@@ -174,7 +173,7 @@ class WebsiteController extends Controller
 								'acct_type' =>  $project_bcs_coll->acct_type,
 								'act_bal' => $project_bcs_coll->act_bal,
 								'nakaraan' => $get_project_bcs_housing_nakaraan ,
-								'monpdto' => $last_payment->date,
+								'monpdto' => $last_payment->date ?? '',
 								'fod' => $project_bcs_coll->fod,
 								'kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
 								'multa' => $get_project_bcs_housing_multa,
