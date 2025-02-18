@@ -59,14 +59,14 @@ class WebsiteController extends Controller
 	}
 	
 	public function checkIFvalidDetails(Request $request){
-			
-			
+
 			if( 
+				
 				\DB::connection('mysql2')->table('beneficiaries as t1')
-				->leftJoin('loans AS t2','t2.beneficiaries_id','=','t1.beneficiaries_id')	
-				->where('t2.beneficiaries_id', $request->beneficiaries_id)	
-				->where('t2.district_id', $request->district)	
-				->where('t2.project_office_id', $request->project_office)	
+				// ->leftJoin('loans AS t2','t2.beneficiaries_id','=','t1.beneficiaries_id')	
+				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
+				->where('t1.district_id', $request->district)	
+				->where('t1.project_office_id', $request->project_office)	
 				->where('t1.last_name', $request->last_name)	
 				->exists()
 			)
@@ -86,7 +86,6 @@ class WebsiteController extends Controller
 	
 	public function searchByDetails(Request $request)
 	{	
-		// dd($request);
 
 			$selectQuery ="
 					t1.beneficiaries_id as BIN,
@@ -96,29 +95,34 @@ class WebsiteController extends Controller
 					ofc.name as project_office,
 					phase.name as phase,
 					block.name as block,
-					lot.name as lot,
-					t2.id as loan_tbl_id
+					lot.name as lot
 					";
 				$getCus = \DB::connection('mysql2')->table('beneficiaries as t1')
 				->select(\DB::raw($selectQuery))
-				->leftJoin('loans AS t2','t2.beneficiaries_id','=','t1.beneficiaries_id')				
-				->leftJoin('districts as dis','dis.id','=','t2.district_id')
+				->leftJoin('districts as dis','dis.id','=','t1.district_id')
 				->leftJoin('regions as reg','reg.id','=','dis.region_id')
-				->leftJoin('project_offices as ofc','ofc.id','=','t2.project_office_id')
-				->leftJoin('phases as phase','phase.id','=','t2.phase_id')
-				->leftJoin('blocks as block','block.id','=','t2.block_id')
-				->leftJoin('lots as lot','lot.id','=','t2.lot_id')
+				->leftJoin('project_offices as ofc','ofc.id','=','t1.project_office_id')
+				->leftJoin('phases as phase','phase.id','=','t1.phase_id')
+				->leftJoin('blocks as block','block.id','=','t1.block_id')
+				->leftJoin('lots as lot','lot.id','=','t1.lot_id')
 				->where('t1.beneficiaries_id', $request->beneficiaries_id)	
+				->first(); 	
+
+				$getLoan = \DB::connection('mysql2')->table('loans as l')
+				->where('l.beneficiaries_id', $request->beneficiaries_id)	
 				->first(); 	
 
 
 		if($request->trxn_type == 'notice'){
+				$last_payment = '';	
 
-				$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->where('loan_id', $getCus->loan_tbl_id)->first();
-
-				if($last_payment == null){
-					$last_payment = '';	
+				if($getLoan != null){
+					$last_payment = \DB::connection('mysql2')->table('invoices')->orderBy('id','Desc')->where('loan_id', $getLoan->id)->first();
+					if($last_payment == null){
+						$last_payment = '';	
+					}
 				}
+
 
 				$get_project_office = \DB::connection('mysql2')->table('project_offices as p1')
 				->where('p1.id', $request->project_office)
@@ -153,7 +157,7 @@ class WebsiteController extends Controller
 							foreach($data_collection as $item){
 
 								if (!$firstIteration) {
-									$get_project_bcs_housing_multa += $item->deb_del < 0 ? 0 : $item->deb_del;
+									$get_project_bcs_housing_multa += $item->deb_del ;
 									$get_project_bcs_housing_tubo += $item->deb_int < 0 ? 0 : $item->deb_int;
 									$get_project_bcs_housing_nakaraan += ($item->deb_amt < 0 ? 0 : $item->deb_amt) + ( $item->deb_int < 0 ? 0 : $item->deb_int);
 									if($from < $item->tx_date)
@@ -174,7 +178,7 @@ class WebsiteController extends Controller
 								'acct_type' =>  $project_bcs_coll->acct_type,
 								'act_bal' => $project_bcs_coll->act_bal,
 								'nakaraan' => $get_project_bcs_housing_nakaraan ,
-								'monpdto' => $last_payment->date,
+								'monpdto' => $last_payment->date ?? '',
 								'fod' => $project_bcs_coll->fod,
 								'kasalukuyan' => $get_project_bcs_housing_kasalukuyan,
 								'multa' => $get_project_bcs_housing_multa,
