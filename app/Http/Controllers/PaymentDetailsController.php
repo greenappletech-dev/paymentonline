@@ -520,7 +520,7 @@ class PaymentDetailsController extends Controller
 
 			$dataArr = [
 				'bene_name' => $bene_info->client_name,
-				'amount' => $bene_info->amount,
+				'amount' => 'Php '.number_format($bene_info->amount, 2),
 				'message' => $request->message,
 				'txnid' => $request->txnid,
 				'status' => $request->status,
@@ -537,7 +537,7 @@ class PaymentDetailsController extends Controller
 			->first();
 
 		$bene_name = $bene_info->beneficiaries_name;
-		$amount = $bene_info->amount;
+		$amount = 'Php '.number_format($bene_info->amount, 2);
 		$message = $request->message;
 		$txnid = $request->txnid;
 		$status = $request->status;
