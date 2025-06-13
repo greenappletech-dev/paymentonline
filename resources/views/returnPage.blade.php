@@ -126,13 +126,22 @@
 											<td>{{@$txnid}}</td>
 										<tr>
 										
+										<tr>
+											<td><b>Beneficiary Name</b></td>
+											<td>:</td>
+											<td>{{@$bene_name}}</td>
+										</tr>
+										
+										<tr>
+											<td><b>Amount</b></td>
+											<td>:</td>
+											<td>{{@$amount}}</td>
+										</tr>
 										
 										<tr>
 											<td width="25%"><b>Reference Number</b></td>
 											<td>:</td>
 											<td>{{@$refno}}</td>
-										<tr>
-										
 										
 										<tr>
 											<td><b>Remarks</b></td>
