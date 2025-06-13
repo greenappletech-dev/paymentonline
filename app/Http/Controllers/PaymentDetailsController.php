@@ -516,7 +516,7 @@ class PaymentDetailsController extends Controller
 		if($separate[0]=='R3'){
 			// sleep(5);
 			// $retrieve = data_results::where('txnid',$request->txnid)->first();
-			$bene_info = $result = OnlinePayment::where('transaction_no',$request->txnid)->first();
+			$bene_info = OnlinePayment::where('transaction_no',$request->txnid)->first();
 
 			$dataArr = [
 				'bene_name' => $bene_info->clien_name,
