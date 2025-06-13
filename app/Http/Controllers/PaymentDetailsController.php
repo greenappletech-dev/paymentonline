@@ -516,7 +516,11 @@ class PaymentDetailsController extends Controller
 		if($separate[0]=='R3'){
 			// sleep(5);
 			// $retrieve = data_results::where('txnid',$request->txnid)->first();
+			$bene_info = $result = OnlinePayment::where('transaction_no',$request->txnid)->first();
+
 			$dataArr = [
+				'bene_name' => $bene_info->clien_name,
+				'amount' => $bene_info->amount,
 				'message' => $request->message,
 				'txnid' => $request->txnid,
 				'status' => $request->status,
@@ -528,12 +532,18 @@ class PaymentDetailsController extends Controller
 		}
 		else{
 		// Test
+		$bene_info = \DB::connection('mysql')->table('payments')
+			->where('transaction_id', $request->txnid)
+			->first();
+
+		$bene_name = $bene_info->beneficiaries_name;
+		$amount = $bene_info->amount;
 		$message = $request->message;
 		$txnid = $request->txnid;
 		$status = $request->status;
 		$refno = $request->refno;
-	
-		return view('.returnPage', compact('message','txnid','status','refno'));
+
+		return view('.returnPage', compact('message','txnid','status','refno','bene_name','amount'));
 		}
 	}
 	
