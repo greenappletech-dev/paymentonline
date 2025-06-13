@@ -519,7 +519,7 @@ class PaymentDetailsController extends Controller
 			$bene_info = OnlinePayment::where('transaction_no',$request->txnid)->first();
 
 			$dataArr = [
-				'bene_name' => $bene_info->clien_name,
+				'bene_name' => $bene_info->client_name,
 				'amount' => $bene_info->amount,
 				'message' => $request->message,
 				'txnid' => $request->txnid,
