@@ -127,11 +127,11 @@
 										<tr>
 										
 										<tr>
-											<td><b>Beneficiary Name</b></td>
+											<td><b>Payee</b></td>
 											<td>:</td>
 											<td>{{@$bene_name}}</td>
 										</tr>
-										
+
 										<tr>
 											<td><b>Amount</b></td>
 											<td>:</td>
