@@ -158,7 +158,7 @@
 			
 			<div style="margin-bottom:20px">
 				<span class="text">Customer hotline : +63 927 522 9568</span><br>
-				<span class="text">Green Apple Tel. No: +63 8 681 9680</span><br>
+				<span class="text">Green Apple Tel. No: +632 8 681 9680</span><br>
 				<span class="text">Inquire : inquiry@greenappletech.ph</span><br>
 			</div>
 			
