@@ -330,7 +330,7 @@ html, body {
 					</div>
 					
 					<div class="positionbutton">
-						<button onclick="location.href='information'" class="welcome-button" style="width:100%">PAY NOW</button>
+						<button onclick="location.href='maintenance'" class="welcome-button" style="width:100%">PAY NOW</button>
 						<br>
 						<br>
 						<button onclick="location.href='portal/payment'" class="welcome-button" style="width:100%">VIEW PAYMENTS</button>
@@ -484,6 +484,7 @@ html, body {
 	  </div>
  </div>
 <!-- /.content -->
+
 
 
 <script>

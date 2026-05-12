@@ -33,6 +33,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('maintenance', function () {
+    return view('maintenance');
+});
+
 
 /*
 Route::get('/test', function () {
