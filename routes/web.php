@@ -47,7 +47,7 @@ Route::get('/test', function () {
 Route::get('test',[PaymentDetailsController::class,'test'])->name('test');
 
 
-Route::get('information',[PaymentDetailsController::class,'epayment'])->name('information');
+// Route::get('information',[PaymentDetailsController::class,'epayment'])->name('information');
 Route::get('pay_type/{id}',[PaymentDetailsController::class,'convie']);
 Route::get('project/{id}',[PaymentDetailsController::class,'proj_data']);
 Route::post('add',[PaymentDetailsController::class,'add_details']);
